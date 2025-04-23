@@ -1,0 +1,6 @@
+@MediCore_HostAddress = http://localhost:5120
+
+GET {{MediCore_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
