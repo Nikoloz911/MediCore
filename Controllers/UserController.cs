@@ -8,7 +8,7 @@ using MediCore.Core;
 
 namespace MediCore.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class UserController : ControllerBase
     {
