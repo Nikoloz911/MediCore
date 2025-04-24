@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250424104558_init")]
+    [Migration("20250424125143_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -391,11 +391,11 @@ namespace MediCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -17,7 +17,7 @@ public class DataContext : DbContext
     public DbSet<User> Users { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Data Source=LENOVO\SQLEXPRESS01;Initial Catalog=MediCore;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
+        optionsBuilder.UseSqlServer(@"Data Source=LENOVO\SQLEXPRESS02;Initial Catalog=MediCoreTest;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -65,6 +65,4 @@ public class DataContext : DbContext
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }
-
-
 }
