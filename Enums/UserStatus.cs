@@ -1,6 +1,6 @@
 ﻿namespace MediCore.Enums;
 public enum USER_STATUS
 {
-    ACTIVE,
-    INACTIVE,
+    INACTIVE = 0,
+    ACTIVE = 1
 }

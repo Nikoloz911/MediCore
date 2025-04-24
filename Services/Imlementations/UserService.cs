@@ -57,8 +57,8 @@ public class UserService : IUser
             existingUser.LastName = user.LastName;
             existingUser.Email = user.Email;
             existingUser.Password = user.Password;  // 
-            existingUser.Role = user.Role;          //
-            existingUser.Status = user.Status;
+            //existingUser.Role = user.Role;          //
+            //existingUser.Status = user.Status;
             _context.SaveChanges();
             return existingUser;
         }

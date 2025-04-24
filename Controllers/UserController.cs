@@ -4,7 +4,6 @@ using MediCore.Services.Interaces;
 using MediCore.Models;
 using MediCore.DTOs.UserDTOs;
 using AutoMapper;
-using System.Collections.Generic;
 using MediCore.Core;
 
 namespace MediCore.Controllers
@@ -32,8 +31,8 @@ namespace MediCore.Controllers
                 var response = new UserApiResponse<List<UserGetDTO>>
                 {
                     Status = StatusCodes.Status403Forbidden,
-                    Data = null,
-                    Message = "You are not authorized to access this resource"
+                    Message = "You are not authorized to access this resource",
+                    Data = null,              
                 };
                 return StatusCode(StatusCodes.Status403Forbidden, response);
             }
@@ -41,9 +40,9 @@ namespace MediCore.Controllers
             var userDtos = _mapper.Map<List<UserGetDTO>>(users);
             var userResponse = new UserApiResponse<List<UserGetDTO>>
             {
-                Status = StatusCodes.Status200OK,
+                Status = StatusCodes.Status200OK, 
+                Message = "Users retrieved successfully",
                 Data = userDtos,
-                Message = "Users retrieved successfully"
             };
             return Ok(userResponse);
         }
@@ -57,9 +56,9 @@ namespace MediCore.Controllers
             {
                 var response = new UserApiResponse<UserGetByIdDTO>
                 {
-                    Status = StatusCodes.Status404NotFound,
+                    Status = StatusCodes.Status404NotFound, 
+                    Message = "User not found",
                     Data = null,
-                    Message = "User not found"
                 };
                 return NotFound(response);
             }
@@ -67,9 +66,9 @@ namespace MediCore.Controllers
             var userDto = _mapper.Map<UserGetByIdDTO>(user);
             var userResponse = new UserApiResponse<UserGetByIdDTO>
             {
-                Status = StatusCodes.Status200OK,
+                Status = StatusCodes.Status200OK,             
+                Message = "User retrieved successfully",
                 Data = userDto,
-                Message = "User retrieved successfully"
             };
             return Ok(userResponse);
         }
@@ -83,9 +82,9 @@ namespace MediCore.Controllers
             {
                 var response = new UserApiResponse<UserGetByIdDTO>
                 {
-                    Status = StatusCodes.Status404NotFound,
+                    Status = StatusCodes.Status404NotFound,              
+                    Message = "User not found",
                     Data = null,
-                    Message = "User not found"
                 };
                 return NotFound(response);
             }
@@ -94,9 +93,9 @@ namespace MediCore.Controllers
             var userDto = _mapper.Map<UserGetByIdDTO>(updatedUser);
             var userResponse = new UserApiResponse<UserGetByIdDTO>
             {
-                Status = StatusCodes.Status200OK,
+                Status = StatusCodes.Status200OK,           
+                Message = "User updated successfully",
                 Data = userDto,
-                Message = "User updated successfully"
             };
             return Ok(userResponse);
         }
@@ -110,18 +109,18 @@ namespace MediCore.Controllers
             {
                 var response = new UserApiResponse<bool>
                 {
-                    Status = StatusCodes.Status404NotFound,
+                    Status = StatusCodes.Status404NotFound,              
+                    Message = "User not found or you are not authorized to delete this user",
                     Data = false,
-                    Message = "User not found or you are not authorized to delete this user"
                 };
                 return NotFound(response);
             }
 
             var userResponse = new UserApiResponse<bool>
             {
-                Status = StatusCodes.Status200OK,
+                Status = StatusCodes.Status200OK,        
+                Message = "User deleted successfully",
                 Data = true,
-                Message = "User deleted successfully"
             };
             return Ok(userResponse);
         }
