@@ -20,7 +20,7 @@ public class AuthenticationController : ControllerBase
     }
     // REGISTER A NEW USER
     [HttpPost("register")]
-    public ActionResult<UserApiResponse<User>> Register([FromBody] AddUserDTO request)
+    public ActionResult<UserApiResponse<PublicUserDTO>> Register([FromBody] AddUserDTO request)
     {
         var response = _authorizationService.Register(request);
         if (response.Status == 200)

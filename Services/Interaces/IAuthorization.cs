@@ -5,7 +5,7 @@ using MediCore.Request;
 namespace MediCore.Services.Interaces;
 public interface IAuthorization
 {
-    UserApiResponse<User> Register(AddUserDTO request);
+    UserApiResponse<PublicUserDTO> Register(AddUserDTO request);
     User LogIn(User user);
     User RefreshToken(User user);
 }

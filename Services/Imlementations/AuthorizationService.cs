@@ -25,9 +25,9 @@ public class AuthorizationService : IAuthorization
 
 
     // REGISTER A NEW USER
-    public UserApiResponse<User> Register(AddUserDTO requestDto)
+    public UserApiResponse<PublicUserDTO> Register(AddUserDTO requestDto)
     {
-        var response = new UserApiResponse<User>();
+        var response = new UserApiResponse<PublicUserDTO>();
         var request = _mapper.Map<AddUser>(requestDto);
 
         var validationResult = _userValidator.Validate(request);
@@ -58,11 +58,13 @@ public class AuthorizationService : IAuthorization
         _context.Users.Add(newUser);
         _context.SaveChanges();
 
+        var userDto = _mapper.Map<PublicUserDTO>(newUser);
         response.Status = 200;
         response.Message = "User registered successfully.";
-        response.Data = newUser;
+        response.Data = userDto;
         return response;
     }
+
 
 
 

@@ -22,5 +22,8 @@ public class UserMappingProfile : Profile
         // Add mapping between AddUserDTO and AddUser (both directions)
         CreateMap<AddUserDTO, AddUser>();
         CreateMap<AddUser, AddUserDTO>();
+        CreateMap<User, PublicUserDTO>()
+    .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()));
+
     }
 }
