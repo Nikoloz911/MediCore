@@ -17,6 +17,54 @@ public class DataContext : DbContext
     public DbSet<User> Users { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"");
+        optionsBuilder.UseSqlServer(@"Data Source=LENOVO\SQLEXPRESS01;Initial Catalog=MediCore;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
     }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Appointment>()
+            .HasOne(a => a.Patient)
+            .WithMany(p => p.Appointments)
+            .HasForeignKey(a => a.PatientId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
+        modelBuilder.Entity<Appointment>()
+            .HasOne(a => a.Doctor)
+            .WithMany(d => d.Appointments)
+            .HasForeignKey(a => a.DoctorId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
+        modelBuilder.Entity<Appointment>()
+            .HasOne(a => a.Department)
+            .WithMany(d => d.Appointments)
+            .HasForeignKey(a => a.DepartmentId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
+        modelBuilder.Entity<Patient>()
+            .HasOne(p => p.User)
+            .WithOne(u => u.Patient)
+            .HasForeignKey<Patient>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
+        modelBuilder.Entity<Doctor>()
+            .HasOne(d => d.User)
+            .WithOne(u => u.Doctor)
+            .HasForeignKey<Doctor>(d => d.UserId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
+        modelBuilder.Entity<MedicalRecord>()
+            .HasOne(m => m.Patient)
+            .WithMany(p => p.MedicalRecords)
+            .HasForeignKey(m => m.PatientId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+    }
+
+
 }

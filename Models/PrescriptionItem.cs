@@ -8,5 +8,4 @@ public class PrescriptionItem
     public int DurationDays { get; set; }
     public Prescription Prescription { get; set; } // Navigation Property
     public Medication Medication { get; set; } // Navigation Property
-    public List<Medication> Medications { get; set; } // prescription's medications
 }
