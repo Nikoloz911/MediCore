@@ -3,6 +3,10 @@ using MediCore.Data;
 using MediCore.Validators;
 using MediCore.Services.Imlementations;
 using MediCore.Services.Interaces;
+using MediCore.JWT;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,24 +14,44 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
 // Register services
-builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserValidator>());
-
 
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IAuthorization, AuthorizationService>();
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserValidator>());
+
+// JWT Token configuration
+builder.Services.AddScoped<IJWTService, JWTService>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "MediCore",
+            ValidAudience = "application",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                builder.Configuration["JWT:Key"] ?? "YourSecureJwtKeyHereMakeItLongAndSecure12345")),
+            ClockSkew = TimeSpan.Zero,
+        };
+    });
+
+
 
 // Enable CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins", builder =>
+    options.AddDefaultPolicy(builder =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+        builder
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
@@ -39,7 +63,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAllOrigins");
+app.UseCors();
+app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

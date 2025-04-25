@@ -10,20 +10,22 @@ using FluentValidation;
 using MediCore.DTOs.UserDTOs;
 using AutoMapper;
 using MediCore.SMTP;
+using MediCore.JWT;
 namespace MediCore.Services.Imlementations;
 public class AuthorizationService : IAuthorization
 {
     private readonly DataContext _context;
     private readonly IValidator<AddUser> _userValidator;
     private readonly IMapper _mapper;
+    private readonly IJWTService _jwtService;
 
-    public AuthorizationService(DataContext context, IValidator<AddUser> userValidator, IMapper mapper)
+    public AuthorizationService(DataContext context, IValidator<AddUser> userValidator, IMapper mapper, IJWTService jwtService)
     {
         _context = context;
         _userValidator = userValidator;
         _mapper = mapper;
+        _jwtService = jwtService;
     }
-
 
     // REGISTER A NEW USER
     public UserApiResponse<PublicUserDTO> Register(AddUserDTO requestDto)
@@ -71,12 +73,10 @@ public class AuthorizationService : IAuthorization
         try
         {
             SMTP_Registration.EmailSender(newUser.Email, newUser.FirstName, newUser.LastName, verificationCode);
-            response.Message = "User registered successfully. Verification code sent to email.";
         }
         catch (Exception ex)
         {
             response.Status = 500;
-            response.Message = "User registered, but verification email failed to send. Please try again later.";
             return response;
         }
 
@@ -85,10 +85,14 @@ public class AuthorizationService : IAuthorization
         _context.Users.Add(newUser);
         _context.SaveChanges();
 
+        // Generate JWT token
+        var jwtToken = _jwtService.GetUserToken(newUser);
+
         // Map User to PublicUserDTO for response
         var userDto = _mapper.Map<PublicUserDTO>(newUser);
         response.Status = 200;
         response.Data = userDto;
+        userDto.Token = jwtToken.Token;
         return response;
     }
 
