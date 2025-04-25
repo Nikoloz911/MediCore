@@ -1,9 +1,11 @@
-﻿using MediCore.Models;
+﻿using MediCore.Core;
+using MediCore.DTOs.UserDTOs;
+using MediCore.Models;
 namespace MediCore.Services.Interaces;
 public interface IUser
 {
-    List<User> GetAllUsers(); // (ADMIN)
-    User GetUserById(int id);
-    User UpdateUserById(int id, User user);
-    User DeleteUserById(int id); // (ADMIN)
+    UserApiResponse<List<UserGetDTO>> GetAllUsers();    // ADMIN
+    UserApiResponse<UserGetByIdDTO> GetUserById(int id);
+    UserApiResponse<UserGetByIdDTO> UpdateUserById(int id, UserUpdateDTO userUpdateDto);
+    UserApiResponse<User> DeleteUserById(int id);   // ADMIN
 }

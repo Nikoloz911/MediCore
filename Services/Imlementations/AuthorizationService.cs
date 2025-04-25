@@ -66,6 +66,7 @@ public class AuthorizationService : IAuthorization
         _context.Users.Add(newUser);
         _context.SaveChanges();
         // Send verification email
+        // Store Code to expirity
         string verificationCode = SMTP_Registration.GenerateVerificationCode();
         try
         {

@@ -1,89 +1,124 @@
 ﻿using MediCore.Data;
 using MediCore.Models;
-using MediCore.Enums;
+using MediCore.DTOs.UserDTOs;
 using MediCore.Services.Interaces;
-using System.Security.Claims;
+using MediCore.Core;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
 
-namespace MediCore.Services.Imlementations;
-public class UserService : IUser
+namespace MediCore.Services.Imlementations
 {
-    private readonly DataContext _context;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    public class UserService : IUser
+    {
+        private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-    public UserService(DataContext context, IHttpContextAccessor httpContextAccessor)
-    {
-        _context = context;
-        _httpContextAccessor = httpContextAccessor;
-    }
+        public UserService(DataContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
-    // GET ALL USERS
-    public List<User> GetAllUsers()
-    {
-        var currentUserRole = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
-        if (currentUserRole != USER_ROLE.ADMIN.ToString())
+        public UserApiResponse<List<UserGetDTO>> GetAllUsers()
         {
-            return null;  
-        }
-        else
-        {
-            return _context.Users.ToList();
-        }   
-    }
-    // GET USER BY ID
-    public User GetUserById(int id)
-    {
-        var foundUser = _context.Users.FirstOrDefault(u => u.Id == id);
-        if (foundUser == null)
-        {
-            return null;
-        }
-        else
-        {
-            return foundUser;
-        }
-    }
+            var users = _context.Users.ToList();
 
-    // UPDATE USER BY ID
-    public User UpdateUserById(int id, User user)
-    {
-        var existingUser = _context.Users.FirstOrDefault(u => u.Id == id);
-        if (existingUser == null)
-        {
-            return null;  
+            if (users == null || !users.Any())
+            {
+                return new UserApiResponse<List<UserGetDTO>>
+                {
+                    Status = StatusCodes.Status403Forbidden,
+                    Message = "No users found or unauthorized access.",
+                    Data = null
+                };
+            }
+
+            var userDtos = _mapper.Map<List<UserGetDTO>>(users);
+
+            return new UserApiResponse<List<UserGetDTO>>
+            {
+                Status = StatusCodes.Status200OK,
+                Message = "Users retrieved successfully",
+                Data = userDtos
+            };
         }
-        else
+
+        public UserApiResponse<UserGetByIdDTO> GetUserById(int id)
         {
-            existingUser.FirstName = user.FirstName;
-            existingUser.LastName = user.LastName;
-            existingUser.Email = user.Email;
-            existingUser.Password = user.Password;  // 
-            //existingUser.Role = user.Role;          //
-            //existingUser.Status = user.Status;
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+            if (user == null)
+            {
+                return new UserApiResponse<UserGetByIdDTO>
+                {
+                    Status = StatusCodes.Status404NotFound,
+                    Message = "User not found",
+                    Data = null
+                };
+            }
+
+            var userDto = _mapper.Map<UserGetByIdDTO>(user);
+
+            return new UserApiResponse<UserGetByIdDTO>
+            {
+                Status = StatusCodes.Status200OK,
+                Message = "User retrieved successfully",
+                Data = userDto
+            };
+        }
+
+        public UserApiResponse<UserGetByIdDTO> UpdateUserById(int id, UserUpdateDTO userUpdateDto)
+        {
+            var existingUser = _context.Users.FirstOrDefault(u => u.Id == id);
+
+            if (existingUser == null)
+            {
+                return new UserApiResponse<UserGetByIdDTO>
+                {
+                    Status = StatusCodes.Status404NotFound,
+                    Message = "User not found",
+                    Data = null
+                };
+            }
+
+            _mapper.Map(userUpdateDto, existingUser);
             _context.SaveChanges();
-            return existingUser;
+
+            var updatedDto = _mapper.Map<UserGetByIdDTO>(existingUser);
+
+            return new UserApiResponse<UserGetByIdDTO>
+            {
+                Status = StatusCodes.Status200OK,
+                Message = "User updated successfully",
+                Data = updatedDto
+            };
         }
-    }
-    // DELETE USER BY ID
-    public User DeleteUserById(int id)
-    {
-        var currentUserRole = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
-        if (currentUserRole != USER_ROLE.ADMIN.ToString())
-        {
-            return null;
-        }
-        else
+
+        public UserApiResponse<User> DeleteUserById(int id)
         {
             var userToDelete = _context.Users.FirstOrDefault(u => u.Id == id);
+
             if (userToDelete == null)
             {
-                return null;
+                return new UserApiResponse<User>
+                {
+                    Status = StatusCodes.Status404NotFound,
+                    Message = "User not found",
+                    Data = null
+                };
             }
-            else
+
+            _context.Users.Remove(userToDelete);
+            _context.SaveChanges();
+
+            return new UserApiResponse<User>
             {
-                userToDelete.Status = USER_STATUS.INACTIVE;
-                _context.SaveChanges();
-                return userToDelete;
-            }
+                Status = StatusCodes.Status200OK,
+                Message = "User deleted successfully",
+                Data = userToDelete
+            };
         }
+    
     }
 }

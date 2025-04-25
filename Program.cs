@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen();
 // Register services
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserValidator>());
 
-builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IAuthorization, AuthorizationService>();
