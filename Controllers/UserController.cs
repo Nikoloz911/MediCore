@@ -21,29 +21,75 @@ namespace MediCore.Controllers
         {
             var response = _userService.GetAllUsers();
 
-
-            return Ok(response);
+            if (response.Status == StatusCodes.Status200OK)
+            {
+                return Ok(response);
+            }
+            else if (response.Status == StatusCodes.Status403Forbidden)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, response);
+            }
+            else
+            {
+                return StatusCode(response.Status, response);
+            }
         }
 
         [HttpGet("user/{id}")]
         public IActionResult GetUserById(int id)
         {
             var response = _userService.GetUserById(id);
-            return Ok(response);
+
+            if (response.Status == StatusCodes.Status200OK)
+            {
+                return Ok(response);
+            }
+            else if (response.Status == StatusCodes.Status404NotFound)
+            {
+                return NotFound(response);
+            }
+            else
+            {
+                return StatusCode(response.Status, response);
+            }
         }
 
         [HttpPut("users/{id}")]
         public IActionResult UpdateUserById(int id, UserUpdateDTO userUpdateDto)
         {
             var response = _userService.UpdateUserById(id, userUpdateDto);
-            return Ok(response);
+
+            if (response.Status == StatusCodes.Status200OK)
+            {
+                return Ok(response);
+            }
+            else if (response.Status == StatusCodes.Status404NotFound)
+            {
+                return NotFound(response);
+            }
+            else
+            {
+                return StatusCode(response.Status, response);
+            }
         }
 
         [HttpDelete("users/{id}")]
         public IActionResult DeleteUserById(int id)
         {
             var response = _userService.DeleteUserById(id);
-            return Ok(response);
+
+            if (response.Status == StatusCodes.Status200OK)
+            {
+                return Ok(response);
+            }
+            else if (response.Status == StatusCodes.Status404NotFound)
+            {
+                return NotFound(response);
+            }
+            else
+            {
+                return StatusCode(response.Status, response);
+            }
         }
     }
 }
