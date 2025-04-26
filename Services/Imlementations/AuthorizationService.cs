@@ -12,6 +12,7 @@ using AutoMapper;
 using MediCore.SMTP;
 using MediCore.JWT;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 namespace MediCore.Services.Imlementations;
 public class AuthorizationService : IAuthorization
 {
@@ -159,7 +160,6 @@ public class AuthorizationService : IAuthorization
             Data = loginUser
         };
     }
-
     // LOGOUT
     public UserApiResponse<string> Logout(TokenRefreshRequestDTO request)
     {
@@ -172,7 +172,29 @@ public class AuthorizationService : IAuthorization
                 Data = null
             };
         }
-        var principal = _jwtService.GetPrincipalFromExpiredToken(request.Token);
+        ClaimsPrincipal principal;
+        try
+        {
+            principal = _jwtService.GetPrincipalFromExpiredToken(request.Token);
+        }
+        catch (SecurityTokenMalformedException ex)
+        {
+            return new UserApiResponse<string>
+            {
+                Status = 401,
+                Message = ex.Message, 
+                Data = null
+            };
+        }
+        catch (SecurityTokenInvalidSignatureException ex)
+        {
+            return new UserApiResponse<string>
+            {
+                Status = 401,
+                Message = ex.Message, 
+                Data = null
+            };
+        }
         if (principal == null)
         {
             return new UserApiResponse<string>
@@ -189,7 +211,6 @@ public class AuthorizationService : IAuthorization
             Data = "Logout successful"
         };
     }
-
     // REFRESH TOKEN
     public UserApiResponse<LogInUserDTO> RefreshToken(TokenRefreshRequestDTO request)
     {
@@ -207,12 +228,21 @@ public class AuthorizationService : IAuthorization
         {
             principal = _jwtService.GetPrincipalFromExpiredToken(request.Token);
         }
-        catch
+        catch (SecurityTokenMalformedException ex)
         {
             return new UserApiResponse<LogInUserDTO>
             {
                 Status = 401,
-                Message = "Invalid token",
+                Message = ex.Message, 
+                Data = null
+            };
+        }
+        catch (SecurityTokenInvalidSignatureException ex)
+        {
+            return new UserApiResponse<LogInUserDTO>
+            {
+                Status = 401,
+                Message = ex.Message, 
                 Data = null
             };
         }
@@ -227,7 +257,6 @@ public class AuthorizationService : IAuthorization
         }
         var email = principal.FindFirstValue(ClaimTypes.Email);
         var foundUser = _context.Users.FirstOrDefault(u => u.Email == email);
-
         if (foundUser == null)
         {
             return new UserApiResponse<LogInUserDTO>
@@ -237,9 +266,7 @@ public class AuthorizationService : IAuthorization
                 Data = null
             };
         }
-
         var newJwtToken = _jwtService.GetUserToken(foundUser);
-
         var loginUser = new LogInUserDTO
         {
             Email = foundUser.Email,
@@ -248,7 +275,6 @@ public class AuthorizationService : IAuthorization
             Status = foundUser.Status.ToString(),
             Password = foundUser.Password
         };
-
         return new UserApiResponse<LogInUserDTO>
         {
             Status = 200,
@@ -256,8 +282,4 @@ public class AuthorizationService : IAuthorization
             Data = loginUser
         };
     }
-
-  
-
-
 }

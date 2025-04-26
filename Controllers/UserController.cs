@@ -69,6 +69,10 @@ namespace MediCore.Controllers
             {
                 return NotFound(response);
             }
+            else if (response.Status == StatusCodes.Status409Conflict)
+            {
+                return Conflict(response);
+            }
             else
             {
                 return StatusCode(response.Status, response);

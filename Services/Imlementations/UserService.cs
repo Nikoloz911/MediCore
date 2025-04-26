@@ -104,7 +104,7 @@ namespace MediCore.Services.Imlementations
             {
                 return new UserApiResponse<UserGetByIdDTO>
                 {
-                    Status = StatusCodes.Status400BadRequest,
+                    Status = StatusCodes.Status409Conflict,
                     Message = "Email is already in use",
                     Data = null
                 };
@@ -217,9 +217,9 @@ namespace MediCore.Services.Imlementations
                         errors.Add("Email is not valid.");
                     }
 
-                    if (!userDto.Email.EndsWith("@gmail.com"))
+                    if (!userDto.Email.EndsWith(".com"))
                     {
-                        errors.Add("Email must end with '@gmail.com'.");
+                        errors.Add("Email must end with '.com'");
                     }
                 }
             }

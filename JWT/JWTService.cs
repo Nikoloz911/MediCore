@@ -63,8 +63,24 @@ namespace MediCore.JWT
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-            return principal;
+            // VALIDATE TOKEN
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+                return principal;
+            }
+            catch (FormatException ex)
+            {
+                throw new SecurityTokenInvalidSignatureException("The token format is invalid. Please check the token.", ex);
+            }
+            catch (SecurityTokenMalformedException ex)
+            {
+                throw new SecurityTokenMalformedException("The token is malformed. It may not have the correct number of segments (JWT must have three segments).", ex);
+            }
+            catch (SecurityTokenException ex)
+            {
+                throw new SecurityTokenInvalidSignatureException("Token validation failed. The token may be expired or improperly formatted.", ex);
+            }
         }
     }
 }
