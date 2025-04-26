@@ -41,7 +41,6 @@ public class AuthorizationService : IAuthorization
             response.Data = null!;
             return response;
         }   
-
         //if (_context.Users.Any(u => u.Email == requestDto.Email))
         //{
         //    response.Status = 409;
@@ -60,15 +59,15 @@ public class AuthorizationService : IAuthorization
             response.Message = $"Invalid user role: {requestDto.Role}";
             return response;
         }
-
         // Map AddUserDTO to User
         var newUser = _mapper.Map<User>(requestDto);
         newUser.Password = BCrypt.Net.BCrypt.HashPassword(requestDto.Password);
         newUser.Role = role;
         newUser.Status = USER_STATUS.INACTIVE;
-
-        //  Send the email and generated verification code
+        //  Send the email and generated verification code with expiry time
         string verificationCode = SMTP_Registration.GenerateVerificationCode();
+        newUser.VerificationCode = verificationCode;
+        newUser.VerificationCodeExpiry = DateTime.UtcNow.AddMinutes(5);
         try
         {
             SMTP_Registration.EmailSender(newUser.Email, newUser.FirstName, newUser.LastName, verificationCode);
@@ -78,12 +77,9 @@ public class AuthorizationService : IAuthorization
             response.Status = 500;
             return response;
         }
-
         // Save the new user in the database
-        newUser.VerificationCode = verificationCode;
         _context.Users.Add(newUser);
         _context.SaveChanges();
-
         // Generate JWT token
         // Map User to PublicUserDTO for response
         var userDto = _mapper.Map<PublicUserDTO>(newUser);
@@ -104,7 +100,6 @@ public class AuthorizationService : IAuthorization
                 Data = null
             };
         }
-
         if (!BCrypt.Net.BCrypt.Verify(user.Password, foundUser.Password))
         {
             return new UserApiResponse<LogInUserDTO>
@@ -114,16 +109,7 @@ public class AuthorizationService : IAuthorization
                 Data = null
             };
         }
-
-        if (foundUser.Status != USER_STATUS.ACTIVE)
-        {
-            foundUser.Status = USER_STATUS.ACTIVE;
-            _context.Users.Update(foundUser);
-            _context.SaveChanges();
-        }
-
         var jwtToken = _jwtService.GetUserToken(foundUser);
-
         var loginUser = new LogInUserDTO
         {
             Email = foundUser.Email,
@@ -132,7 +118,6 @@ public class AuthorizationService : IAuthorization
             Status = foundUser.Status.ToString(),
             Password = foundUser.Password
         };
-
         return new UserApiResponse<LogInUserDTO>
         {
             Status = 200,
@@ -141,8 +126,45 @@ public class AuthorizationService : IAuthorization
         };
     }
 
-
-
+    public UserApiResponse<PublicUserDTO> VerifyEmail(string verificationCode)
+    {
+        var response = new UserApiResponse<PublicUserDTO>();
+        var user = _context.Users.FirstOrDefault(u =>
+            u.VerificationCode == verificationCode &&
+            u.VerificationCodeExpiry > DateTime.UtcNow); 
+        if (user == null)
+        {
+            response.Status = 404;
+            response.Message = "Invalid or expired verification code";
+            response.Data = null;
+            return response;
+        }
+        user.Status = USER_STATUS.ACTIVE;
+        user.VerificationCode = null;
+        user.VerificationCodeExpiry = DateTime.MinValue;
+        _context.Users.Update(user);
+        _context.SaveChanges();
+        var publicUser = _mapper.Map<PublicUserDTO>(user);
+        response.Status = 200;
+        response.Message = "Email verification successful";
+        response.Data = publicUser;
+        return response;
+    }
+    // Cleanup expired verification codes
+    public void CleanupExpiredVerificationCodes()
+    {
+        var expiredUsers = _context.Users
+            .Where(u => u.Status == USER_STATUS.INACTIVE &&
+                       u.VerificationCodeExpiry < DateTime.UtcNow &&
+                       u.VerificationCode != null)
+            .ToList();
+        foreach (var user in expiredUsers)
+        {
+            user.VerificationCode = null;
+            user.VerificationCodeExpiry = DateTime.MinValue;
+        }
+        _context.SaveChanges();
+    }
 
     public User RefreshToken(User user)
     {

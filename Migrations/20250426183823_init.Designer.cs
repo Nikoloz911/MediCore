@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250425114812_missingProperty")]
-    partial class missingProperty
+    [Migration("20250426183823_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -410,8 +410,10 @@ namespace MediCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("VerificationCode")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("VerificationCodeExpiry")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

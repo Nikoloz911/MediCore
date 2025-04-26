@@ -13,7 +13,6 @@ namespace MediCore.Controllers;
 public class AuthenticationController : ControllerBase
 {
     private readonly IAuthorization _authorizationService;
-
     public AuthenticationController(IAuthorization authorizationService)
     {
         _authorizationService = authorizationService;
@@ -65,6 +64,29 @@ public class AuthenticationController : ControllerBase
             return StatusCode(500, "Internal Server Error");
         }
     }
+
+    // VERIFY EMAIL
+    [HttpPost("verify-email")]
+    public ActionResult<UserApiResponse<PublicUserDTO>> VerifyEmail([FromBody] EmailVerificationDTO verificationDto)
+    {
+        var response = _authorizationService.VerifyEmail(verificationDto.VerificationCode);
+
+        if (response.Status == 200)
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 404)
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
+
+
+
 
 
 
