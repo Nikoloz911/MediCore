@@ -1,4 +1,5 @@
 ﻿using MediCore.Core;
+using MediCore.Enums;
 using MediCore.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,13 +19,22 @@ public class JWTService : IJWTService
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+        string mappedRole = user.Role switch
+        {
+            USER_ROLE.ADMIN => "Admin",
+            USER_ROLE.DOCTOR => "Doctor",
+            USER_ROLE.NURSE => "Nurse",
+            USER_ROLE.PATIENT => "Patient",
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim("role", user.Role.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+        new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
+        new Claim(JwtRegisteredClaimNames.Name, user.FirstName),
+        new Claim(ClaimTypes.Role, mappedRole),
+    };
 
         var token = new JwtSecurityToken(
             issuer: JwtIssuer,
@@ -39,4 +49,5 @@ public class JWTService : IJWTService
             Token = new JwtSecurityTokenHandler().WriteToken(token)
         };
     }
+
 }

@@ -37,4 +37,36 @@ public class AuthenticationController : ControllerBase
         }
         return StatusCode(500, "Internal Server Error");
     }
+    // LOGIN
+    [HttpPost("login")]
+    public ActionResult<UserApiResponse<LogInUserDTO>> Login([FromBody] LoginRequestDTO loginDto)
+    {
+        var user = new User
+        {
+            Email = loginDto.Email,
+            Password = loginDto.Password
+        };
+
+        var response = _authorizationService.LogIn(user);
+
+        if (response.Status == 200)
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 400)
+        {
+            return BadRequest(response);
+        }
+        else if (response.Status == 401)
+        {
+            return Unauthorized(response);
+        }
+        else
+        {
+            return StatusCode(500, "Internal Server Error");
+        }
+    }
+
+
+
 }

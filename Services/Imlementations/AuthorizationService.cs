@@ -86,13 +86,13 @@ public class AuthorizationService : IAuthorization
         _context.SaveChanges();
 
         // Generate JWT token
-        var jwtToken = _jwtService.GetUserToken(newUser);
+        // var jwtToken = _jwtService.GetUserToken(newUser);
 
         // Map User to PublicUserDTO for response
         var userDto = _mapper.Map<PublicUserDTO>(newUser);
         response.Status = 200;
         response.Data = userDto;
-        userDto.Token = jwtToken.Token;
+        // userDto.Token = jwtToken.Token;
         return response;
     }
 
@@ -100,11 +100,50 @@ public class AuthorizationService : IAuthorization
 
 
 
-
-    public User LogIn(User user)
+    public UserApiResponse<LogInUserDTO> LogIn(User user)
     {
-        throw new NotImplementedException();
+        var foundUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
+        if (foundUser == null)
+        {
+            return new UserApiResponse<LogInUserDTO>
+            {
+                Status = 400,
+                Message = "User not found",
+                Data = null
+            };
+        }
+
+        if (!BCrypt.Net.BCrypt.Verify(user.Password, foundUser.Password))
+        {
+            return new UserApiResponse<LogInUserDTO>
+            {
+                Status = 401,
+                Message = "Invalid password",
+                Data = null
+            };
+        }
+
+        var jwtToken = _jwtService.GetUserToken(foundUser);
+
+        var loginUser = new LogInUserDTO
+        {
+            Email = foundUser.Email,
+            Role = foundUser.Role.ToString(),
+            Token = jwtToken.Token,
+            Status = foundUser.Status.ToString(),
+            Password = foundUser.Password
+        };
+
+        return new UserApiResponse<LogInUserDTO>
+        {
+            Status = 200,
+            Message = "Login successful",
+            Data = loginUser
+        };
     }
+
+
+
     public User RefreshToken(User user)
     {
         throw new NotImplementedException();

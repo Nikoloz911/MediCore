@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Services.Interaces;
 using MediCore.DTOs.UserDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MediCore.Controllers
 {
@@ -17,6 +18,7 @@ namespace MediCore.Controllers
         }
 
         [HttpGet("users")]
+        [Authorize(Policy = "AdminOnly")]
         public IActionResult GetAllUsers()
         {
             var response = _userService.GetAllUsers();
@@ -74,6 +76,7 @@ namespace MediCore.Controllers
         }
 
         [HttpDelete("users/{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public IActionResult DeleteUserById(int id)
         {
             var response = _userService.DeleteUserById(id);
