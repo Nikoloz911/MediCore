@@ -34,7 +34,26 @@ public class AuthenticationController : ControllerBase
         {
             return Conflict(response);
         }
-        return StatusCode(500, "Internal Server Error"); //
+        return StatusCode(500, "Internal Server Error"); 
+    }
+    // VERIFY EMAIL
+    [HttpPost("verify-email")]
+    public ActionResult<UserApiResponse<PublicUserDTO>> VerifyEmail([FromBody] EmailVerificationDTO verificationDto)
+    {
+        var response = _authorizationService.VerifyEmail(verificationDto.VerificationCode);
+
+        if (response.Status == 200)
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 404)
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return StatusCode(500, "Internal Server Error");
+        }
     }
     // LOGIN
     [HttpPost("login")]
@@ -59,35 +78,60 @@ public class AuthenticationController : ControllerBase
         {
             return Unauthorized(response);
         }
+        else if (response.Status == 403)
+        {
+            return StatusCode(403, new UserApiResponse<LogInUserDTO>
+            {
+                Status = 403,
+                Message = "User is not active",
+                Data = null 
+            });
+        }
         else
         {
             return StatusCode(500, "Internal Server Error");
         }
     }
 
-    // VERIFY EMAIL
-    [HttpPost("verify-email")]
-    public ActionResult<UserApiResponse<PublicUserDTO>> VerifyEmail([FromBody] EmailVerificationDTO verificationDto)
+    // LOGOUT
+    [HttpPost("logout")]
+    public ActionResult<UserApiResponse<string>> Logout([FromBody] TokenRefreshRequestDTO request)
     {
-        var response = _authorizationService.VerifyEmail(verificationDto.VerificationCode);
-
+        var response = _authorizationService.Logout(request);
         if (response.Status == 200)
         {
             return Ok(response);
         }
-        else if (response.Status == 404)
+        else if (response.Status == 400)
         {
-            return NotFound(response);
+            return BadRequest(response);
         }
-        else
+        else if (response.Status == 401)
         {
-            return StatusCode(500, "Internal Server Error");
+            return Unauthorized(response);
         }
+        return StatusCode(500, "Internal Server Error");
     }
 
 
-
-
-
+    // REFRESH TOKEN
+    [HttpPost("refresh-token")]
+    public ActionResult<UserApiResponse<LogInUserDTO>> RefreshToken([FromBody] TokenRefreshRequestDTO request)
+    {
+        var response = _authorizationService.RefreshToken(request);
+        if (response.Status == 200)
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 400)
+        {
+            return BadRequest(response);
+        }
+        else if (response.Status == 401)
+        {
+            return Unauthorized(response);
+        }
+        return StatusCode(500, "Internal Server Error");
+    }
 
 }

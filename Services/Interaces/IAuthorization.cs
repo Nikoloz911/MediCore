@@ -8,5 +8,6 @@ public interface IAuthorization
     UserApiResponse<PublicUserDTO> Register(AddUserDTO request);
     UserApiResponse<LogInUserDTO> LogIn(User user);
     UserApiResponse<PublicUserDTO> VerifyEmail(string verificationCode);
-    User RefreshToken(User user);
+    UserApiResponse<LogInUserDTO> RefreshToken(TokenRefreshRequestDTO request);
+    UserApiResponse<string> Logout(TokenRefreshRequestDTO request);
 }

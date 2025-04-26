@@ -14,9 +14,11 @@ public class UserValidator : AbstractValidator<AddUser>
             .Length(1, 60).WithMessage("Last Name must be between 1 and 60 characters.");
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required.")
-            .EmailAddress().WithMessage("Email is not valid.")
-            .Must(email => email.EndsWith("@gmail.com")).WithMessage("Email must end with '@gmail.com'.");
+              .NotEmpty().WithMessage("Email is required.")
+              .EmailAddress().WithMessage("Email is not valid.")
+              .Must(email => email.Contains("@") && email.Trim().EndsWith(".com", StringComparison.OrdinalIgnoreCase))
+              .WithMessage("Email must contain '@' and end with '.com'.");
+
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required.")

@@ -11,6 +11,7 @@ using MediCore.DTOs.UserDTOs;
 using AutoMapper;
 using MediCore.SMTP;
 using MediCore.JWT;
+using System.Security.Claims;
 namespace MediCore.Services.Imlementations;
 public class AuthorizationService : IAuthorization
 {
@@ -80,14 +81,38 @@ public class AuthorizationService : IAuthorization
         // Save the new user in the database
         _context.Users.Add(newUser);
         _context.SaveChanges();
-        // Generate JWT token
         // Map User to PublicUserDTO for response
         var userDto = _mapper.Map<PublicUserDTO>(newUser);
         response.Status = 200;
         response.Data = userDto;
         return response;
     }
-
+    // VERIFY EMAIL
+    public UserApiResponse<PublicUserDTO> VerifyEmail(string verificationCode)
+    {
+        var response = new UserApiResponse<PublicUserDTO>();
+        var user = _context.Users.FirstOrDefault(u =>
+            u.VerificationCode == verificationCode &&
+            u.VerificationCodeExpiry > DateTime.UtcNow);
+        if (user == null)
+        {
+            response.Status = 404;
+            response.Message = "Invalid or expired verification code";
+            response.Data = null;
+            return response;
+        }
+        user.Status = USER_STATUS.ACTIVE;
+        user.VerificationCode = null;
+        user.VerificationCodeExpiry = DateTime.MinValue;
+        _context.Users.Update(user);
+        _context.SaveChanges();
+        var publicUser = _mapper.Map<PublicUserDTO>(user);
+        response.Status = 200;
+        response.Message = "Email verification successful";
+        response.Data = publicUser;
+        return response;
+    }
+    // LOGIN
     public UserApiResponse<LogInUserDTO> LogIn(User user)
     {
         var foundUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
@@ -97,6 +122,15 @@ public class AuthorizationService : IAuthorization
             {
                 Status = 400,
                 Message = "User not found",
+                Data = null
+            };
+        }
+        if (foundUser.Status == USER_STATUS.INACTIVE)
+        {
+            return new UserApiResponse<LogInUserDTO>
+            {
+                Status = 403, 
+                Message = "User is not active",
                 Data = null
             };
         }
@@ -126,48 +160,104 @@ public class AuthorizationService : IAuthorization
         };
     }
 
-    public UserApiResponse<PublicUserDTO> VerifyEmail(string verificationCode)
+    // LOGOUT
+    public UserApiResponse<string> Logout(TokenRefreshRequestDTO request)
     {
-        var response = new UserApiResponse<PublicUserDTO>();
-        var user = _context.Users.FirstOrDefault(u =>
-            u.VerificationCode == verificationCode &&
-            u.VerificationCodeExpiry > DateTime.UtcNow); 
-        if (user == null)
+        if (string.IsNullOrEmpty(request.Token))
         {
-            response.Status = 404;
-            response.Message = "Invalid or expired verification code";
-            response.Data = null;
-            return response;
+            return new UserApiResponse<string>
+            {
+                Status = 400,
+                Message = "Token is required",
+                Data = null
+            };
         }
-        user.Status = USER_STATUS.ACTIVE;
-        user.VerificationCode = null;
-        user.VerificationCodeExpiry = DateTime.MinValue;
-        _context.Users.Update(user);
-        _context.SaveChanges();
-        var publicUser = _mapper.Map<PublicUserDTO>(user);
-        response.Status = 200;
-        response.Message = "Email verification successful";
-        response.Data = publicUser;
-        return response;
-    }
-    // Cleanup expired verification codes
-    public void CleanupExpiredVerificationCodes()
-    {
-        var expiredUsers = _context.Users
-            .Where(u => u.Status == USER_STATUS.INACTIVE &&
-                       u.VerificationCodeExpiry < DateTime.UtcNow &&
-                       u.VerificationCode != null)
-            .ToList();
-        foreach (var user in expiredUsers)
+        var principal = _jwtService.GetPrincipalFromExpiredToken(request.Token);
+        if (principal == null)
         {
-            user.VerificationCode = null;
-            user.VerificationCodeExpiry = DateTime.MinValue;
+            return new UserApiResponse<string>
+            {
+                Status = 401,
+                Message = "Invalid token",
+                Data = null
+            };
         }
-        _context.SaveChanges();
+        return new UserApiResponse<string>
+        {
+            Status = 200,
+            Message = "Logged out successfully",
+            Data = "Logout successful"
+        };
     }
 
-    public User RefreshToken(User user)
+    // REFRESH TOKEN
+    public UserApiResponse<LogInUserDTO> RefreshToken(TokenRefreshRequestDTO request)
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(request.Token))
+        {
+            return new UserApiResponse<LogInUserDTO>
+            {
+                Status = 400,
+                Message = "Token is required",
+                Data = null
+            };
+        }
+        ClaimsPrincipal principal;
+        try
+        {
+            principal = _jwtService.GetPrincipalFromExpiredToken(request.Token);
+        }
+        catch
+        {
+            return new UserApiResponse<LogInUserDTO>
+            {
+                Status = 401,
+                Message = "Invalid token",
+                Data = null
+            };
+        }
+        if (principal == null)
+        {
+            return new UserApiResponse<LogInUserDTO>
+            {
+                Status = 401,
+                Message = "Invalid token",
+                Data = null
+            };
+        }
+        var email = principal.FindFirstValue(ClaimTypes.Email);
+        var foundUser = _context.Users.FirstOrDefault(u => u.Email == email);
+
+        if (foundUser == null)
+        {
+            return new UserApiResponse<LogInUserDTO>
+            {
+                Status = 400,
+                Message = "User not found",
+                Data = null
+            };
+        }
+
+        var newJwtToken = _jwtService.GetUserToken(foundUser);
+
+        var loginUser = new LogInUserDTO
+        {
+            Email = foundUser.Email,
+            Role = foundUser.Role.ToString(),
+            Token = newJwtToken.Token,
+            Status = foundUser.Status.ToString(),
+            Password = foundUser.Password
+        };
+
+        return new UserApiResponse<LogInUserDTO>
+        {
+            Status = 200,
+            Message = "Token refreshed successfully",
+            Data = loginUser
+        };
     }
+
+  
+
+
 }
