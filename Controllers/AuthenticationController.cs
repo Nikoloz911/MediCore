@@ -35,7 +35,7 @@ public class AuthenticationController : ControllerBase
         {
             return Conflict(response);
         }
-        return StatusCode(500, "Internal Server Error");
+        return StatusCode(500, "Internal Server Error"); //
     }
     // LOGIN
     [HttpPost("login")]
@@ -48,7 +48,6 @@ public class AuthenticationController : ControllerBase
         };
 
         var response = _authorizationService.LogIn(user);
-
         if (response.Status == 200)
         {
             return Ok(response);

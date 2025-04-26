@@ -40,8 +40,7 @@ public class AuthorizationService : IAuthorization
             response.Message = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
             response.Data = null!;
             return response;
-        }
-
+        }   
 
         //if (_context.Users.Any(u => u.Email == requestDto.Email))
         //{
@@ -86,19 +85,12 @@ public class AuthorizationService : IAuthorization
         _context.SaveChanges();
 
         // Generate JWT token
-        // var jwtToken = _jwtService.GetUserToken(newUser);
-
         // Map User to PublicUserDTO for response
         var userDto = _mapper.Map<PublicUserDTO>(newUser);
         response.Status = 200;
         response.Data = userDto;
-        // userDto.Token = jwtToken.Token;
         return response;
     }
-
-
-
-
 
     public UserApiResponse<LogInUserDTO> LogIn(User user)
     {
@@ -123,6 +115,13 @@ public class AuthorizationService : IAuthorization
             };
         }
 
+        if (foundUser.Status != USER_STATUS.ACTIVE)
+        {
+            foundUser.Status = USER_STATUS.ACTIVE;
+            _context.Users.Update(foundUser);
+            _context.SaveChanges();
+        }
+
         var jwtToken = _jwtService.GetUserToken(foundUser);
 
         var loginUser = new LogInUserDTO
@@ -141,6 +140,7 @@ public class AuthorizationService : IAuthorization
             Data = loginUser
         };
     }
+
 
 
 

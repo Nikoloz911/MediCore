@@ -98,7 +98,6 @@ namespace MediCore.Services.Imlementations
                 };
             }
 
-            // Check if email is being changed and if it's already taken
             if (!string.IsNullOrWhiteSpace(userUpdateDto.Email) &&
                 userUpdateDto.Email != existingUser.Email &&
                 _context.Users.Any(u => u.Email == userUpdateDto.Email))
@@ -111,10 +110,7 @@ namespace MediCore.Services.Imlementations
                 };
             }
 
-            // Track if any changes were made
             bool hasChanges = false;
-
-            // Update only if values are different
             if (!string.IsNullOrWhiteSpace(userUpdateDto.FirstName) && userUpdateDto.FirstName != existingUser.FirstName)
             {
                 existingUser.FirstName = userUpdateDto.FirstName;
@@ -133,30 +129,24 @@ namespace MediCore.Services.Imlementations
                 hasChanges = true;
             }
 
-            // Handle password update separately with hashing
             if (!string.IsNullOrWhiteSpace(userUpdateDto.Password))
             {
                 bool isSamePassword = false;
                 try
                 {
-                    // Try to verify if passwords match - wrap in try/catch to handle any BCrypt issues
                     isSamePassword = BCrypt.Net.BCrypt.Verify(userUpdateDto.Password, existingUser.Password);
                 }
                 catch
                 {
-                    // If verification fails (due to format issues etc.), assume passwords are different
                     isSamePassword = false;
                 }
 
                 if (!isSamePassword)
                 {
-                    // Hash and update the new password
                     existingUser.Password = BCrypt.Net.BCrypt.HashPassword(userUpdateDto.Password);
                     hasChanges = true;
                 }
             }
-
-            // Only save if changes were made
             if (hasChanges)
             {
                 _context.SaveChanges();
@@ -169,7 +159,6 @@ namespace MediCore.Services.Imlementations
             }
             else
             {
-                // Return 204 No Content when no changes were made
                 return new UserApiResponse<UserGetByIdDTO>
                 {
                     Status = StatusCodes.Status204NoContent,
@@ -179,12 +168,9 @@ namespace MediCore.Services.Imlementations
             }
         }
 
-        // Validation helper method for user updates - matched to UserValidator rules
         private List<string> ValidateUserUpdate(UserUpdateDTO userDto, User existingUser)
         {
             var errors = new List<string>();
-
-            // Check if any fields were provided for update
             if (string.IsNullOrWhiteSpace(userDto.FirstName) &&
                 string.IsNullOrWhiteSpace(userDto.LastName) &&
                 string.IsNullOrWhiteSpace(userDto.Email) &&
@@ -193,8 +179,6 @@ namespace MediCore.Services.Imlementations
                 errors.Add("No fields provided for update");
                 return errors;
             }
-
-            // Validate firstName if provided - matching UserValidator
             if (!string.IsNullOrWhiteSpace(userDto.FirstName))
             {
                 if (string.IsNullOrEmpty(userDto.FirstName))
@@ -207,7 +191,6 @@ namespace MediCore.Services.Imlementations
                 }
             }
 
-            // Validate lastName if provided - matching UserValidator
             if (!string.IsNullOrWhiteSpace(userDto.LastName))
             {
                 if (string.IsNullOrEmpty(userDto.LastName))
@@ -220,7 +203,6 @@ namespace MediCore.Services.Imlementations
                 }
             }
 
-            // Validate email if provided - matching UserValidator
             if (!string.IsNullOrWhiteSpace(userDto.Email))
             {
                 if (string.IsNullOrEmpty(userDto.Email))
@@ -229,14 +211,12 @@ namespace MediCore.Services.Imlementations
                 }
                 else
                 {
-                    // Email regex pattern for basic email validation
                     var emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
                     if (!Regex.IsMatch(userDto.Email, emailPattern))
                     {
                         errors.Add("Email is not valid.");
                     }
 
-                    // Check for gmail.com domain requirement
                     if (!userDto.Email.EndsWith("@gmail.com"))
                     {
                         errors.Add("Email must end with '@gmail.com'.");
@@ -244,7 +224,6 @@ namespace MediCore.Services.Imlementations
                 }
             }
 
-            // Validate password if provided - matching UserValidator
             if (!string.IsNullOrWhiteSpace(userDto.Password))
             {
                 if (string.IsNullOrEmpty(userDto.Password))
