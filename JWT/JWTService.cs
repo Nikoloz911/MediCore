@@ -22,10 +22,10 @@ namespace MediCore.JWT
 
             string mappedRole = user.Role switch
             {
-                USER_ROLE.ADMIN => "Admin",
-                USER_ROLE.DOCTOR => "Doctor",
-                USER_ROLE.NURSE => "Nurse",
-                USER_ROLE.PATIENT => "Patient",
+                USER_ROLE.ADMIN => "ADMIN",
+                USER_ROLE.DOCTOR => "DOCTOR",
+                USER_ROLE.NURSE => "NURSE",
+                USER_ROLE.PATIENT => "PATIENT",
                 _ => throw new ArgumentOutOfRangeException()
             };
 

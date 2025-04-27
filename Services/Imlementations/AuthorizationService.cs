@@ -65,7 +65,7 @@ public class AuthorizationService : IAuthorization
         var newUser = _mapper.Map<User>(requestDto);
         newUser.Password = BCrypt.Net.BCrypt.HashPassword(requestDto.Password);
         newUser.Role = role;
-        newUser.Status = USER_STATUS.INACTIVE;
+        newUser.Status = USER_STATUS.UNVERIFIED;
         //  Send the email and generated verification code with expiry time
         string verificationCode = SMTP_Registration.GenerateVerificationCode();
         newUser.VerificationCode = verificationCode;
@@ -102,7 +102,7 @@ public class AuthorizationService : IAuthorization
             response.Data = null;
             return response;
         }
-        user.Status = USER_STATUS.ACTIVE;
+        user.Status = USER_STATUS.VERIFIED;
         user.VerificationCode = null;
         user.VerificationCodeExpiry = DateTime.MinValue;
         _context.Users.Update(user);
@@ -126,12 +126,12 @@ public class AuthorizationService : IAuthorization
                 Data = null
             };
         }
-        if (foundUser.Status == USER_STATUS.INACTIVE)
+        if (foundUser.Status == USER_STATUS.UNVERIFIED)
         {
             return new UserApiResponse<LogInUserDTO>
             {
                 Status = 403, 
-                Message = "User is not active",
+                Message = "User is not Verified",
                 Data = null
             };
         }
@@ -153,6 +153,9 @@ public class AuthorizationService : IAuthorization
             Status = foundUser.Status.ToString(),
             Password = foundUser.Password
         };
+        foundUser.Status = USER_STATUS.ACTIVE;
+        _context.Users.Update(foundUser);
+        _context.SaveChanges();
         return new UserApiResponse<LogInUserDTO>
         {
             Status = 200,
@@ -203,6 +206,14 @@ public class AuthorizationService : IAuthorization
                 Message = "Invalid token",
                 Data = null
             };
+        }
+        var email = principal.FindFirstValue(ClaimTypes.Email);
+        var foundUser = _context.Users.FirstOrDefault(u => u.Email == email);
+        if (foundUser != null)
+        {
+            foundUser.Status = USER_STATUS.INACTIVE;
+            _context.Users.Update(foundUser);
+            _context.SaveChanges();
         }
         return new UserApiResponse<string>
         {

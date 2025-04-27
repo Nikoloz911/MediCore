@@ -46,9 +46,9 @@ builder.Services.AddAuthentication(options =>
     });
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("DoctorOnly", policy => policy.RequireRole("Doctor"));
-    options.AddPolicy("NurseOnly", policy => policy.RequireRole("Nurse"));
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("ADMIN"));
+    options.AddPolicy("DoctorOnly", policy => policy.RequireRole("DOCTOR"));
+    options.AddPolicy("NurseOnly", policy => policy.RequireRole("NURSE"));
 });
 
 

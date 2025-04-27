@@ -37,7 +37,7 @@ namespace MediCore.Controllers
             }
         }
 
-        [HttpGet("user/{id}")]
+        [HttpGet("users/{id}")]
         public IActionResult GetUserById(int id)
         {
             var response = _userService.GetUserById(id);
