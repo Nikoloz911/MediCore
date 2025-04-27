@@ -409,7 +409,7 @@ namespace MediCore.Migrations
                     b.Property<string>("VerificationCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("VerificationCodeExpiry")
+                    b.Property<DateTime?>("VerificationCodeExpiry")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

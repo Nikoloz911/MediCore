@@ -8,7 +8,7 @@ public class User
     public string Email { get; set; }
     public string Password { get; set; }
     public string? VerificationCode { get; set; }
-    public DateTime VerificationCodeExpiry { get; set; }
+    public DateTime? VerificationCodeExpiry { get; set; }
     public USER_ROLE Role { get; set; }  // Admin, Doctor, Nurse, Patient
     public USER_STATUS Status { get; set; } // verified, unverified, active, inactive
     public Doctor? Doctor { get; set; } // Navigation property to Doctor

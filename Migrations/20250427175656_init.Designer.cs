@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250426183823_init")]
+    [Migration("20250427175656_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -412,7 +412,7 @@ namespace MediCore.Migrations
                     b.Property<string>("VerificationCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("VerificationCodeExpiry")
+                    b.Property<DateTime?>("VerificationCodeExpiry")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

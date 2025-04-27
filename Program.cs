@@ -7,6 +7,8 @@ using MediCore.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MediCore.Services.Interfaces;
+using MediCore.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,12 +69,20 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+/// TO ADD DATA IN DATABASE
+/// 
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    var context = services.GetRequiredService<DataContext>();
+//    AddDoctorsData.SeedDoctorsData(context);
+//}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseCors();
 app.UseAuthentication();
 app.UseHttpsRedirection();

@@ -3,36 +3,66 @@ using MediCore.Data;
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Core;
 using MediCore.DTOs.DoctorDTOs;
-using MediCore.Services.Interaces;
-namespace MediCore.Services.Imlementations;
-public class DoctorService : IDoctor
+using MediCore.Services.Interfaces;
+using MediCore.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace MediCore.Services.Implementations
 {
-    private readonly DataContext _context;
-    private readonly IMapper _mapper;
-    public DoctorService(DataContext context, IMapper mapper)
+    public class DoctorService : IDoctor
     {
-        _context = context;
-        _mapper = mapper;
-    }
-    // Get all doctors
-    public ApiResponse<List<DoctorDTO>> GetAllDoctors()
-    {
-        var doctors = _context.Doctors.ToList();
-        if (!doctors.Any())
+        private readonly DataContext _context;
+        private readonly IMapper _mapper;
+
+        public DoctorService(DataContext context, IMapper mapper)
         {
-            return new ApiResponse<List<DoctorDTO>>
+            _context = context;
+            _mapper = mapper;
+        }
+
+        // Get all doctors (Basic Info)
+        public ApiResponse<List<DoctorAllDTO>> GetAllDoctors()
+        {
+            var doctors = _context.Doctors.Include(d => d.User).ToList(); 
+            if (!doctors.Any())
             {
-                Status = 404,
-                Message = "No doctors found.",
-                Data = null
+                return new ApiResponse<List<DoctorAllDTO>>
+                {
+                    Status = 404,
+                    Message = "No doctors found.",
+                    Data = null
+                };
+            }
+            var doctorDtos = _mapper.Map<List<DoctorAllDTO>>(doctors);
+            return new ApiResponse<List<DoctorAllDTO>>
+            {
+                Status = 200,
+                Message = "Doctors retrieved successfully.",
+                Data = doctorDtos
             };
         }
-        var doctorDtos = _mapper.Map<List<DoctorDTO>>(doctors);
-        return new ApiResponse<List<DoctorDTO>>
+        // Get doctor by ID
+        public ApiResponse<DoctorByIdDTO> GetDoctorById(int id)
         {
-            Status = 200,
-            Message = "Doctors retrieved successfully.",
-            Data = doctorDtos
-        };
+            var doctor = _context.Doctors
+                .Include(d => d.User)
+                .FirstOrDefault(d => d.UserId == id);
+            if (doctor == null)
+            {
+                return new ApiResponse<DoctorByIdDTO>
+                {
+                    Status = 404,
+                    Message = "Doctor not found.",
+                    Data = null
+                };
+            }
+            var doctorDto = _mapper.Map<DoctorByIdDTO>(doctor);
+            return new ApiResponse<DoctorByIdDTO>
+            {
+                Status = 200,
+                Message = "Doctor retrieved successfully.",
+                Data = doctorDto
+            };
+        }
     }
 }

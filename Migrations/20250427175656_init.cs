@@ -67,7 +67,7 @@ namespace MediCore.Migrations
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VerificationCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VerificationCodeExpiry = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VerificationCodeExpiry = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Role = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },

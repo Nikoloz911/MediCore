@@ -1,8 +1,9 @@
 ﻿using MediCore.Core;
 using MediCore.DTOs.DoctorDTOs;
 
-namespace MediCore.Services.Interaces;
+namespace MediCore.Services.Interfaces;
 public interface IDoctor
 {
-    public ApiResponse<List<DoctorDTO>> GetAllDoctors();
+    ApiResponse<List<DoctorAllDTO>> GetAllDoctors();
+    ApiResponse<DoctorByIdDTO> GetDoctorById(int id); 
 }
