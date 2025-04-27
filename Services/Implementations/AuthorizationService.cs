@@ -1,4 +1,4 @@
-﻿using MediCore.Services.Interaces;
+﻿using MediCore.Services.Interfaces;
 using MediCore.Data;
 using MediCore.Models;
 using MediCore.Core;
@@ -13,7 +13,7 @@ using MediCore.SMTP;
 using MediCore.JWT;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
-namespace MediCore.Services.Imlementations;
+namespace MediCore.Services.Implementations;
 public class AuthorizationService : IAuthorization
 {
     private readonly DataContext _context;

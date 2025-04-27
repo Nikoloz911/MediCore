@@ -1,14 +1,17 @@
 using FluentValidation.AspNetCore;
 using MediCore.Data;
 using MediCore.Validators;
-using MediCore.Services.Imlementations;
-using MediCore.Services.Interaces;
+using MediCore.Services.Implementations;
+using MediCore.Services.Interfaces;
 using MediCore.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using MediCore.Services.Interfaces;
-using MediCore.Services.Implementations;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using MediCore.Core;
+using Microsoft.AspNetCore.Diagnostics;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Register services
+/// REGISTER SERVICES  /// REGISTER SERVICES  /// REGISTER SERVICES  /// REGISTER SERVICES  /// REGISTER SERVICES
 
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddScoped<IAuthorization, AuthorizationService>();
@@ -54,7 +57,12 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("NurseOnly", policy => policy.RequireRole("NURSE"));
 });
 
-
+// DISABLE AUTOMATIC 400 RESPONSES
+// FOR DoctorController HTTPPUT
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 // Enable CORS
 builder.Services.AddCors(options =>
 {
@@ -66,9 +74,43 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod();
     });
 });
+/// REGISTER SERVICES  /// REGISTER SERVICES  /// REGISTER SERVICES  /// REGISTER SERVICES  /// REGISTER SERVICES
+
 
 var app = builder.Build();
+app.UseExceptionHandler(appBuilder =>
+{
+    appBuilder.Run(async context =>
+    {
+        var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+        var exception = exceptionHandlerFeature.Error;
+        if (exception is JsonException || exception.InnerException is JsonException)
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            context.Response.ContentType = "application/json";
 
+            var response = new ApiResponse<object>
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Message = "Invalid JSON format in request body",
+                Data = null
+            };
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        }
+        else
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.ContentType = "application/json";
+            var response = new ApiResponse<object>
+            {
+                Status = StatusCodes.Status500InternalServerError,
+                Message = "An unexpected error occurred",
+                Data = null
+            };
+            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        }
+    });
+});
 /// TO ADD DATA IN DATABASE
 /// 
 //using (var scope = app.Services.CreateScope())

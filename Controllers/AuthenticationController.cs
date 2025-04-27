@@ -2,7 +2,7 @@
 using MediCore.DTOs.UserDTOs;
 using MediCore.Models;
 using MediCore.Request;
-using MediCore.Services.Interaces;
+using MediCore.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

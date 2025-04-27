@@ -2,7 +2,7 @@
 using MediCore.DTOs.UserDTOs;
 using MediCore.Models;
 using MediCore.Request;
-namespace MediCore.Services.Interaces;
+namespace MediCore.Services.Interfaces;
 public interface IAuthorization
 {
     ApiResponse<PublicUserDTO> Register(AddUserDTO request);

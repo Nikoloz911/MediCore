@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MediCore.Services.Interaces;
+using MediCore.Services.Interfaces;
 using MediCore.DTOs.UserDTOs;
 using Microsoft.AspNetCore.Authorization;
 

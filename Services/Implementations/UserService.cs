@@ -1,7 +1,7 @@
 ﻿using MediCore.Data;
 using MediCore.Models;
 using MediCore.DTOs.UserDTOs;
-using MediCore.Services.Interaces;
+using MediCore.Services.Interfaces;
 using MediCore.Core;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using BCrypt.Net;
 
-namespace MediCore.Services.Imlementations
+namespace MediCore.Services.Implementations
 {
     public class UserService : IUser
     {

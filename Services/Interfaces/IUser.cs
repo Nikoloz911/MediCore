@@ -1,7 +1,7 @@
 ﻿using MediCore.Core;
 using MediCore.DTOs.UserDTOs;
 using MediCore.Models;
-namespace MediCore.Services.Interaces;
+namespace MediCore.Services.Interfaces;
 public interface IUser
 {
     ApiResponse<List<UserGetDTO>> GetAllUsers();    // ADMIN
