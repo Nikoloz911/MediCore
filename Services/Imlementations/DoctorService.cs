@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MediCore.Core;
 using MediCore.DTOs.DoctorDTOs;
 using MediCore.Services.Interfaces;
-using MediCore.Models;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 namespace MediCore.Services.Implementations
 {
@@ -13,14 +13,15 @@ namespace MediCore.Services.Implementations
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
-
-        public DoctorService(DataContext context, IMapper mapper)
+        private readonly IValidator<DoctorUpdateDTO> _doctorValidator;
+        public DoctorService(DataContext context, IMapper mapper, IValidator<DoctorUpdateDTO> doctorValidator)
         {
             _context = context;
             _mapper = mapper;
+            _doctorValidator = doctorValidator;
         }
 
-        // Get all doctors (Basic Info)
+        // GET ALL DOCTORS
         public ApiResponse<List<DoctorAllDTO>> GetAllDoctors()
         {
             var doctors = _context.Doctors.Include(d => d.User).ToList(); 
@@ -41,7 +42,7 @@ namespace MediCore.Services.Implementations
                 Data = doctorDtos
             };
         }
-        // Get doctor by ID
+        // GET DOCTOR BY ID
         public ApiResponse<DoctorByIdDTO> GetDoctorById(int id)
         {
             var doctor = _context.Doctors
@@ -64,5 +65,68 @@ namespace MediCore.Services.Implementations
                 Data = doctorDto
             };
         }
+
+
+//        GET /api/doctors/department/{departmentId
+//    } - ექიმები დეპარტამენტის მიხედვით
+//GET /api/doctors/schedule/{doctorId
+//}
+//-ექიმის გრაფიკი
+
+
+        // UPDATE DOCTOR BY ID
+        public ApiResponse<DoctorByIdDTO> UpdateDoctor(int id, DoctorUpdateDTO doctorUpdateDTO)
+        {
+            var validationResult = _doctorValidator.Validate(doctorUpdateDTO);
+
+            if (!validationResult.IsValid)
+            {
+                string validationMessages = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
+
+                return new ApiResponse<DoctorByIdDTO>
+                {
+                    Status = 400,
+                    Message = $"Validation failed: {validationMessages}", 
+                    Data = null
+                };
+            }
+            var doctor = _context.Doctors
+                .Include(d => d.User)
+                .FirstOrDefault(d => d.UserId == id);
+            if (doctor == null)
+            {
+                return new ApiResponse<DoctorByIdDTO>
+                {
+                    Status = 404,
+                    Message = "Doctor not found.",
+                    Data = null
+                };
+            }
+            doctor.User.FirstName = doctorUpdateDTO.FirstName;
+            doctor.User.LastName = doctorUpdateDTO.LastName;
+            doctor.User.Email = doctorUpdateDTO.Email;
+            doctor.Specialty = doctorUpdateDTO.Specialty;
+            doctor.LicenseNumber = doctorUpdateDTO.LicenseNumber;
+            doctor.WorkingHours = doctorUpdateDTO.WorkingHours;
+            doctor.ExperienceYears = doctorUpdateDTO.ExperienceYears;
+            if (!string.IsNullOrEmpty(doctorUpdateDTO.Password))
+            {
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(doctorUpdateDTO.Password);
+                doctor.User.Password = hashedPassword;
+            }
+            _context.SaveChanges();
+            var doctorDto = _mapper.Map<DoctorByIdDTO>(doctor);
+            return new ApiResponse<DoctorByIdDTO>
+            {
+                Status = 200,
+                Message = "Doctor updated successfully.",
+                Data = doctorDto
+            };
+        }
+
+
+
+
+
     }
 }
