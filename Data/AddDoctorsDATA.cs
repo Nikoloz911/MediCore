@@ -4,7 +4,7 @@ using MediCore.Enums;
 
 namespace MediCore.Data
 {
-    public class AddDoctorsData
+    public static class AddDoctorsData
     {
         public static readonly DataContext _context = new DataContext();
 
@@ -206,6 +206,12 @@ namespace MediCore.Data
                 }
             }
             context.SaveChanges();
+        }
+        public static void InitializeData(this IApplicationBuilder app)
+        {
+            using var scope = app.ApplicationServices.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+            SeedDoctorsData(context);
         }
     }
 }

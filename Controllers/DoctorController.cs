@@ -2,7 +2,6 @@
 using MediCore.DTOs.DoctorDTOs;
 using MediCore.Services.Implementations;
 using MediCore.Services.Interfaces;
-using MediCore.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Controllers
