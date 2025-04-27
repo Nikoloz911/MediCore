@@ -10,7 +10,7 @@ public class User
     public string? VerificationCode { get; set; }
     public DateTime VerificationCodeExpiry { get; set; }
     public USER_ROLE Role { get; set; }  // Admin, Doctor, Nurse, Patient
-    public USER_STATUS Status { get; set; } // active, inactive
+    public USER_STATUS Status { get; set; } // verified, unverified, active, inactive
     public Doctor? Doctor { get; set; } // Navigation property to Doctor
     public Patient? Patient { get; set; } // Navigation property to Patient
 }

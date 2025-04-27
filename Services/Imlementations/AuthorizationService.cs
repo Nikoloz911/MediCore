@@ -145,6 +145,9 @@ public class AuthorizationService : IAuthorization
             };
         }
         var jwtToken = _jwtService.GetUserToken(foundUser);
+        foundUser.Status = USER_STATUS.ACTIVE;
+        _context.Users.Update(foundUser);
+        _context.SaveChanges();
         var loginUser = new LogInUserDTO
         {
             Email = foundUser.Email,
@@ -153,9 +156,6 @@ public class AuthorizationService : IAuthorization
             Status = foundUser.Status.ToString(),
             Password = foundUser.Password
         };
-        foundUser.Status = USER_STATUS.ACTIVE;
-        _context.Users.Update(foundUser);
-        _context.SaveChanges();
         return new UserApiResponse<LogInUserDTO>
         {
             Status = 200,
