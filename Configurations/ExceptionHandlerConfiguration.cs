@@ -1,43 +1,45 @@
 ﻿using MediCore.Core;
 using Microsoft.AspNetCore.Diagnostics;
 using System.Text.Json;
-namespace MediCore.Configurations;
 
-public static class ExceptionHandlerConfiguration
+namespace MediCore.Configurations
 {
-    public static void UseCustomExceptionHandler(this IApplicationBuilder app)
+    public class ExceptionHandlerConfiguration
     {
-        app.UseExceptionHandler(appBuilder =>
+        public void CustomExceptionHandler(IApplicationBuilder app)
         {
-            appBuilder.Run(async context =>
+            app.UseExceptionHandler(appBuilder =>
             {
-                var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
-                var exception = exceptionHandlerFeature?.Error;
-                context.Response.ContentType = "application/json";
+                appBuilder.Run(async context =>
+                {
+                    var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    var exception = exceptionHandlerFeature?.Error;
+                    context.Response.ContentType = "application/json";
 
-                if (exception is JsonException || exception?.InnerException is JsonException)
-                {
-                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                    var response = new ApiResponse<object>
+                    if (exception is JsonException || exception?.InnerException is JsonException)
                     {
-                        Status = StatusCodes.Status400BadRequest,
-                        Message = "Invalid JSON format in request body",
-                        Data = null
-                    };
-                    await context.Response.WriteAsync(JsonSerializer.Serialize(response));
-                }
-                else
-                {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    var response = new ApiResponse<object>
+                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                        var response = new ApiResponse<object>
+                        {
+                            Status = StatusCodes.Status400BadRequest,
+                            Message = "Invalid JSON format in request body",
+                            Data = null
+                        };
+                        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+                    }
+                    else
                     {
-                        Status = StatusCodes.Status500InternalServerError,
-                        Message = "An unexpected error occurred",
-                        Data = null
-                    };
-                    await context.Response.WriteAsync(JsonSerializer.Serialize(response));
-                }
+                        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                        var response = new ApiResponse<object>
+                        {
+                            Status = StatusCodes.Status500InternalServerError,
+                            Message = "An unexpected error occurred",
+                            Data = null
+                        };
+                        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+                    }
+                });
             });
-        });
+        }
     }
 }

@@ -3,17 +3,19 @@ using MediCore.Data;
 using MediCore.Services.Implementations;
 using MediCore.Services.Interfaces;
 using MediCore.Validators;
-namespace MediCore.Configurations;
 
-public static class ServiceConfiguration
+namespace MediCore.Configurations
 {
-    public static void ConfigureApplicationServices(this IServiceCollection services)
+    public class ServiceConfiguration
     {
-        services.AddDbContext<DataContext>();
-        services.AddScoped<IAuthorization, AuthorizationService>();
-        services.AddScoped<IUser, UserService>();
-        services.AddScoped<IDoctor, DoctorService>();
-        services.AddAutoMapper(typeof(Program));
-        services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserValidator>());
+        public void ConfigureApplicationServices(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>();
+            services.AddScoped<IAuthorization, AuthorizationService>();
+            services.AddScoped<IUser, UserService>();
+            services.AddScoped<IDoctor, DoctorService>();
+            services.AddAutoMapper(typeof(Program));
+            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserValidator>());
+        }
     }
 }

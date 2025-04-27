@@ -1,16 +1,21 @@
-﻿namespace MediCore.Configurations;
-public static class CorsConfiguration
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace MediCore.Configurations
 {
-    public static void ConfigureCors(this IServiceCollection services)
+    public class CorsConfiguration
     {
-        services.AddCors(options =>
+        public void ConfigureCors(IServiceCollection services)
         {
-            options.AddDefaultPolicy(builder =>
+            services.AddCors(options =>
             {
-                builder.AllowAnyOrigin()
-                       .AllowAnyHeader()
-                       .AllowAnyMethod();
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
             });
-        });
+        }
     }
 }

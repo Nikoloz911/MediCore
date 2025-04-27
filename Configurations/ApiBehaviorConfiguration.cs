@@ -2,9 +2,9 @@
 
 namespace MediCore.Configurations
 {
-    public static class ApiBehaviorConfiguration
+    public class ApiBehaviorConfiguration
     {
-        public static void ConfigureApiBehavior(this IServiceCollection services)
+        public void ConfigureApiBehavior(IServiceCollection services)
         {
             services.Configure<ApiBehaviorOptions>(options =>
             {
