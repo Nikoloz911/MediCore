@@ -19,7 +19,7 @@ public class AuthenticationController : ControllerBase
     }
     // REGISTER A NEW USER
     [HttpPost("register")]
-    public ActionResult<UserApiResponse<PublicUserDTO>> Register([FromBody] AddUserDTO request)
+    public ActionResult<ApiResponse<PublicUserDTO>> Register([FromBody] AddUserDTO request)
     {
         var response = _authorizationService.Register(request);
         if (response.Status == 200)
@@ -38,7 +38,7 @@ public class AuthenticationController : ControllerBase
     }
     // VERIFY EMAIL
     [HttpPost("verify-email")]
-    public ActionResult<UserApiResponse<PublicUserDTO>> VerifyEmail([FromBody] EmailVerificationDTO verificationDto)
+    public ActionResult<ApiResponse<PublicUserDTO>> VerifyEmail([FromBody] EmailVerificationDTO verificationDto)
     {
         var response = _authorizationService.VerifyEmail(verificationDto.VerificationCode);
 
@@ -57,14 +57,13 @@ public class AuthenticationController : ControllerBase
     }
     // LOGIN
     [HttpPost("login")]
-    public ActionResult<UserApiResponse<LogInUserDTO>> Login([FromBody] LoginRequestDTO loginDto)
+    public ActionResult<ApiResponse<LogInUserDTO>> Login([FromBody] LoginRequestDTO loginDto)
     {
         var user = new User
         {
             Email = loginDto.Email,
             Password = loginDto.Password
         };
-
         var response = _authorizationService.LogIn(user);
         if (response.Status == 200)
         {
@@ -80,7 +79,7 @@ public class AuthenticationController : ControllerBase
         }
         else if (response.Status == 403)
         {
-            return StatusCode(403, new UserApiResponse<LogInUserDTO>
+            return StatusCode(403, new ApiResponse<LogInUserDTO>
             {
                 Status = 403,
                 Message = "User is not active",
@@ -95,7 +94,7 @@ public class AuthenticationController : ControllerBase
 
     // LOGOUT
     [HttpPost("logout")]
-    public ActionResult<UserApiResponse<string>> Logout([FromBody] TokenRefreshRequestDTO request)
+    public ActionResult<ApiResponse<string>> Logout([FromBody] TokenRefreshRequestDTO request)
     {
         var response = _authorizationService.Logout(request);
         if (response.Status == 200)
@@ -113,10 +112,9 @@ public class AuthenticationController : ControllerBase
         return StatusCode(500, "Internal Server Error");
     }
 
-
     // REFRESH TOKEN
     [HttpPost("refresh-token")]
-    public ActionResult<UserApiResponse<LogInUserDTO>> RefreshToken([FromBody] TokenRefreshRequestDTO request)
+    public ActionResult<ApiResponse<LogInUserDTO>> RefreshToken([FromBody] TokenRefreshRequestDTO request)
     {
         var response = _authorizationService.RefreshToken(request);
         if (response.Status == 200)
@@ -133,5 +131,4 @@ public class AuthenticationController : ControllerBase
         }
         return StatusCode(500, "Internal Server Error");
     }
-
 }

@@ -21,114 +21,100 @@ namespace MediCore.Services.Imlementations
             _context = context;
             _mapper = mapper;
         }
-
-        public UserApiResponse<List<UserGetDTO>> GetAllUsers()
+        // Get all users
+        public ApiResponse<List<UserGetDTO>> GetAllUsers()
         {
             var users = _context.Users.ToList();
-
             if (users == null || !users.Any())
             {
-                return new UserApiResponse<List<UserGetDTO>>
+                return new ApiResponse<List<UserGetDTO>>
                 {
                     Status = StatusCodes.Status403Forbidden,
                     Message = "No users found or unauthorized access.",
                     Data = null
                 };
             }
-
             var userDtos = _mapper.Map<List<UserGetDTO>>(users);
-
-            return new UserApiResponse<List<UserGetDTO>>
+            return new ApiResponse<List<UserGetDTO>>
             {
                 Status = StatusCodes.Status200OK,
                 Message = "Users retrieved successfully",
                 Data = userDtos
             };
         }
-
-        public UserApiResponse<UserGetByIdDTO> GetUserById(int id)
+        // Get user by ID
+        public ApiResponse<UserGetByIdDTO> GetUserById(int id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
-
             if (user == null)
             {
-                return new UserApiResponse<UserGetByIdDTO>
+                return new ApiResponse<UserGetByIdDTO>
                 {
                     Status = StatusCodes.Status404NotFound,
                     Message = "User not found",
                     Data = null
                 };
             }
-
             var userDto = _mapper.Map<UserGetByIdDTO>(user);
-
-            return new UserApiResponse<UserGetByIdDTO>
+            return new ApiResponse<UserGetByIdDTO>
             {
                 Status = StatusCodes.Status200OK,
                 Message = "User retrieved successfully",
                 Data = userDto
             };
         }
-
-
-
-        public UserApiResponse<UserGetByIdDTO> UpdateUserById(int id, UserUpdateDTO userUpdateDto)
+        // Update user by ID
+        public ApiResponse<UserGetByIdDTO> UpdateUserById(int id, UserUpdateDTO userUpdateDto)
         {
             // Find the existing user
             var existingUser = _context.Users.FirstOrDefault(u => u.Id == id);
             if (existingUser == null)
             {
-                return new UserApiResponse<UserGetByIdDTO>
+                return new ApiResponse<UserGetByIdDTO>
                 {
                     Status = StatusCodes.Status404NotFound,
                     Message = "User not found",
                     Data = null
                 };
             }
-
             // Validate inputs
             var validationErrors = ValidateUserUpdate(userUpdateDto, existingUser);
             if (validationErrors.Count > 0)
             {
-                return new UserApiResponse<UserGetByIdDTO>
+                return new ApiResponse<UserGetByIdDTO>
                 {
                     Status = StatusCodes.Status400BadRequest,
                     Message = "Validation failed: " + string.Join(", ", validationErrors),
                     Data = null
                 };
             }
-
             if (!string.IsNullOrWhiteSpace(userUpdateDto.Email) &&
                 userUpdateDto.Email != existingUser.Email &&
                 _context.Users.Any(u => u.Email == userUpdateDto.Email))
             {
-                return new UserApiResponse<UserGetByIdDTO>
+                return new ApiResponse<UserGetByIdDTO>
                 {
                     Status = StatusCodes.Status409Conflict,
                     Message = "Email is already in use",
                     Data = null
                 };
             }
-
             bool hasChanges = false;
             if (!string.IsNullOrWhiteSpace(userUpdateDto.FirstName) && userUpdateDto.FirstName != existingUser.FirstName)
             {
                 existingUser.FirstName = userUpdateDto.FirstName;
                 hasChanges = true;
             }
-
             if (!string.IsNullOrWhiteSpace(userUpdateDto.LastName) && userUpdateDto.LastName != existingUser.LastName)
             {
                 existingUser.LastName = userUpdateDto.LastName;
                 hasChanges = true;
             }
-
             if (!string.IsNullOrWhiteSpace(userUpdateDto.Email) && userUpdateDto.Email != existingUser.Email)
             {
                 existingUser.Email = userUpdateDto.Email;
                 hasChanges = true;
             }
-
             if (!string.IsNullOrWhiteSpace(userUpdateDto.Password))
             {
                 bool isSamePassword = false;
@@ -140,7 +126,6 @@ namespace MediCore.Services.Imlementations
                 {
                     isSamePassword = false;
                 }
-
                 if (!isSamePassword)
                 {
                     existingUser.Password = BCrypt.Net.BCrypt.HashPassword(userUpdateDto.Password);
@@ -150,7 +135,7 @@ namespace MediCore.Services.Imlementations
             if (hasChanges)
             {
                 _context.SaveChanges();
-                return new UserApiResponse<UserGetByIdDTO>
+                return new ApiResponse<UserGetByIdDTO>
                 {
                     Status = StatusCodes.Status200OK,
                     Message = "User updated successfully",
@@ -159,7 +144,7 @@ namespace MediCore.Services.Imlementations
             }
             else
             {
-                return new UserApiResponse<UserGetByIdDTO>
+                return new ApiResponse<UserGetByIdDTO>
                 {
                     Status = StatusCodes.Status204NoContent,
                     Message = "No changes were made - all values matched existing data",
@@ -167,7 +152,7 @@ namespace MediCore.Services.Imlementations
                 };
             }
         }
-
+        // Validate user update
         private List<string> ValidateUserUpdate(UserUpdateDTO userDto, User existingUser)
         {
             var errors = new List<string>();
@@ -190,7 +175,6 @@ namespace MediCore.Services.Imlementations
                     errors.Add("First Name must be between 1 and 40 characters.");
                 }
             }
-
             if (!string.IsNullOrWhiteSpace(userDto.LastName))
             {
                 if (string.IsNullOrEmpty(userDto.LastName))
@@ -202,7 +186,6 @@ namespace MediCore.Services.Imlementations
                     errors.Add("Last Name must be between 1 and 60 characters.");
                 }
             }
-
             if (!string.IsNullOrWhiteSpace(userDto.Email))
             {
                 if (string.IsNullOrEmpty(userDto.Email))
@@ -216,14 +199,12 @@ namespace MediCore.Services.Imlementations
                     {
                         errors.Add("Email is not valid.");
                     }
-
                     if (!userDto.Email.EndsWith(".com"))
                     {
                         errors.Add("Email must end with '.com'");
                     }
                 }
             }
-
             if (!string.IsNullOrWhiteSpace(userDto.Password))
             {
                 if (string.IsNullOrEmpty(userDto.Password))
@@ -236,47 +217,40 @@ namespace MediCore.Services.Imlementations
                     {
                         errors.Add("Password must be between 4 and 40 characters.");
                     }
-
                     if (!Regex.IsMatch(userDto.Password, @"[A-Z]"))
                     {
                         errors.Add("Password must contain at least one uppercase letter.");
                     }
-
                     if (!Regex.IsMatch(userDto.Password, @"[0-9]"))
                     {
                         errors.Add("Password must contain at least one number.");
                     }
                 }
             }
-
             return errors;
         }
-
-
-        public UserApiResponse<User> DeleteUserById(int id)
+        // Delete user by ID
+        public ApiResponse<User> DeleteUserById(int id)
         {
             var userToDelete = _context.Users.FirstOrDefault(u => u.Id == id);
 
             if (userToDelete == null)
             {
-                return new UserApiResponse<User>
+                return new ApiResponse<User>
                 {
                     Status = StatusCodes.Status404NotFound,
                     Message = "User not found",
                     Data = null
                 };
             }
-
             _context.Users.Remove(userToDelete);
             _context.SaveChanges();
-
-            return new UserApiResponse<User>
+            return new ApiResponse<User>
             {
                 Status = StatusCodes.Status200OK,
                 Message = "User deleted successfully",
                 Data = userToDelete
             };
-        }
-    
+        }   
     }
 }

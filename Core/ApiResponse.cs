@@ -1,5 +1,5 @@
 ﻿namespace MediCore.Core;
-public class UserApiResponse<T>
+public class ApiResponse<T>
 {
     public int Status { get; set; }
     public string? Message { get; set; }

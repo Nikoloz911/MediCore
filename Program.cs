@@ -17,8 +17,9 @@ builder.Services.AddSwaggerGen();
 // Register services
 
 builder.Services.AddDbContext<DataContext>();
-builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IAuthorization, AuthorizationService>();
+builder.Services.AddScoped<IUser, UserService>();
+builder.Services.AddScoped<IDoctor, DoctorService>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserValidator>());
 

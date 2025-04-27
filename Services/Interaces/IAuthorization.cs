@@ -5,9 +5,9 @@ using MediCore.Request;
 namespace MediCore.Services.Interaces;
 public interface IAuthorization
 {
-    UserApiResponse<PublicUserDTO> Register(AddUserDTO request);
-    UserApiResponse<LogInUserDTO> LogIn(User user);
-    UserApiResponse<PublicUserDTO> VerifyEmail(string verificationCode);
-    UserApiResponse<LogInUserDTO> RefreshToken(TokenRefreshRequestDTO request);
-    UserApiResponse<string> Logout(TokenRefreshRequestDTO request);
+    ApiResponse<PublicUserDTO> Register(AddUserDTO request);
+    ApiResponse<LogInUserDTO> LogIn(User user);
+    ApiResponse<PublicUserDTO> VerifyEmail(string verificationCode);
+    ApiResponse<LogInUserDTO> RefreshToken(TokenRefreshRequestDTO request);
+    ApiResponse<string> Logout(TokenRefreshRequestDTO request);
 }

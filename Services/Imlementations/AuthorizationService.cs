@@ -30,9 +30,9 @@ public class AuthorizationService : IAuthorization
     }
 
     // REGISTER A NEW USER
-    public UserApiResponse<PublicUserDTO> Register(AddUserDTO requestDto)
+    public ApiResponse<PublicUserDTO> Register(AddUserDTO requestDto)
     {
-        var response = new UserApiResponse<PublicUserDTO>();
+        var response = new ApiResponse<PublicUserDTO>();
         var request = _mapper.Map<AddUser>(requestDto);
 
         var validationResult = _userValidator.Validate(request);
@@ -42,15 +42,14 @@ public class AuthorizationService : IAuthorization
             response.Message = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
             response.Data = null!;
             return response;
-        }   
-        //if (_context.Users.Any(u => u.Email == requestDto.Email))
-        //{
-        //    response.Status = 409;
-        //    response.Message = "User with this email already exists.";
-        //    response.Data = null!;
-        //    return response;
-        //}
-
+        }
+        if (_context.Users.Any(u => u.Email == requestDto.Email))
+        {
+            response.Status = 409;
+            response.Message = "User with this email already exists.";
+            response.Data = null!;
+            return response;
+        }
         // Validate role
         USER_ROLE role;
         bool isValidRole = Enum.TryParse(requestDto.Role, true, out role) &&
@@ -89,9 +88,9 @@ public class AuthorizationService : IAuthorization
         return response;
     }
     // VERIFY EMAIL
-    public UserApiResponse<PublicUserDTO> VerifyEmail(string verificationCode)
+    public ApiResponse<PublicUserDTO> VerifyEmail(string verificationCode)
     {
-        var response = new UserApiResponse<PublicUserDTO>();
+        var response = new ApiResponse<PublicUserDTO>();
         var user = _context.Users.FirstOrDefault(u =>
             u.VerificationCode == verificationCode &&
             u.VerificationCodeExpiry > DateTime.UtcNow);
@@ -114,12 +113,12 @@ public class AuthorizationService : IAuthorization
         return response;
     }
     // LOGIN
-    public UserApiResponse<LogInUserDTO> LogIn(User user)
+    public ApiResponse<LogInUserDTO> LogIn(User user)
     {
         var foundUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
         if (foundUser == null)
         {
-            return new UserApiResponse<LogInUserDTO>
+            return new ApiResponse<LogInUserDTO>
             {
                 Status = 400,
                 Message = "User not found",
@@ -128,7 +127,7 @@ public class AuthorizationService : IAuthorization
         }
         if (foundUser.Status == USER_STATUS.UNVERIFIED)
         {
-            return new UserApiResponse<LogInUserDTO>
+            return new ApiResponse<LogInUserDTO>
             {
                 Status = 403, 
                 Message = "User is not Verified",
@@ -137,7 +136,7 @@ public class AuthorizationService : IAuthorization
         }
         if (!BCrypt.Net.BCrypt.Verify(user.Password, foundUser.Password))
         {
-            return new UserApiResponse<LogInUserDTO>
+            return new ApiResponse<LogInUserDTO>
             {
                 Status = 401,
                 Message = "Invalid password",
@@ -156,7 +155,7 @@ public class AuthorizationService : IAuthorization
             Status = foundUser.Status.ToString(),
             Password = foundUser.Password
         };
-        return new UserApiResponse<LogInUserDTO>
+        return new ApiResponse<LogInUserDTO>
         {
             Status = 200,
             Message = "Login successful",
@@ -164,11 +163,11 @@ public class AuthorizationService : IAuthorization
         };
     }
     // LOGOUT
-    public UserApiResponse<string> Logout(TokenRefreshRequestDTO request)
+    public ApiResponse<string> Logout(TokenRefreshRequestDTO request)
     {
         if (string.IsNullOrEmpty(request.Token))
         {
-            return new UserApiResponse<string>
+            return new ApiResponse<string>
             {
                 Status = 400,
                 Message = "Token is required",
@@ -182,7 +181,7 @@ public class AuthorizationService : IAuthorization
         }
         catch (SecurityTokenMalformedException ex)
         {
-            return new UserApiResponse<string>
+            return new ApiResponse<string>
             {
                 Status = 401,
                 Message = ex.Message, 
@@ -191,7 +190,7 @@ public class AuthorizationService : IAuthorization
         }
         catch (SecurityTokenInvalidSignatureException ex)
         {
-            return new UserApiResponse<string>
+            return new ApiResponse<string>
             {
                 Status = 401,
                 Message = ex.Message, 
@@ -200,7 +199,7 @@ public class AuthorizationService : IAuthorization
         }
         if (principal == null)
         {
-            return new UserApiResponse<string>
+            return new ApiResponse<string>
             {
                 Status = 401,
                 Message = "Invalid token",
@@ -215,7 +214,7 @@ public class AuthorizationService : IAuthorization
             _context.Users.Update(foundUser);
             _context.SaveChanges();
         }
-        return new UserApiResponse<string>
+        return new ApiResponse<string>
         {
             Status = 200,
             Message = "Logged out successfully",
@@ -223,11 +222,11 @@ public class AuthorizationService : IAuthorization
         };
     }
     // REFRESH TOKEN
-    public UserApiResponse<LogInUserDTO> RefreshToken(TokenRefreshRequestDTO request)
+    public ApiResponse<LogInUserDTO> RefreshToken(TokenRefreshRequestDTO request)
     {
         if (string.IsNullOrEmpty(request.Token))
         {
-            return new UserApiResponse<LogInUserDTO>
+            return new ApiResponse<LogInUserDTO>
             {
                 Status = 400,
                 Message = "Token is required",
@@ -241,7 +240,7 @@ public class AuthorizationService : IAuthorization
         }
         catch (SecurityTokenMalformedException ex)
         {
-            return new UserApiResponse<LogInUserDTO>
+            return new ApiResponse<LogInUserDTO>
             {
                 Status = 401,
                 Message = ex.Message, 
@@ -250,7 +249,7 @@ public class AuthorizationService : IAuthorization
         }
         catch (SecurityTokenInvalidSignatureException ex)
         {
-            return new UserApiResponse<LogInUserDTO>
+            return new ApiResponse<LogInUserDTO>
             {
                 Status = 401,
                 Message = ex.Message, 
@@ -259,7 +258,7 @@ public class AuthorizationService : IAuthorization
         }
         if (principal == null)
         {
-            return new UserApiResponse<LogInUserDTO>
+            return new ApiResponse<LogInUserDTO>
             {
                 Status = 401,
                 Message = "Invalid token",
@@ -270,7 +269,7 @@ public class AuthorizationService : IAuthorization
         var foundUser = _context.Users.FirstOrDefault(u => u.Email == email);
         if (foundUser == null)
         {
-            return new UserApiResponse<LogInUserDTO>
+            return new ApiResponse<LogInUserDTO>
             {
                 Status = 400,
                 Message = "User not found",
@@ -286,7 +285,7 @@ public class AuthorizationService : IAuthorization
             Status = foundUser.Status.ToString(),
             Password = foundUser.Password
         };
-        return new UserApiResponse<LogInUserDTO>
+        return new ApiResponse<LogInUserDTO>
         {
             Status = 200,
             Message = "Token refreshed successfully",
