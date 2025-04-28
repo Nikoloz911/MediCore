@@ -40,7 +40,7 @@ public class PatientController : ControllerBase
 
     // GET PATIENT BY ID
     [HttpGet("patients/{id}")]
-    // [Authorize(Policy = "AdminOrDoctorOrOwner")]
+    // [Authorize(Policy = "AdminOrDoctor")]
     public ActionResult GetPatientById(int id)
     {
         var response = _patientService.GetPatientById(id);
