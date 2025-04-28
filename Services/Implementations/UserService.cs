@@ -21,16 +21,16 @@ namespace MediCore.Services.Implementations
             _context = context;
             _mapper = mapper;
         }
-        // Get all users
+        // GET ALL USERS
         public ApiResponse<List<UserGetDTO>> GetAllUsers()
         {
             var users = _context.Users.ToList();
-            if (users == null || !users.Any())
+            if (users == null)
             {
                 return new ApiResponse<List<UserGetDTO>>
                 {
-                    Status = StatusCodes.Status403Forbidden,
-                    Message = "No users found or unauthorized access.",
+                    Status = StatusCodes.Status404NotFound,
+                    Message = "No users found.",
                     Data = null
                 };
             }
@@ -42,7 +42,7 @@ namespace MediCore.Services.Implementations
                 Data = userDtos
             };
         }
-        // Get user by ID
+        // GET USER BY ID
         public ApiResponse<UserGetByIdDTO> GetUserById(int id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
@@ -63,7 +63,7 @@ namespace MediCore.Services.Implementations
                 Data = userDto
             };
         }
-        // Update user by ID
+        // UPDATE USER BY ID
         public ApiResponse<UserGetByIdDTO> UpdateUserById(int id, UserUpdateDTO userUpdateDto)
         {
             // Find the existing user
@@ -147,7 +147,7 @@ namespace MediCore.Services.Implementations
                 return new ApiResponse<UserGetByIdDTO>
                 {
                     Status = StatusCodes.Status204NoContent,
-                    Message = "No changes were made - all values matched existing data",
+                    Message = "No changes were made. values matched existing data",
                     Data = _mapper.Map<UserGetByIdDTO>(existingUser)
                 };
             }
@@ -229,7 +229,7 @@ namespace MediCore.Services.Implementations
             }
             return errors;
         }
-        // Delete user by ID
+        // DELTE USER BY ID
         public ApiResponse<User> DeleteUserById(int id)
         {
             var userToDelete = _context.Users.FirstOrDefault(u => u.Id == id);

@@ -42,7 +42,6 @@ public class PatientService : IPatient
     public ApiResponse<PatientGetByIdDTO> GetPatientById(int id)
     {
         var patient = _context.Patients.FirstOrDefault(p => p.Id == id);
-
         if (patient == null)
         {
             return new ApiResponse<PatientGetByIdDTO>
@@ -52,7 +51,6 @@ public class PatientService : IPatient
                 Data = null
             };
         }
-
         var patientDto = _mapper.Map<PatientGetByIdDTO>(patient);
         return new ApiResponse<PatientGetByIdDTO>
         {

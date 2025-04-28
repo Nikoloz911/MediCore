@@ -22,15 +22,15 @@ public class AuthenticationController : ControllerBase
     public ActionResult<ApiResponse<PublicUserDTO>> Register([FromBody] AddUserDTO request)
     {
         var response = _authorizationService.Register(request);
-        if (response.Status == 200)
+        if (response.Status == 200)     // OK
         {
             return Ok(response);
         }
-        else if (response.Status == 400)
+        else if (response.Status == 400)  // BAD REQUEST
         {
             return BadRequest(response);
         }
-        else if (response.Status == 409)
+        else if (response.Status == 409)   // CONFLICT
         {
             return Conflict(response);
         }
@@ -42,11 +42,11 @@ public class AuthenticationController : ControllerBase
     {
         var response = _authorizationService.VerifyEmail(verificationDto.VerificationCode);
 
-        if (response.Status == 200)
+        if (response.Status == 200)    // OK
         {
             return Ok(response);
         }
-        else if (response.Status == 404)
+        else if (response.Status == 404)   // NOT FOUND
         {
             return NotFound(response);
         }
@@ -69,15 +69,15 @@ public class AuthenticationController : ControllerBase
         {
             return Ok(response);
         }
-        else if (response.Status == 400)
+        else if (response.Status == 404)        // NOT FOUND
         {
-            return BadRequest(response);
+            return NotFound(response);
         }
-        else if (response.Status == 401)
+        else if (response.Status == 401)        // UNAUTHORIZED
         {
             return Unauthorized(response);
         }
-        else if (response.Status == 403)
+        else if (response.Status == 403)         // FORBIDDEN
         {
             return StatusCode(403, new ApiResponse<LogInUserDTO>
             {
@@ -97,19 +97,19 @@ public class AuthenticationController : ControllerBase
     public ActionResult<ApiResponse<string>> Logout([FromBody] TokenRefreshRequestDTO request)
     {
         var response = _authorizationService.Logout(request);
-        if (response.Status == 200)
+        if (response.Status == 200)        // OK
         {
             return Ok(response);
         }
-        else if (response.Status == 400)
+        else if (response.Status == 400)   // BAD REQUEST
         {
             return BadRequest(response);
         }
-        else if (response.Status == 401)
+        else if (response.Status == 401)   // UNAUTHORIZED
         {
             return Unauthorized(response);
         }
-        return StatusCode(500, "Internal Server Error");
+        return null;
     }
 
     // REFRESH TOKEN
@@ -117,15 +117,15 @@ public class AuthenticationController : ControllerBase
     public ActionResult<ApiResponse<LogInUserDTO>> RefreshToken([FromBody] TokenRefreshRequestDTO request)
     {
         var response = _authorizationService.RefreshToken(request);
-        if (response.Status == 200)
+        if (response.Status == 200)     // OK
         {
             return Ok(response);
         }
-        else if (response.Status == 400)
+        else if (response.Status == 400)   // BAD REQUEST
         {
             return BadRequest(response);
         }
-        else if (response.Status == 401)
+        else if (response.Status == 401)   // UNAUTHORIZED
         {
             return Unauthorized(response);
         }

@@ -120,7 +120,7 @@ public class AuthorizationService : IAuthorization
         {
             return new ApiResponse<LogInUserDTO>
             {
-                Status = 400,
+                Status = 404,
                 Message = "User not found",
                 Data = null
             };

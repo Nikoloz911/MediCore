@@ -31,20 +31,7 @@ public class PatientController : ControllerBase
         else if (response.Status == StatusCodes.Status404NotFound) // NOT FOUND
         {
             return NotFound(response);
-        }
-        else if (response.Status == StatusCodes.Status401Unauthorized) // UNAUTHORIZED ACCESS
-        {
-            return Unauthorized(new ApiResponse<List<PatientGetDTO>>
-            {
-                Status = StatusCodes.Status401Unauthorized,
-                Message = "You are not authorized to access this resource.",
-                Data = null
-            });
-        }
-        else if (response.Status == StatusCodes.Status403Forbidden)  // FORBIDDEN ACCESS
-        {
-            return StatusCode(StatusCodes.Status403Forbidden, response);
-        }
+        }   
         else
         {
             return null;
@@ -65,14 +52,11 @@ public class PatientController : ControllerBase
         else if (response.Status == StatusCodes.Status404NotFound)  // NOT FOUND
         {
             return NotFound(response);
-        }
-        else if (response.Status == StatusCodes.Status403Forbidden)  // FORBIDDEN ACCESS
-        {
-            return StatusCode(StatusCodes.Status403Forbidden, response);
-        }
+        }   
         else
         {
             return null;
         }
     }
+
 }
