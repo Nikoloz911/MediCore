@@ -65,7 +65,37 @@ namespace MediCore.Services.Implementations
                 Data = doctorDto
             };
         }
+        // GET DOCTOR SCHEDULE BY DOCTOR ID
+        public ApiResponse<DoctorScheduleDTO> GetDoctorSchedule(int doctorId)
+        {
+            var doctor = _context.Doctors
+                .Include(d => d.User)
+                .FirstOrDefault(d => d.UserId == doctorId);
 
+            if (doctor == null)
+            {
+                return new ApiResponse<DoctorScheduleDTO>
+                {
+                    Status = 404,
+                    Message = "Doctor not found.",
+                    Data = null
+                };
+            }
+
+            var scheduleDto = new DoctorScheduleDTO
+            {
+                DoctorId = doctor.UserId,
+                DoctorName = $"{doctor.User.FirstName}",
+                WorkingHours = doctor.WorkingHours
+            };
+
+            return new ApiResponse<DoctorScheduleDTO>
+            {
+                Status = 200,
+                Message = "Doctor schedule retrieved successfully.",
+                Data = scheduleDto
+            };
+        }
 
 
         // UPDATE DOCTOR BY ID

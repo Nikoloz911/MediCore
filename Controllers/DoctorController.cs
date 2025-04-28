@@ -54,7 +54,23 @@ namespace MediCore.Controllers
             }
         }
 
-
+        [HttpGet("doctors/schedule/{doctorId}")]
+        public ActionResult<ApiResponse<DoctorScheduleDTO>> GetDoctorSchedule(int doctorId)
+        {
+            var response = _doctorService.GetDoctorSchedule(doctorId);
+            if (response.Status == 200)
+            {
+                return Ok(response);
+            }
+            else if (response.Status == 404)
+            {
+                return NotFound(response);
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
+        }
         // UPDATE DOCTOR BY ID
         [HttpPut("doctors/{id}")]
         public ActionResult<ApiResponse<DoctorByIdDTO>> UpdateDoctor(int id, DoctorUpdateDTO doctorUpdateDTO)

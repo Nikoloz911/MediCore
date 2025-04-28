@@ -27,7 +27,8 @@ var app = builder.Build();
 exceptionHandlerConfig.CustomExceptionHandler(app); // EXEPTION HANDLER
 
 /// UNCOMMENT CODE BELOW TO INITIALIZE DATA
-// app.InitializeData();  
+// app.InitializeDoctorsData();
+// app.InitializeDepartmentsData();
 
 if (app.Environment.IsDevelopment())
 {

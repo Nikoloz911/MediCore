@@ -6,5 +6,6 @@ public interface IDoctor
 {
     ApiResponse<List<DoctorAllDTO>> GetAllDoctors();
     ApiResponse<DoctorByIdDTO> GetDoctorById(int id);
+    ApiResponse<DoctorScheduleDTO> GetDoctorSchedule(int doctorId);
     ApiResponse<DoctorByIdDTO> UpdateDoctor(int id, DoctorUpdateDTO doctorUpdateDTO);
 }

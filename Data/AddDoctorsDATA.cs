@@ -207,7 +207,7 @@ namespace MediCore.Data
             }
             context.SaveChanges();
         }
-        public static void InitializeData(this IApplicationBuilder app)
+        public static void InitializeDoctorsData(this IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<DataContext>();
