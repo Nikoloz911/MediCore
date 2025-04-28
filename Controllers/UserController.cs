@@ -33,7 +33,7 @@ namespace MediCore.Controllers
             }
             else
             {
-                return StatusCode(response.Status, response);
+                return null;
             }
         }
 
@@ -52,7 +52,7 @@ namespace MediCore.Controllers
             }
             else
             {
-                return StatusCode(response.Status, response);
+                return null;
             }
         }
 
@@ -75,7 +75,7 @@ namespace MediCore.Controllers
             }
             else
             {
-                return StatusCode(response.Status, response);
+                return null;
             }
         }
 
@@ -95,7 +95,7 @@ namespace MediCore.Controllers
             }
             else
             {
-                return StatusCode(response.Status, response);
+                return null;
             }
         }
     }

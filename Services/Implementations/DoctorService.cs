@@ -67,12 +67,6 @@ namespace MediCore.Services.Implementations
         }
 
 
-//        GET /api/doctors/department/{departmentId
-//    } - ექიმები დეპარტამენტის მიხედვით
-//GET /api/doctors/schedule/{doctorId
-//}
-//-ექიმის გრაფიკი
-
 
         // UPDATE DOCTOR BY ID
         public ApiResponse<DoctorByIdDTO> UpdateDoctor(int id, DoctorUpdateDTO doctorUpdateDTO)

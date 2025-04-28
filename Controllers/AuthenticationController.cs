@@ -34,7 +34,7 @@ public class AuthenticationController : ControllerBase
         {
             return Conflict(response);
         }
-        return StatusCode(500, "Internal Server Error"); 
+        return null;
     }
     // VERIFY EMAIL
     [HttpPost("verify-email")]
@@ -52,7 +52,7 @@ public class AuthenticationController : ControllerBase
         }
         else
         {
-            return StatusCode(500, "Internal Server Error");
+            return null;
         }
     }
     // LOGIN
@@ -88,7 +88,7 @@ public class AuthenticationController : ControllerBase
         }
         else
         {
-            return StatusCode(500, "Internal Server Error");
+            return null;
         }
     }
 
@@ -129,6 +129,6 @@ public class AuthenticationController : ControllerBase
         {
             return Unauthorized(response);
         }
-        return StatusCode(500, "Internal Server Error");
+        return null;
     }
 }

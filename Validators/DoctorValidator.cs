@@ -34,5 +34,8 @@ public class DoctorValidator : AbstractValidator<DoctorUpdateDTO>
 
         RuleFor(x => x.WorkingHours)
             .MaximumLength(100).WithMessage("Working hours cannot be longer than 100 characters.");
+
+        RuleFor(x => x.ExperienceYears)
+            .InclusiveBetween(0, 100).WithMessage("Experience years must be between 0 and 100.");
     }
 }

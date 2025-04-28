@@ -7,7 +7,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// REGISTER SERVICES
 // REGISTER CONFIGURATION CLASSES
 var apiBehaviorConfig = new ApiBehaviorConfiguration();
 apiBehaviorConfig.ConfigureApiBehavior(builder.Services);
@@ -25,9 +24,10 @@ authConfig.ConfigureJwtAuthentication(builder.Services);
 
 var app = builder.Build();
 
-exceptionHandlerConfig.CustomExceptionHandler(app);
+exceptionHandlerConfig.CustomExceptionHandler(app); // EXEPTION HANDLER
 
-// app.InitializeData();  /// INITIALIZE DATA
+/// UNCOMMENT CODE BELOW TO INITIALIZE DATA
+// app.InitializeData();  
 
 if (app.Environment.IsDevelopment())
 {

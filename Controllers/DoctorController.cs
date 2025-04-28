@@ -40,7 +40,6 @@ namespace MediCore.Controllers
         public ActionResult<ApiResponse<DoctorByIdDTO>> GetDoctorById(int id)
         {
             var response = _doctorService.GetDoctorById(id);
-
             if (response.Status == 200)
             {
                 return Ok(response);
