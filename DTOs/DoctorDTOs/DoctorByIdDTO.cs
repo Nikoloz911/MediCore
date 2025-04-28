@@ -10,6 +10,7 @@ public class DoctorByIdDTO
     public string LicenseNumber { get; set; }
     public string WorkingHours { get; set; }
     public int ExperienceYears { get; set; }
+    public string DepartmentType { get; set; }
     //public User User { get; set; } // Navigation property to User
     //public List<Appointment> Appointments { get; set; } // Doctor's appointments
     //public List<MedicalRecord> MedicalRecords { get; set; } // Doctor's medical records

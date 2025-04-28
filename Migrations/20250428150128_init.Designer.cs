@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250428132025_init")]
+    [Migration("20250428150128_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -122,6 +122,9 @@ namespace MediCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ExperienceYears")
                         .HasColumnType("int");
 
@@ -141,6 +144,8 @@ namespace MediCore.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -460,11 +465,19 @@ namespace MediCore.Migrations
 
             modelBuilder.Entity("MediCore.Models.Doctor", b =>
                 {
+                    b.HasOne("MediCore.Models.Department", "Department")
+                        .WithMany("Doctors")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MediCore.Models.User", "User")
                         .WithOne("Doctor")
                         .HasForeignKey("MediCore.Models.Doctor", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Department");
 
                     b.Navigation("User");
                 });
@@ -551,6 +564,8 @@ namespace MediCore.Migrations
             modelBuilder.Entity("MediCore.Models.Department", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("MediCore.Models.Doctor", b =>

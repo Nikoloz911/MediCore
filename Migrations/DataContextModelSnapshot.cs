@@ -119,6 +119,9 @@ namespace MediCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ExperienceYears")
                         .HasColumnType("int");
 
@@ -138,6 +141,8 @@ namespace MediCore.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -457,11 +462,19 @@ namespace MediCore.Migrations
 
             modelBuilder.Entity("MediCore.Models.Doctor", b =>
                 {
+                    b.HasOne("MediCore.Models.Department", "Department")
+                        .WithMany("Doctors")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MediCore.Models.User", "User")
                         .WithOne("Doctor")
                         .HasForeignKey("MediCore.Models.Doctor", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Department");
 
                     b.Navigation("User");
                 });
@@ -548,6 +561,8 @@ namespace MediCore.Migrations
             modelBuilder.Entity("MediCore.Models.Department", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("MediCore.Models.Doctor", b =>

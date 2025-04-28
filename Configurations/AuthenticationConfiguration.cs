@@ -42,6 +42,9 @@ namespace MediCore.Configurations
                 options.AddPolicy("AdminOnly", policy => policy.RequireRole("ADMIN"));
                 options.AddPolicy("DoctorOnly", policy => policy.RequireRole("DOCTOR"));
                 options.AddPolicy("NurseOnly", policy => policy.RequireRole("NURSE"));
+                // COMBINE POLICIES
+                options.AddPolicy("AdminOrDoctor", policy =>
+                 policy.RequireRole("ADMIN", "DOCTOR"));
             });
         }
     }
