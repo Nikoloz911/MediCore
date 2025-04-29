@@ -1,6 +1,6 @@
 ﻿namespace MediCore.Enums;
 public enum GENDER
 {
-    FEMALE,
-    MALE
+    FEMALE = 1,
+    MALE = 2
 }

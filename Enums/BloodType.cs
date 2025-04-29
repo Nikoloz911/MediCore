@@ -1,12 +1,12 @@
 ﻿namespace MediCore.Enums;
 public enum BLOOD_TYPE
 {
-    A_POSITIVE,
-    A_NEGATIVE,
-    B_POSITIVE,
-    B_NEGATIVE,
-    AB_POSITIVE,
-    AB_NEGATIVE,
-    O_POSITIVE,
-    O_NEGATIVE
+    A_POSITIVE = 1,
+    A_NEGATIVE = 2,
+    B_POSITIVE = 3,
+    B_NEGATIVE = 4,
+    AB_POSITIVE = 5,
+    AB_NEGATIVE = 6,
+    O_POSITIVE = 7,
+    O_NEGATIVE = 8
 }
