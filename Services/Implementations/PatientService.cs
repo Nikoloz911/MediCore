@@ -5,8 +5,9 @@ using MediCore.DTOs.PatientDTOs;
 using MediCore.Models;
 using MediCore.Services.Interfaces;
 using MediCore.Enums;
+using MediCore.Validators;
 using BCrypt.Net;
-using System;
+using FluentValidation;
 
 namespace MediCore.Services.Implementations;
 
@@ -14,12 +15,14 @@ public class PatientService : IPatient
 {
     private readonly DataContext _context;
     private readonly IMapper _mapper;
-
-    public PatientService(DataContext context, IMapper mapper)
+    private readonly IValidator _validator;
+    public PatientService(DataContext context, IMapper mapper, IValidator validator)
     {
         _context = context;
         _mapper = mapper;
+        _validator = validator;
     }
+
 
     // GET ALL PATIENTS
     public ApiResponse<List<PatientGetDTO>> GetAllPatients()
@@ -67,6 +70,8 @@ public class PatientService : IPatient
         };
     }
 
+
+    // ADD NEW PATIENT
     public ApiResponse<PatientCreatedDTO> AddPatient(PatientAddDTO dto)
     {
         // VALIDATE EMAIL
