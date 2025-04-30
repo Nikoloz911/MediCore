@@ -24,7 +24,7 @@ authConfig.ConfigureJwtAuthentication(builder.Services);
 
 var app = builder.Build();
 
-exceptionHandlerConfig.CustomExceptionHandler(app); // EXEPTION HANDLER
+exceptionHandlerConfig.CustomExceptionHandler(app);    // EXCEPTION HANDLER
 
 /// UNCOMMENT CODE BELOW TO INITIALIZE DATA
 // app.InitializeDoctorsData();

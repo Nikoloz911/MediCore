@@ -42,83 +42,66 @@ namespace MediCore.Services.Implementations
                 Data = departmentDtos
             };
         }
+        // ADD NEW DEPARTMENT
         public ApiResponse<DepartmentAllDTO> CreateDepartment(DepartmentAddDTO departmentDto)
         {
-            // Validate Department Type Length
-            if (string.IsNullOrEmpty(departmentDto.DepartmentType) || departmentDto.DepartmentType.Length > 20)
+            if (string.IsNullOrEmpty(departmentDto.DepartmentName) || departmentDto.DepartmentName.Length > 20)
             {
                 return new ApiResponse<DepartmentAllDTO>
                 {
                     Status = 400,
-                    Message = "Department type must be a non-empty string with a maximum length of 20 characters.",
-                    Data = null
-                };
-            }
-
-            // Validate Enum Type
-            if (!Enum.TryParse<DEPARTMENT_TYPE>(departmentDto.DepartmentType, true, out DEPARTMENT_TYPE departmentType))
-            {
-                return new ApiResponse<DepartmentAllDTO>
-                {
-                    Status = 400,
-                    Message = "Invalid department type.",
+                    Message = "Department name must be a non-empty string with max length 20.",
                     Data = null
                 };
             }
 
             var existingDepartment = _context.Departments
-                .FirstOrDefault(d => d.DepartmentType == departmentType);
-
+                .FirstOrDefault(d => d.DepartmentName.ToLower() == departmentDto.DepartmentName.ToLower());
             if (existingDepartment != null)
             {
                 return new ApiResponse<DepartmentAllDTO>
                 {
-                    Status = 409,  // Changed to 409 for conflict
-                    Message = "Department with this type already exists.",
+                    Status = 409,
+                    Message = "Department with this name already exists.",
                     Data = null
                 };
+            }
+
+            DEPARTMENT_TYPE? matchedEnum = null;
+            if (Enum.TryParse<DEPARTMENT_TYPE>(departmentDto.DepartmentName, true, out var parsedEnum))
+            {
+                matchedEnum = parsedEnum;
             }
 
             var department = new Department
             {
-                DepartmentType = departmentType,
+                DepartmentName = departmentDto.DepartmentName,
+                DepartmentType = matchedEnum,
                 Doctors = new List<Doctor>(),
                 Appointments = new List<Appointment>()
             };
-
             _context.Departments.Add(department);
             _context.SaveChanges();
-
-            var createdDepartmentDto = _mapper.Map<DepartmentAllDTO>(department);
-
+            // Map the created department to DTO
+            var createdDto = _mapper.Map<DepartmentAllDTO>(department);
             return new ApiResponse<DepartmentAllDTO>
             {
-                Status = 201,
+                Status = 200,
                 Message = "Department created successfully.",
-                Data = createdDepartmentDto
+                Data = createdDto
             };
         }
 
+
+        // UPDATE DEPARTMENT
         public ApiResponse<DepartmentAllDTO> UpdateDepartment(int id, DepartmentUpdateDTO departmentDto)
         {
-            // Validate Department Type Length
-            if (string.IsNullOrEmpty(departmentDto.DepartmentType) || departmentDto.DepartmentType.Length > 20)
+            if (string.IsNullOrEmpty(departmentDto.DepartmentName) || departmentDto.DepartmentName.Length > 20)
             {
                 return new ApiResponse<DepartmentAllDTO>
                 {
                     Status = 400,
-                    Message = "Department type must be a non-empty string with a maximum length of 20 characters.",
-                    Data = null
-                };
-            }
-
-            // Validate Enum Type
-            if (!Enum.TryParse<DEPARTMENT_TYPE>(departmentDto.DepartmentType, true, out DEPARTMENT_TYPE departmentType))
-            {
-                return new ApiResponse<DepartmentAllDTO>
-                {
-                    Status = 400,
-                    Message = "Invalid department type.",
+                    Message = "Department name must be a non-empty string with max length 20.",
                     Data = null
                 };
             }
@@ -133,30 +116,43 @@ namespace MediCore.Services.Implementations
                     Data = null
                 };
             }
-
-            var existingDepartment = _context.Departments
-                .FirstOrDefault(d => d.DepartmentType == departmentType && d.Id != id);
-
-            if (existingDepartment != null)
+            // VALIDATE IF DEPARTMENT NAME OR TYPE ALREADY EXISTS WITH ENUM
+            var nameToCheck = departmentDto.DepartmentName.Trim().ToLower();
+            var nameExists = _context.Departments.Any(d =>
+                d.Id != id &&
+                d.DepartmentName != null &&
+                d.DepartmentName.ToLower() == nameToCheck
+            );
+            bool enumExists = false;
+            if (Enum.TryParse<DEPARTMENT_TYPE>(departmentDto.DepartmentName, true, out var parsedEnum))
+            {
+                enumExists = _context.Departments.Any(d =>
+                    d.Id != id &&
+                    d.DepartmentType == parsedEnum
+                );
+            }
+            if (nameExists || enumExists)
             {
                 return new ApiResponse<DepartmentAllDTO>
                 {
-                    Status = 409,  // Changed to 409 for conflict
-                    Message = "Another department with this type already exists.",
+                    Status = 409,
+                    Message = "A department with this name or type already exists.",
                     Data = null
                 };
             }
+            department.DepartmentName = departmentDto.DepartmentName;
+            department.DepartmentType = Enum.TryParse<DEPARTMENT_TYPE>(departmentDto.DepartmentName, true, out var type)
+                ? type
+                : null;
 
-            department.DepartmentType = departmentType;
             _context.SaveChanges();
-
-            var updatedDepartmentDto = _mapper.Map<DepartmentAllDTO>(department);
-
+            // MAP THE UPDATED DEPARTMENT TO DTO
+            var updatedDto = _mapper.Map<DepartmentAllDTO>(department);
             return new ApiResponse<DepartmentAllDTO>
             {
                 Status = 200,
                 Message = "Department updated successfully.",
-                Data = updatedDepartmentDto
+                Data = updatedDto
             };
         }
 

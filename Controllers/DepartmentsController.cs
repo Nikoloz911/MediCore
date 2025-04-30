@@ -13,7 +13,6 @@ namespace MediCore.Controllers
     public class DepartmentsController : ControllerBase
     {
         private readonly IDepartment _departmentService;
-
         public DepartmentsController(IDepartment departmentService)
         {
             _departmentService = departmentService;
@@ -45,13 +44,22 @@ namespace MediCore.Controllers
         public ActionResult<ApiResponse<DepartmentAllDTO>> CreateDepartment([FromBody] DepartmentAddDTO departmentDto)
         {
             var response = _departmentService.CreateDepartment(departmentDto);
-            if (response.Status == 201) // CREATED
+
+            if (response.Status == 200)     // OK
             {
-                return StatusCode(201, response);
+                return StatusCode(response.Status, response); 
             }
-            else if (response.Status == 400) // BAD REQUEST
+            else if (response.Status == 400)            // BAD REQUEST
             {
                 return BadRequest(response);
+            }
+            else if (response.Status == 404)              // NOT FOUND
+            {
+                return NotFound(response);
+            }
+            else if (response.Status == 409)               // CONFLICT 
+            {
+                return Conflict(response);
             }
             else
             {
@@ -59,23 +67,28 @@ namespace MediCore.Controllers
             }
         }
 
+
         // UPDATE DEPARTMENT
         [HttpPut("departments/{id}")]
         // [Authorize(Policy = "AdminOnly")] 
         public ActionResult<ApiResponse<DepartmentAllDTO>> UpdateDepartment(int id, [FromBody] DepartmentUpdateDTO departmentDto)
         {
             var response = _departmentService.UpdateDepartment(id, departmentDto);
-            if (response.Status == 200) // OK
+            if (response.Status == 200)           // OK
             {
                 return Ok(response);
             }
-            else if (response.Status == 404) // NOT FOUND
+            else if (response.Status == 404)       // NOT FOUND
             {
                 return NotFound(response);
             }
-            else if (response.Status == 400) // BAD REQUEST
+            else if (response.Status == 400)      // BAD REQUEST
             {
                 return BadRequest(response);
+            }
+            else if (response.Status == 409)      // CONFLICT
+            {
+                return Conflict(response);
             }
             else
             {
@@ -96,10 +109,6 @@ namespace MediCore.Controllers
             else if (response.Status == 404) // NOT FOUND
             {
                 return NotFound(response);
-            }
-            else if (response.Status == 400) // BAD REQUEST
-            {
-                return BadRequest(response);
             }
             else
             {

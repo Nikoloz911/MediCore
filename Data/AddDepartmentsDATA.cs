@@ -10,16 +10,16 @@ namespace MediCore.Data
         public static void SeedDepartmentsData(DataContext context)
         {
             var departments = new List<Department>
-{
-    new Department { DepartmentType = DEPARTMENT_TYPE.Cardiology },
-    new Department { DepartmentType = DEPARTMENT_TYPE.Neurology },
-    new Department { DepartmentType = DEPARTMENT_TYPE.Orthopedics },
-    new Department { DepartmentType = DEPARTMENT_TYPE.Pediatrics },
-    new Department { DepartmentType = DEPARTMENT_TYPE.Dermatology },
-    new Department { DepartmentType = DEPARTMENT_TYPE.Psychiatry },
-    new Department { DepartmentType = DEPARTMENT_TYPE.Gastroenterology },
-    new Department { DepartmentType = DEPARTMENT_TYPE.Radiology }
-};
+            {
+                new Department { DepartmentType = DEPARTMENT_TYPE.Cardiology, DepartmentName = "Cardiology" },
+                new Department { DepartmentType = DEPARTMENT_TYPE.Neurology, DepartmentName = "Neurology" },
+                new Department { DepartmentType = DEPARTMENT_TYPE.Orthopedics, DepartmentName = "Orthopedics" },
+                new Department { DepartmentType = DEPARTMENT_TYPE.Pediatrics, DepartmentName = "Pediatrics" },
+                new Department { DepartmentType = DEPARTMENT_TYPE.Dermatology, DepartmentName = "Dermatology" },
+                new Department { DepartmentType = DEPARTMENT_TYPE.Psychiatry, DepartmentName = "Psychiatry" },
+                new Department { DepartmentType = DEPARTMENT_TYPE.Gastroenterology, DepartmentName = "Gastroenterology" },
+                new Department { DepartmentType = DEPARTMENT_TYPE.Radiology, DepartmentName = "Radiology" }
+            };
 
             foreach (var department in departments)
             {

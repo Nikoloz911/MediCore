@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250428150128_init")]
+    [Migration("20250430171538_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -76,7 +76,10 @@ namespace MediCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DepartmentType")
+                    b.Property<string>("DepartmentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("DepartmentType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
