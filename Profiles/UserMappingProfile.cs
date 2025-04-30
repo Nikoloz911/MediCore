@@ -10,20 +10,11 @@ public class UserMappingProfile : Profile
     {
         CreateMap<User, UserGetDTO>();
         CreateMap<User, UserGetByIdDTO>();
-        CreateMap<UserUpdateDTO, User>()
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
-        // Add mapping for AddUserDTO to User
-        CreateMap<AddUserDTO, User>()
-            .ForMember(dest => dest.Password, opt => opt.Ignore())
-            .ForMember(dest => dest.Role, opt => opt.Ignore())
-            .ForMember(dest => dest.Status, opt => opt.Ignore());
-
-        // Add mapping between AddUserDTO and AddUser (both directions)
+        CreateMap<UserUpdateDTO, User>();
+        CreateMap<AddUserDTO, User>();
         CreateMap<AddUserDTO, AddUser>();
         CreateMap<AddUser, AddUserDTO>();
-        CreateMap<User, PublicUserDTO>()
-    .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()));
+        CreateMap<User, PublicUserDTO>();
 
     }
 }

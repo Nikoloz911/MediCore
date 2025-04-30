@@ -15,12 +15,12 @@ public class PatientService : IPatient
 {
     private readonly DataContext _context;
     private readonly IMapper _mapper;
-    private readonly IValidator _validator;
-    public PatientService(DataContext context, IMapper mapper, IValidator validator)
+   
+    public PatientService(DataContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
-        _validator = validator;
+    
     }
 
 
