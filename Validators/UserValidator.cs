@@ -19,7 +19,6 @@ public class UserValidator : AbstractValidator<AddUser>
               .Must(email => email.Contains("@") && email.Trim().EndsWith(".com", StringComparison.OrdinalIgnoreCase))
               .WithMessage("Email must contain '@' and end with '.com'.");
 
-
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required.")
             .Matches(@"[A-Z]").WithMessage("Password must contain at least one uppercase letter.")

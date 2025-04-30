@@ -15,5 +15,4 @@ public class Patient
     public List<Appointment> Appointments { get; set; } // Patient's appointments
     public List<MedicalRecord> MedicalRecords { get; set; } // Patient's medical records
 
-
 }

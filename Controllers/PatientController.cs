@@ -19,7 +19,7 @@ public class PatientController : ControllerBase
 
     // GET ALL PATIENTS
     [HttpGet("patients")]
-    // [Authorize(Policy = "AdminOrDoctor")]
+    [Authorize(Policy = "AdminOrDoctor")]
     public ActionResult GetAllPatients()
     {
         var response = _patientService.GetAllPatients();
@@ -39,7 +39,7 @@ public class PatientController : ControllerBase
 
     // GET PATIENT BY ID
     [HttpGet("patients/{id}")]
-    // [Authorize(Policy = "AdminOrDoctor")]
+    [Authorize(Policy = "AdminOrDoctor")]
     public ActionResult GetPatientById(int id)
     {
         var response = _patientService.GetPatientById(id);
@@ -59,7 +59,7 @@ public class PatientController : ControllerBase
 
     // ADD NEW PATIENT
     [HttpPost("patients")]
-    // [Authorize(Policy = "AdminOnly)]
+    [Authorize(Policy = "AdminOnly")]
     public ActionResult AddPatient(PatientAddDTO patientDto)
     {
         var response = _patientService.AddPatient(patientDto);
@@ -81,5 +81,21 @@ public class PatientController : ControllerBase
             return null;
         }
     }
-
+    // GET PATIENT HISTORY BY PATIENT ID
+    [HttpGet("patients/{id}/medical-history")]
+    public ActionResult DeletePatient(int id) {
+        var response = _patientService.GetPatientHistory(id);
+        if (response.Status == StatusCodes.Status200OK)  // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == StatusCodes.Status404NotFound)  // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

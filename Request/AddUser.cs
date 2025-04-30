@@ -1,6 +1,4 @@
 ﻿using MediCore.Enums;
-using MediCore.Models;
-
 namespace MediCore.Request;
 public class AddUser
 {
@@ -10,8 +8,6 @@ public class AddUser
     public string Password { get; set; }
     public string? VerificationCode { get; set; }
     public DateTime? VerificationCodeExpiry { get; set; }
-    public string Role { get; set; }  // Admin, Doctor, Nurse, Patient
-    public USER_STATUS Status { get; set; } // verified, unverified, active, inactive
-    // public Doctor? Doctor { get; set; } // Navigation property to Doctor
-    // public Patient? Patient { get; set; } // Navigation property to Patient
+    public string Role { get; set; } 
+    public USER_STATUS Status { get; set; }
 }
