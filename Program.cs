@@ -21,7 +21,6 @@ serviceConfig.ConfigureApplicationServices(builder.Services);
 var authConfig = new AuthenticationConfiguration(builder.Configuration);
 authConfig.ConfigureJwtAuthentication(builder.Services);
 
-
 var app = builder.Build();
 
 exceptionHandlerConfig.CustomExceptionHandler(app);    // EXCEPTION HANDLER
