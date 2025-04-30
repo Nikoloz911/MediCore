@@ -16,6 +16,7 @@ namespace MediCore.Configurations
             services.AddScoped<IDoctor, DoctorService>();
             services.AddScoped<IPatient, PatientService>();
             services.AddScoped<IDepartment, DepartmentService>();
+            services.AddScoped<IAppointments, AppointmentsService>();
             services.AddAutoMapper(typeof(Program));
             services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserValidator>());
         }
