@@ -18,7 +18,6 @@ namespace MediCore.Controllers
             _departmentService = departmentService;
         }
 
-
         // GET ALL DEPARTMENTS
         [HttpGet("departments")]
         public ActionResult<ApiResponse<List<DepartmentAllDTO>>> GetAllDepartments()
@@ -40,7 +39,7 @@ namespace MediCore.Controllers
 
         // ADD NEW DEPARTMENT
         [HttpPost("departments")]
-        // [Authorize(Policy = "AdminOnly")] 
+        [Authorize(Policy = "AdminOnly")] 
         public ActionResult<ApiResponse<DepartmentAllDTO>> CreateDepartment([FromBody] DepartmentAddDTO departmentDto)
         {
             var response = _departmentService.CreateDepartment(departmentDto);
@@ -70,7 +69,7 @@ namespace MediCore.Controllers
 
         // UPDATE DEPARTMENT
         [HttpPut("departments/{id}")]
-        // [Authorize(Policy = "AdminOnly")] 
+        [Authorize(Policy = "AdminOnly")] 
         public ActionResult<ApiResponse<DepartmentAllDTO>> UpdateDepartment(int id, [FromBody] DepartmentUpdateDTO departmentDto)
         {
             var response = _departmentService.UpdateDepartment(id, departmentDto);
@@ -98,7 +97,7 @@ namespace MediCore.Controllers
 
         // DELETE DEPARTMENT
         [HttpDelete("departments/{id}")]
-        // [Authorize(Policy = "AdminOnly")] 
+        [Authorize(Policy = "AdminOnly")] 
         public ActionResult<ApiResponse<bool>> DeleteDepartment(int id)
         {
             var response = _departmentService.DeleteDepartment(id);
