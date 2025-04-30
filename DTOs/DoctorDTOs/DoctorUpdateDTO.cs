@@ -1,6 +1,4 @@
-﻿using MediCore.Enums;
-
-namespace MediCore.DTOs.DoctorDTOs;
+﻿namespace MediCore.DTOs.DoctorDTOs;
 public class DoctorUpdateDTO
 {
     public string FirstName { get; set; }

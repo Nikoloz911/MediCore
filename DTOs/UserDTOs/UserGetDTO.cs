@@ -6,7 +6,6 @@ public class UserGetDTO
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
-    // public string Password { get; set; }
-    public USER_ROLE Role { get; set; }  // Admin, Doctor, Nurse, Patient
-    public USER_STATUS Status { get; set; } // active, inactive
+    public USER_ROLE Role { get; set; }
+    public USER_STATUS Status { get; set; } 
 }

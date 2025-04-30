@@ -1,10 +1,8 @@
 ﻿using MediCore.Enums;
-
 namespace MediCore.DTOs.PatientDTOs;
-
 public class PatientCreatedDTO
 {
-    public int Id { get; set; } // Patient ID
+    public int Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }

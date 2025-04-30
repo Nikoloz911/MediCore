@@ -1,7 +1,4 @@
-﻿using MediCore.Enums;
-using System.ComponentModel.DataAnnotations;
-
-namespace MediCore.DTOs.PatientDTOs;
+﻿namespace MediCore.DTOs.PatientDTOs;
 
 public class PatientAddDTO
 {

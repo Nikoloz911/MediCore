@@ -3,16 +3,15 @@ using MediCore.Models;
 namespace MediCore.DTOs.PatientDTOs;
 public class PatientGetByIdDTO
 {
-    public int Id { get; set; } // Primary Key
-    public int UserId { get; set; } // Foreign key to User
+    public int Id { get; set; } 
+    public int UserId { get; set; } 
     public string PersonalNumber { get; set; }
     public DateTime DateOfBirth { get; set; }
-    public GENDER GENDER { get; set; } // Enum For Gender
+    public GENDER GENDER { get; set; }
     public string ContactInfo { get; set; }
     public string InsuranceDetails { get; set; }
     public string Allergies { get; set; }
-    public BLOOD_TYPE BloodType { get; set; } // Enum for blood type
-    //public User User { get; set; } // Navigation property to User
-    public List<Appointment> Appointments { get; set; } // Patient's appointments
-    public List<MedicalRecord> MedicalRecords { get; set; } // Patient's medical records
+    public BLOOD_TYPE BloodType { get; set; } 
+    public List<Appointment> Appointments { get; set; }
+    public List<MedicalRecord> MedicalRecords { get; set; } 
 }

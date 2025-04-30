@@ -1,6 +1,4 @@
-﻿using MediCore.Enums;
-
-namespace MediCore.DTOs.UserDTOs;
+﻿namespace MediCore.DTOs.UserDTOs;
 public class PublicUserDTO
 {
     public int Id { get; set; }
