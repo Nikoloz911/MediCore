@@ -2,7 +2,6 @@
 using MediCore.Data;
 using MediCore.Services.Implementations;
 using MediCore.Services.Interfaces;
-using MediCore.Validators;
 
 namespace MediCore.Configurations
 {
@@ -17,6 +16,7 @@ namespace MediCore.Configurations
             services.AddScoped<IPatient, PatientService>();
             services.AddScoped<IDepartment, DepartmentService>();
             services.AddScoped<IAppointments, AppointmentsService>();
+            services.AddScoped<IMedicalRecords, MedicalRecordsService>();
             services.AddAutoMapper(typeof(Program));
             services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
         }
