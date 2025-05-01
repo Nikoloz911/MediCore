@@ -14,21 +14,21 @@ public class GetAppointmentsByIdDTO
     public DepartmentBasicDTO Department { get; set; }
 }
 
-
+// THIS CLASS IS FOR SHOW BASIC INFO OF DOCTOR
 public class DoctorBasicDTO
 {
     public int Id { get; set; }
     public string Specialty { get; set; }
     public string WorkingHours { get; set; }
 }
-
+// THIS CLASS IS FOR SHOW BASIC INFO OF PATIENT
 public class PatientBasicDTO
 {
     public int Id { get; set; }
     public string PersonalNumber { get; set; }
     public string ContactInfo { get; set; }
 }
-
+// THIS CLASS IS FOR SHOW BASIC INFO OF DEPARTMENT
 public class DepartmentBasicDTO
 {
     public int Id { get; set; }

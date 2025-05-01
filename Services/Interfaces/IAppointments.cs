@@ -1,6 +1,7 @@
 ﻿using MediCore.Core;
 using MediCore.DTOs.AppointmentsDTOs;
 using MediCore.Enums;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MediCore.Services.Interfaces;
 public interface IAppointments
@@ -15,4 +16,8 @@ public interface IAppointments
     );
     ApiResponse<GetAppointmentsByIdDTO> GetAppointmentById(int id);
     ApiResponse<AddAppointmentResponseDTO> AddAppointment(AddAppointmentDTO dto);
+    ApiResponse<UpdateAppointmentDTO> UpdateAppointment(int id, UpdateAppointmentDTO updateDto);
+    ApiResponse<string> DeleteAppointment(int id);
+    ApiResponse<List<GetPatientsAppointmentsDTO>> GetAppointmentsByPatientId(int patientId);
+    ApiResponse<List<GetDoctorsAppointmentsDTO>> GetAppointmentsByDoctorId(int doctorId);
 }

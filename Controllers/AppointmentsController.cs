@@ -1,6 +1,7 @@
 ﻿using MediCore.Core;
 using MediCore.DTOs.AppointmentsDTOs;
 using MediCore.Enums;
+using MediCore.Services.Implementations;
 using MediCore.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,13 +30,13 @@ public class AppointmentsController : ControllerBase
         var response = _appointmentsService.GetAppointments(
             doctorId, patientId, departmentId, status, visitType, date);
 
-        if (response.Status == 404)                 // NOT FOUND
+        if (response.Status == 404)                   // NOT FOUND
         {
             return NotFound(response);
         }
         else if (response.Status == 200)
         {
-            return Ok(response);                    //  OK
+            return Ok(response);                       //  OK
         }
 
         return null;
@@ -46,11 +47,11 @@ public class AppointmentsController : ControllerBase
     {
         var response = _appointmentsService.GetAppointmentById(id);
 
-        if (response.Status == 404)  // NOT FOUND
+        if (response.Status == 404)              // NOT FOUND
         {
             return NotFound(response);  
         }
-        else if (response.Status == 200)  // OK
+        else if (response.Status == 200)            // OK
         {
             return Ok(response); 
         }
@@ -61,23 +62,90 @@ public class AppointmentsController : ControllerBase
     public ActionResult<ApiResponse<AddAppointmentResponseDTO>> AddAppointment([FromBody] AddAppointmentDTO dto)
     {
         var response = _appointmentsService.AddAppointment(dto);
-
-        if (response.Status == 200)
+        if (response.Status == 200)                  // OK
         {
             return Ok(response);
         }
-        else if (response.Status == 400) // BAD REQUEST
+        else if (response.Status == 400)             // BAD REQUEST
         {
             return BadRequest(response);
         }
         return null;
     }
+    // UPDATE APPOINTMENT BY ID
+    [HttpPut("appointments/{id}")]
+    public ActionResult<ApiResponse<UpdateAppointmentDTO>> UpdateAppointment(int id, UpdateAppointmentDTO updateDto)
+    {
+        var response = _appointmentsService.UpdateAppointment(id, updateDto);
+        if (response.Status == StatusCodes.Status200OK)             // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == StatusCodes.Status404NotFound)      // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else if (response.Status == StatusCodes.Status400BadRequest)        // BAD REQUEST
+        {
+            return BadRequest(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    [HttpDelete("appointments/{id}")]
+    public ActionResult<ApiResponse<string>> DeleteAppointment(int id)
+    {
+        var response = _appointmentsService.DeleteAppointment(id);
+        if (response.Status == StatusCodes.Status200OK)             // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == StatusCodes.Status404NotFound)      // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    // GET APPOINTMENTS BY DOCTOR ID
+    [HttpGet("appointments/doctor/{doctorId}")]
+    public ActionResult<ApiResponse<List<GetDoctorsAppointmentsDTO>>> GetAppointmentsByDoctorId(int doctorId)
+    {
+        var response = _appointmentsService.GetAppointmentsByDoctorId(doctorId);
+        if (response.Status == StatusCodes.Status200OK)                          // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == StatusCodes.Status404NotFound)                // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-
-
-    //[HttpPut("appointments/{id}")]
-    //[HttpDelete("appointments/{id}")]
-    //[HttpGet("appointments/doctor/{doctorId}")]
-    //[HttpGet("appointments/patient/{patientId}")]
-
+    // GET APPOINTMENTS BY PATIENT ID
+    [HttpGet("appointments/patient/{patientId}")]
+    public ActionResult<ApiResponse<List<GetPatientsAppointmentsDTO>>> GetAppointmentsByPatientId(int patientId)
+    {
+        var response = _appointmentsService.GetAppointmentsByPatientId(patientId);
+        if (response.Status == StatusCodes.Status200OK)                               // OK 
+        {
+            return Ok(response);
+        }
+        else if (response.Status == StatusCodes.Status404NotFound)                  // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
 }
