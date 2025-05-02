@@ -75,7 +75,7 @@ namespace MediCore.JWT
             }
             catch (SecurityTokenMalformedException ex)
             {
-                throw new SecurityTokenMalformedException("The token is malformed. It may not have the correct number of segments (JWT must have three segments).", ex);
+                throw new SecurityTokenMalformedException("The token is malformed. It may not have the correct number of segments.", ex);
             }
             catch (SecurityTokenException ex)
             {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Services.Interfaces;
 using MediCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using MediCore.Core;
 using MediCore.DTOs.MedicalRecordsDTOs;
 namespace MediCore.Controllers;
@@ -53,6 +54,7 @@ public class MedicalRecordsController : ControllerBase
     }
     // ADD MEDICAL RECORD
     [HttpPost("medical-records")]
+    [Authorize(Policy = "DoctorOnly")]
     public ActionResult<ApiResponse<MedicalRecordResponseDTO>> CreateMedicalRecord([FromBody] CreateMedicalRecordDTO dto)
     {
         var result = _medicalRecordsService.CreateMedicalRecord(dto);
@@ -72,6 +74,7 @@ public class MedicalRecordsController : ControllerBase
     }
     // UPDATE MEDICAL RECORD
     [HttpPut("medical-records/{id}")]
+    [Authorize(Policy = "DoctorOnly")]
     public ActionResult<ApiResponse<MedicalRecordResponseDTO>> UpdateMedicalRecord(int id, [FromBody] UpdateMedicalRecordDTO dto)
     {
         var result = _medicalRecordsService.UpdateMedicalRecord(id, dto);
