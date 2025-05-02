@@ -12,11 +12,13 @@ public class DiagnosesService : IDiagnoses
     private readonly DataContext _context;
     private readonly IMapper _mapper;
     private readonly IValidator<AddDiagnosesDTO> _validator;
-    public DiagnosesService(DataContext context, IMapper mapper, IValidator<AddDiagnosesDTO> validator)
+    private readonly IValidator<UpdateDiagnosesDTO> _updateValidator;
+    public DiagnosesService(DataContext context, IMapper mapper, IValidator<AddDiagnosesDTO> validator, IValidator<UpdateDiagnosesDTO> updateValidator)
     {
         _context = context;
         _mapper = mapper;
         _validator = validator;
+        _updateValidator = updateValidator;
     }
 
     // GET DIAGNOSIS BY PATIENT ID
@@ -116,7 +118,40 @@ public class DiagnosesService : IDiagnoses
             Data = responseDTO
         };
     }
+    // UPDATE DIAGNOSES
+    public ApiResponse<UpdateDiagnosesResponseDTO> UpdateDiagnosis(int id, UpdateDiagnosesDTO dto)
+    {
+        // VALIDATE
+        var validationResult = _updateValidator.Validate(dto);
+        if (!validationResult.IsValid)
+        {
+            return new ApiResponse<UpdateDiagnosesResponseDTO>
+            {
+                Status = 400,
+                Message = string.Join(" | ", validationResult.Errors.Select(e => e.ErrorMessage)),
+                Data = null
+            };
+        }
+        var existingDiagnosis = _context.Diagnoses.FirstOrDefault(d => d.Id == id);
+        if (existingDiagnosis == null)
+        {
+            return new ApiResponse<UpdateDiagnosesResponseDTO>
+            {
+                Status = 404,
+                Message = "Diagnosis not found.",
+                Data = null
+            };
+        }
 
+        _mapper.Map(dto, existingDiagnosis);
+        _context.SaveChanges();
 
-
+        var responseDto = _mapper.Map<UpdateDiagnosesResponseDTO>(existingDiagnosis);
+        return new ApiResponse<UpdateDiagnosesResponseDTO>
+        {
+            Status = 200,
+            Message = "Diagnosis updated successfully.",
+            Data = responseDto
+        };
+    }
 }

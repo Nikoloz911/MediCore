@@ -7,5 +7,5 @@ public interface IDiagnoses
     ApiResponse<List<GetPatientDiagnosesDTO>> GetDiagnosesByPatientId(int patientId);
     ApiResponse<List<GetMedicalRecordsDiagnosesDTO>> GetDiagnosesByMedicalRecordId(int recordId);
     ApiResponse<AddDiagnosesResponseDTO> AddDiagnosis(AddDiagnosesDTO newDiagnosis);
-
+    ApiResponse<UpdateDiagnosesResponseDTO> UpdateDiagnosis(int id, UpdateDiagnosesDTO dto);
 }

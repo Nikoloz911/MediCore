@@ -22,5 +22,8 @@ public class DiagnosesMappingProfile : Profile
               .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
               .ForMember(dest => dest.AdditionalComments, opt => opt.MapFrom(src => src.AdditionalComments));
         CreateMap<Diagnoses, AddDiagnosesResponseDTO>();
+        CreateMap<UpdateDiagnosesDTO, Diagnoses>();
+        CreateMap<Diagnoses, UpdateDiagnosesResponseDTO>();
+
     }
 }

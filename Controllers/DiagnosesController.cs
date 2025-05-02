@@ -76,4 +76,27 @@ public class DiagnosesController : ControllerBase
             return null;
         }
     }
+    // UPDATE DIAGNOSES
+    [HttpPut("diagnoses/{id}")]
+    public ActionResult<ApiResponse<UpdateDiagnosesResponseDTO>> UpdateDiagnosis(int id, [FromBody] UpdateDiagnosesDTO dto)
+    {
+        var response = _diagnosesService.UpdateDiagnosis(id, dto);
+
+        if (response.Status == 200)             // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 404)        // Not Found
+        {
+            return NotFound(response);
+        }
+        else if (response.Status == 400)        // Bad Request
+        {
+            return BadRequest(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
 }
