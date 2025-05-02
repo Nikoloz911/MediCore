@@ -1,8 +1,8 @@
 ﻿namespace MediCore.Enums;
 public enum USER_ROLE
 {
-    ADMIN = 0,
-    DOCTOR = 1,
-    NURSE = 2,
-    PATIENT = 3 
+    ADMIN = 1,
+    DOCTOR = 2,
+    NURSE = 3,
+    PATIENT = 4 
 }
