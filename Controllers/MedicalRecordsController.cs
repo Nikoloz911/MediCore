@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Services.Interfaces;
 using MediCore.Models;
+using MediCore.Core;
+using MediCore.DTOs.MedicalRecordsDTOs;
 namespace MediCore.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class MedicalRecordsController : ControllerBase
 {
@@ -14,11 +16,81 @@ public class MedicalRecordsController : ControllerBase
         _medicalRecordsService = medicalRecordsService;
     }
 
+    [HttpGet("medical-records/patient/{patientId}")]
+    public ActionResult<ApiResponse<List<GetPatientsMedicalRecordsDTO>>> GetPatientMedicalRecords(int patientId)
+    {
+        var result = _medicalRecordsService.GetMedicalRecordsByPatientId(patientId);   
+         if (result.Status == 200)                      // OK
+        {
+            return Ok(result);
+        }
+        else if (result.Status == 404)                  // NOT FOUND
+        {
+            return NotFound(result);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    // GET MEDICAL RECORD BY ID
+    [HttpGet("medical-records/{id}")]
+    public ActionResult<ApiResponse<GetMedicalRecordsDTO>> GetMedicalRecordById(int id)
+    {
+        var result = _medicalRecordsService.GetMedicalRecordById(id);
+        if (result.Status == 200)                    // OK
+        {
+            return Ok(result);
+        }
+        else if (result.Status == 404)              // NOT FOUND
+        {
+            return NotFound(result);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    // ADD MEDICAL RECORD
+    [HttpPost("medical-records")]
+    public ActionResult<ApiResponse<MedicalRecordResponseDTO>> CreateMedicalRecord([FromBody] CreateMedicalRecordDTO dto)
+    {
+        var result = _medicalRecordsService.CreateMedicalRecord(dto);
 
+        if (result.Status == 200)  // OK
+        {
+            return Ok(result);
+        }
+        else if (result.Status == 400)  // BAD REQUEST
+        {
+            return BadRequest(result);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    // UPDATE MEDICAL RECORD
+    [HttpPut("medical-records/{id}")]
+    public ActionResult<ApiResponse<MedicalRecordResponseDTO>> UpdateMedicalRecord(int id, [FromBody] UpdateMedicalRecordDTO dto)
+    {
+        var result = _medicalRecordsService.UpdateMedicalRecord(id, dto);
 
-//    GET /api/medical-records/patient/{patientId
-//} - პაციენტის სამედიცინო ჩანაწერები
-//GET /api/medical-records/{id} -კონკრეტული ჩანაწერის დეტალები
-//POST /api/medical-records - ახალი ჩანაწერის შექმნა (Doctor)
-//PUT /api/medical-records/{id} -ჩანაწერის განახლება(Doctor)
+        if (result.Status == 200)  // OK
+        {
+            return Ok(result);
+        }
+        else if (result.Status == 404)  // NOT FOUND
+        {
+            return NotFound(result);
+        }
+        else if (result.Status == 400)  // BAD REQUEST
+        {
+            return BadRequest(result);
+        }
+        else
+        {
+            return null;
+        }
+    }
 }
