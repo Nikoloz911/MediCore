@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250502101507_changedProperty")]
-    partial class changedProperty
+    [Migration("20250502173118_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,7 +87,7 @@ namespace MediCore.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("MediCore.Models.Diagnosis", b =>
+            modelBuilder.Entity("MediCore.Models.Diagnoses", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -455,7 +455,7 @@ namespace MediCore.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("MediCore.Models.Diagnosis", b =>
+            modelBuilder.Entity("MediCore.Models.Diagnoses", b =>
                 {
                     b.HasOne("MediCore.Models.MedicalRecord", "MedicalRecord")
                         .WithMany("Diagnoses")

@@ -139,7 +139,7 @@ namespace MediCore.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
                     Time = table.Column<TimeSpan>(type: "time", nullable: false),
                     Duration = table.Column<TimeSpan>(type: "time", nullable: false),
                     DoctorId = table.Column<int>(type: "int", nullable: false),

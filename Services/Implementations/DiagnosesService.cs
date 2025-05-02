@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediCore.Data;
+using MediCore.Models;
 using MediCore.Services.Interfaces;
 namespace MediCore.Services.Implementations;
 public class DiagnosesService : IDiagnoses
@@ -13,5 +14,6 @@ public class DiagnosesService : IDiagnoses
         _context = context;
         _mapper = mapper;
     }
-    
+    // GET DIAGNOSIS BY PATIENT ID
+   
 }

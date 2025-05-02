@@ -5,7 +5,7 @@ public class DataContext : DbContext
 {
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<Department> Departments { get; set; }
-    public DbSet<Diagnosis> Diagnoses { get; set; }
+    public DbSet<Diagnoses> Diagnoses { get; set; }
     public DbSet<Doctor> Doctors { get; set; }
     public DbSet<LabResult> LabResults { get; set; }
     public DbSet<LabTest> LabTests { get; set; }
@@ -17,7 +17,7 @@ public class DataContext : DbContext
     public DbSet<User> Users { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Data Source=LENOVO\SQLEXPRESS02;Initial Catalog=NewDB;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
+        optionsBuilder.UseSqlServer(@"Data Source=LENOVO\SQLEXPRESS02;Initial Catalog=working;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

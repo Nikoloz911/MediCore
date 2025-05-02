@@ -84,7 +84,7 @@ namespace MediCore.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("MediCore.Models.Diagnosis", b =>
+            modelBuilder.Entity("MediCore.Models.Diagnoses", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -452,7 +452,7 @@ namespace MediCore.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("MediCore.Models.Diagnosis", b =>
+            modelBuilder.Entity("MediCore.Models.Diagnoses", b =>
                 {
                     b.HasOne("MediCore.Models.MedicalRecord", "MedicalRecord")
                         .WithMany("Diagnoses")

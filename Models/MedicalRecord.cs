@@ -10,6 +10,6 @@ public class MedicalRecord
     public string Measurements { get; set; }
     public Doctor Doctor { get; set; } // Navigation Property
     public Patient Patient { get; set; } // Navigation Property
-    public List<Diagnosis> Diagnoses { get; set; } // medical record's diagnoses
+    public List<Diagnoses> Diagnoses { get; set; } // medical record's diagnoses
     public List<Prescription> Prescriptions { get; set; } // medical record's prescriptions
 }
