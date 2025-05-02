@@ -115,9 +115,9 @@ namespace MediCore.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     PersonalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     GENDER = table.Column<int>(type: "int", nullable: false),
-                    ContactInfo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InsuranceDetails = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Allergies = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BloodType = table.Column<int>(type: "int", nullable: false)

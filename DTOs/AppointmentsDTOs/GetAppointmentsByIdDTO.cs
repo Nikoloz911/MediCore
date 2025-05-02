@@ -4,7 +4,7 @@ namespace MediCore.DTOs.AppointmentsDTOs;
 public class GetAppointmentsByIdDTO
 {
     public int Id { get; set; }
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
     public TimeSpan Time { get; set; }
     public TimeSpan Duration { get; set; }
     public APPOINTMENT_STATUS Status { get; set; }
@@ -26,7 +26,7 @@ public class PatientBasicDTO
 {
     public int Id { get; set; }
     public string PersonalNumber { get; set; }
-    public string ContactInfo { get; set; }
+    public string PhoneNumber { get; set; }
 }
 // THIS CLASS IS FOR SHOW BASIC INFO OF DEPARTMENT
 public class DepartmentBasicDTO

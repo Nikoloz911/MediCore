@@ -25,7 +25,7 @@ public class AppointmentsService : IAppointments
         int? departmentId = null,
         APPOINTMENT_STATUS? status = null,
         APPOINTMENT_TYPE? visitType = null,
-        DateTime? date = null
+        DateOnly? date = null
     )
     {
         var query = _context.Appointments.AsQueryable();
@@ -57,7 +57,7 @@ public class AppointmentsService : IAppointments
 
         if (date.HasValue)
         {
-            query = query.Where(a => a.Date.Date == date.Value.Date);
+            query = query.Where(a => a.Date == date.Value);
         }
 
         var appointments = query.ToList();
@@ -124,7 +124,7 @@ public class AppointmentsService : IAppointments
             };
         }
         // VALIDATE DATE TIME
-        if (dto.Date < DateTime.Now)
+        if (dto.Date < DateOnly.FromDateTime(DateTime.Now))
         {
             return new ApiResponse<AddAppointmentResponseDTO>
             {
@@ -173,7 +173,7 @@ public class AppointmentsService : IAppointments
             return new ApiResponse<AddAppointmentResponseDTO>
             {
                 Status = 400,
-                Message = "Invalid Status value. Valid Values:  Primary, FollowUp, Emergency",
+                Message = "Invalid Status value. Valid Values: Scheduled, Completed, Cancelled",
                 Data = null
             };
         }
@@ -184,7 +184,7 @@ public class AppointmentsService : IAppointments
             return new ApiResponse<AddAppointmentResponseDTO>
             {
                 Status = 400,
-                Message = "Invalid VisitType value. Valid Values: Scheduled, Completed, Cancelled",
+                Message = "Invalid VisitType value. Valid Values: Primary, FollowUp, Emergency",
                 Data = null
             };
         }
@@ -273,7 +273,7 @@ public class AppointmentsService : IAppointments
             };
         }
         // VALIDATE DATE TIME
-        if (updateDto.Date < DateTime.Now.Date)
+        if (updateDto.Date < DateOnly.FromDateTime(DateTime.Now))
         {
             return new ApiResponse<UpdateAppointmentDTO>
             {

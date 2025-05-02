@@ -51,7 +51,7 @@ namespace MediCore.Profiles
                 {
                     Id = src.Patient.Id,
                     PersonalNumber = src.Patient.PersonalNumber,
-                    ContactInfo = src.Patient.ContactInfo
+                    PhoneNumber = src.Patient.PhoneNumber
                 }));
         }
     }

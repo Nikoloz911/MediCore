@@ -33,14 +33,14 @@ public class PatientValidator : AbstractValidator<PatientAddDTO>
 
         RuleFor(x => x.DateOfBirth)
             .NotEmpty().WithMessage("Date of Birth is required.")
-            .Must(date => date.Date <= DateTime.Now.Date).WithMessage("Date of Birth cannot be in the future.")
-            .Must(date => date.Date == date).WithMessage("Date of Birth must not contain time.");
+            .Must(date => date <= DateOnly.FromDateTime(DateTime.Now))
+          .WithMessage("Date of Birth cannot be in the future.");
 
         RuleFor(x => x.Gender)
             .NotEmpty().WithMessage("Gender is required.")
             .MaximumLength(20).WithMessage("Gender must not exceed 20 characters.");
 
-        RuleFor(x => x.ContactInfo)
+        RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Contact Info is required.")
             .Length(1, 100).WithMessage("Contact Info must be between 1 and 100 characters.");
 

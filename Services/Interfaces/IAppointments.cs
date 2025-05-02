@@ -12,7 +12,7 @@ public interface IAppointments
         int? departmentId = null,
         APPOINTMENT_STATUS? status = null,
         APPOINTMENT_TYPE? visitType = null,
-        DateTime? date = null
+        DateOnly? date = null
     );
     ApiResponse<GetAppointmentsByIdDTO> GetAppointmentById(int id);
     ApiResponse<AddAppointmentResponseDTO> AddAppointment(AddAppointmentDTO dto);

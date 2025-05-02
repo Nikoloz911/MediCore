@@ -1,7 +1,7 @@
 ﻿namespace MediCore.DTOs.AppointmentsDTOs;
 public class UpdateAppointmentDTO
 {
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
     public TimeSpan Time { get; set; }
     public TimeSpan Duration { get; set; }
     public int DoctorId { get; set; }

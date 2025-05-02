@@ -5,7 +5,7 @@ public class PatientGetDTO
     public int Id { get; set; } 
     public int UserId { get; set; } 
     public string PersonalNumber { get; set; }
-    public DateTime DateOfBirth { get; set; }
+    public DateOnly DateOfBirth { get; set; }
     public GENDER GENDER { get; set; } 
-    public string ContactInfo { get; set; }
+    public string PhoneNumber { get; set; }
 }
