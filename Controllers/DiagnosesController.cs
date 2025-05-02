@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediCore.Services.Interfaces;
 using MediCore.Core;
 using MediCore.DTOs.DiagnosesDTOs;
+using Microsoft.AspNetCore.Authorization;
 namespace MediCore.Controllers;
 
 [Route("api/")]
@@ -55,6 +56,7 @@ public class DiagnosesController : ControllerBase
     }
     // ADD DIAGNOSES
     [HttpPost("diagnoses")]
+    [Authorize(Policy = "DoctorOnly")]
     public ActionResult<ApiResponse<AddDiagnosesResponseDTO>> AddDiagnosis([FromBody] AddDiagnosesDTO newDiagnosis)
     {
         var response = _diagnosesService.AddDiagnosis(newDiagnosis);
@@ -78,6 +80,7 @@ public class DiagnosesController : ControllerBase
     }
     // UPDATE DIAGNOSES
     [HttpPut("diagnoses/{id}")]
+    [Authorize(Policy = "DoctorOnly")]
     public ActionResult<ApiResponse<UpdateDiagnosesResponseDTO>> UpdateDiagnosis(int id, [FromBody] UpdateDiagnosesDTO dto)
     {
         var response = _diagnosesService.UpdateDiagnosis(id, dto);
