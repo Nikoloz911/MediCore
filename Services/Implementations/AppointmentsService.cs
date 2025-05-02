@@ -6,6 +6,7 @@ using MediCore.DTOs.AppointmentsDTOs;
 using MediCore.Enums;
 using MediCore.Models;
 using MediCore.Services.Interfaces;
+using MediCore.Twillio;
 using Microsoft.EntityFrameworkCore;
 namespace MediCore.Services.Implementations;
 public class AppointmentsService : IAppointments
@@ -189,6 +190,30 @@ public class AppointmentsService : IAppointments
             };
         }
 
+        // VALIDATE DOCTORS FREE TIME
+        var conflictingAppointments = _context.Appointments
+                             .Where(a => a.DoctorId == dto.DoctorId && a.Date == dto.Date)
+                             .ToList();
+
+        foreach (var existingAppointment in conflictingAppointments)
+        {
+            TimeSpan newAppointmentStart = dto.Time;
+            TimeSpan newAppointmentEnd = newAppointmentStart.Add(dto.Duration);
+            TimeSpan existingAppointmentStart = existingAppointment.Time;
+            TimeSpan existingAppointmentEnd = existingAppointmentStart.Add(existingAppointment.Duration);
+
+            // Check for overlapping time slots
+            if (newAppointmentStart < existingAppointmentEnd && existingAppointmentStart < newAppointmentEnd)
+            {
+                return new ApiResponse<AddAppointmentResponseDTO>
+                {
+                    Status = 409,
+                    Message = "Doctor has an existing appointment during the selected time slot.",
+                    Data = null
+                };
+            }
+        }
+
         // CREATE APPOINTMENT
         var appointment = new Appointment
         {
@@ -207,6 +232,14 @@ public class AppointmentsService : IAppointments
 
         // Map to response DTO
         var responseDto = _mapper.Map<AddAppointmentResponseDTO>(appointment);
+
+        // SEND SMS
+        string formattedPhoneNumber = patient.PhoneNumber;
+        if (!formattedPhoneNumber.StartsWith("+995"))
+        {
+            formattedPhoneNumber = $"+995{formattedPhoneNumber.TrimStart('0').TrimStart('+')}";
+        }
+        // SMS_Service.SendAppointmentDetails(responseDto, formattedPhoneNumber, _context);
 
         return new ApiResponse<AddAppointmentResponseDTO>
         {
@@ -282,6 +315,30 @@ public class AppointmentsService : IAppointments
                 Data = null
             };
         }
+
+        // CONFLICT CHECK BEFORE UPDATING
+        var conflictingAppointments = _context.Appointments
+            .Where(a => a.DoctorId == updateDto.DoctorId && a.Date == updateDto.Date && a.Id != appointment.Id)
+            .ToList();
+
+        foreach (var existingAppointment in conflictingAppointments)
+        {
+            TimeSpan newAppointmentStart = updateDto.Time;
+            TimeSpan newAppointmentEnd = newAppointmentStart.Add(updateDto.Duration);
+            TimeSpan existingAppointmentStart = existingAppointment.Time;
+            TimeSpan existingAppointmentEnd = existingAppointmentStart.Add(existingAppointment.Duration);
+
+            if (newAppointmentStart < existingAppointmentEnd && existingAppointmentStart < newAppointmentEnd)
+            {
+                return new ApiResponse<UpdateAppointmentDTO>
+                {
+                    Status = 409,
+                    Message = "Doctor has an existing appointment during the selected time slot.",
+                    Data = null
+                };
+            }
+        }
+
         // UPDATE APPOINTMENT PROPERTIES
         appointment.Date = updateDto.Date;
         appointment.Time = updateDto.Time;

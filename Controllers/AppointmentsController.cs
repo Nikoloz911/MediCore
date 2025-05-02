@@ -25,7 +25,7 @@ public class AppointmentsController : ControllerBase
      [FromQuery] int? departmentId,
      [FromQuery] APPOINTMENT_STATUS? status,
      [FromQuery] APPOINTMENT_TYPE? visitType,
-     [FromQuery] DateTime? date)
+     [FromQuery] DateOnly? date)
     {
         var response = _appointmentsService.GetAppointments(
             doctorId, patientId, departmentId, status, visitType, date);
@@ -70,6 +70,10 @@ public class AppointmentsController : ControllerBase
         {
             return BadRequest(response);
         }
+        else if (response.Status == 409)              // CONFLICT
+        {
+            return Conflict(response);            
+        }
         return null;
     }
     // UPDATE APPOINTMENT BY ID
@@ -88,6 +92,10 @@ public class AppointmentsController : ControllerBase
         else if (response.Status == StatusCodes.Status400BadRequest)        // BAD REQUEST
         {
             return BadRequest(response);
+        }
+        else if (response.Status == 409)              // CONFLICT
+        {
+            return Conflict(response);
         }
         else
         {
