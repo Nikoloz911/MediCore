@@ -78,8 +78,8 @@ public class MedicalRecordsService : IMedicalRecords
     // ADD NEW MEDICAL RECORD
     public ApiResponse<MedicalRecordResponseDTO> CreateMedicalRecord(CreateMedicalRecordDTO dto)
     {
+        // VALIDATE
         var validationResult = _validator.Validate(dto);
-
         if (!validationResult.IsValid)
         {
             return new ApiResponse<MedicalRecordResponseDTO>
@@ -89,13 +89,35 @@ public class MedicalRecordsService : IMedicalRecords
                 Data = null
             };
         }
-
+        // CHECK IF PATIENT EXISTS
+        var patient = _context.Patients.FirstOrDefault(p => p.Id == dto.PatientId);
+        if (patient == null)
+        {
+            return new ApiResponse<MedicalRecordResponseDTO>
+            {
+                Status = 404,
+                Message = "Patient not found.",
+                Data = null
+            };
+        }
+        // CHECK IF DOCTOR EXISTS
+        var doctor = _context.Doctors.FirstOrDefault(d => d.Id == dto.DoctorId);
+        if (doctor == null)
+        {
+            return new ApiResponse<MedicalRecordResponseDTO>
+            {
+                Status = 404,
+                Message = "Doctor not found.",
+                Data = null
+            };
+        }
+        // MAP DTO TO ENTITY
         var record = _mapper.Map<MedicalRecord>(dto);
         record.CreatedAt = DateTime.UtcNow;
 
         _context.MedicalRecords.Add(record);
         _context.SaveChanges();
-
+        // MAP TO DTO
         var responseDto = _mapper.Map<MedicalRecordResponseDTO>(record);
         return new ApiResponse<MedicalRecordResponseDTO>
         {
@@ -104,6 +126,7 @@ public class MedicalRecordsService : IMedicalRecords
             Data = responseDto
         };
     }
+
     // UPDATE MEDICAL RECORD
     public ApiResponse<MedicalRecordResponseDTO> UpdateMedicalRecord(int id, UpdateMedicalRecordDTO dto)
     {

@@ -67,6 +67,10 @@ public class MedicalRecordsController : ControllerBase
         {
             return BadRequest(result);
         }
+        else if (result.Status == 404)  // NOT FOUND
+        {
+            return NotFound(result);
+        }
         else
         {
             return null;

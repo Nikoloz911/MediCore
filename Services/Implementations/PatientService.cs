@@ -137,7 +137,6 @@ public class PatientService : IPatient
         };
         _context.Users.Add(user);
         _context.SaveChanges();
-
         // CREATE PATIENT
         var patient = _mapper.Map<Patient>(dto);
         patient.UserId = user.Id;

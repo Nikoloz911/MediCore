@@ -12,7 +12,8 @@ public class PatientMappingProfile : Profile
         CreateMap<Patient, PatientGetDTO>();
 
         CreateMap<Patient, PatientGetByIdDTO>();
-        CreateMap<(User user, Patient patient), PatientCreatedDTO>()    
+        CreateMap<(User user, Patient patient), PatientCreatedDTO>()
+              .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.user.Id))
               .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.user.FirstName))
               .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.user.LastName))
               .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.user.Email))

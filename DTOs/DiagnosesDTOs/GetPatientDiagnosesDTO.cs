@@ -8,9 +8,9 @@ public class GetPatientDiagnosesDTO
     public string ICD10Code { get; set; }
     public string Description { get; set; }
     public string AdditionalComments { get; set; }
-    public PatientBasicInfo Patient { get; set; } 
+    public DiagnosesPatientBasicInfo Patient { get; set; } 
 }
-public class PatientBasicInfo
+public class DiagnosesPatientBasicInfo
 {
     public int UserId { get; set; } 
     public DateOnly DateOfBirth { get; set; }
