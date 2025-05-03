@@ -175,8 +175,8 @@ namespace MediCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TestDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("TestDate")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 

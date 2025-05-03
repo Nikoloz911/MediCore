@@ -180,7 +180,7 @@ namespace MediCore.Migrations
                     PatientId = table.Column<int>(type: "int", nullable: false),
                     LabTestId = table.Column<int>(type: "int", nullable: false),
                     Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TestDate = table.Column<DateOnly>(type: "date", nullable: false),
                     PerformingLab = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
