@@ -29,8 +29,4 @@
     <PackageReference Include="Twilio" Version="7.10.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\PrescriptionsDTOs\" />
-  </ItemGroup>
-
 </Project>

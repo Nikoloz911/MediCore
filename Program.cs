@@ -36,9 +36,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors();             // Enable CORS
-app.UseAuthentication();   // Enable authentication (JWT)
-app.UseAuthorization();    // Enable authorization
+app.UseCors();            
+app.UseAuthentication();  
+app.UseAuthorization();   
 app.UseHttpsRedirection();
 app.MapControllers();  
 app.Run();

@@ -335,11 +335,11 @@ namespace MediCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("ExpiryDate")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("IssueDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("IssueDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("MedicalRecordId")
                         .HasColumnType("int");

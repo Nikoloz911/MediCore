@@ -259,8 +259,8 @@ namespace MediCore.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MedicalRecordId = table.Column<int>(type: "int", nullable: false),
-                    IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IssueDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    ExpiryDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

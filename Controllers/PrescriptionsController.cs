@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using MediCore.Services.Interfaces;
 using MediCore.Models;
-using System;
+using MediCore.Core;
+using MediCore.DTOs.PrescriptionsDTOs;
+using Microsoft.AspNetCore.Authorization;
 namespace MediCore.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class PrescriptionsController : ControllerBase
 {
@@ -14,14 +16,110 @@ public class PrescriptionsController : ControllerBase
     {
         _prescriptionsService = prescriptionsService;
     }
+    // GET PRESCTIPTIONS BY PATIENT ID
+    [HttpGet("prescriptions/patient/{patientId}")]
+    public ActionResult<ApiResponse<List<GetPatientPrescriptionsDTO>>> GetPatientPrescriptions(int patientId)
+    {
+        var response = _prescriptionsService.GetPrescriptionsByPatientId(patientId);
 
+       if(response.Status == 200)           // OK
+        {
+            return Ok(response);
 
+        }
+       else if (response.Status == 404)         // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    // GET PRESCTIPTIONS BY ID
+    [HttpGet("prescriptions/{id}")]
+    public ActionResult<ApiResponse<GetPrescriptionsByIdDTO>> GetPrescriptionById(int id)
+    {
+        var response = _prescriptionsService.GetPrescriptionById(id);
 
-//    GET /api/prescriptions/patient/{patientId
-//} - პაციენტის რეცეპტები
-//GET /api/prescriptions/{id} -კონკრეტული რეცეპტის დეტალები
-//POST /api/prescriptions - ახალი რეცეპტის შექმნა (Doctor)
-//PUT /api/prescriptions/{id} -რეცეპტის განახლება(Doctor)
-//GET / api / prescriptions / active / patient /{ patientId}
-//-პაციენტის აქტიური რეცეპტები
+        if (response.Status == 200)         // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 404)        // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    // ADD NEW PRESCRIPTION
+    [HttpPost("prescriptions")]
+    [Authorize(Policy = "DoctorOnly")]
+    public ActionResult<ApiResponse<AddPrescriptionsResponseDTO>> AddPrescription([FromBody] AddPrescriptionsDTO dto)
+    {
+        var response = _prescriptionsService.AddPrescription(dto);
+
+        if (response.Status == 200)     // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 400)        // BAD REQUEST
+        {
+            return BadRequest(response);
+        }
+        else if (response.Status == 404)        // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    // UPDATE PRESCRIPTION
+    [HttpPut("api/prescriptions/{id}")]
+    [Authorize(Policy = "DoctorOnly")]
+    public ActionResult<ApiResponse<UpdatePrescriptionResponseDTO>> UpdatePrescription(int id, [FromBody] UpdatePrescriptionDTO dto)
+    {
+        var response = _prescriptionsService.UpdatePrescription(id, dto);
+
+        if (response.Status == 200)     // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 400)        // BAD REQUEST
+        {
+            return BadRequest(response);
+        }
+        else if (response.Status == 404)        // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    // GET ACTIVE PRESCRIPTIONS BY PATIENT ID
+    [HttpGet("active/patient/{patientId}")]
+    public ActionResult<ApiResponse<List<GetActivePrescriptionsDTO>>> GetActivePrescriptionsByPatientId(int patientId)
+    {
+        var response = _prescriptionsService.GetActivePrescriptionsByPatientId(patientId);
+
+        if (response.Status == 200)         // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 404)        // BAD REQUEST
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
 }
