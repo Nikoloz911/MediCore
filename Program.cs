@@ -12,6 +12,7 @@ var apiBehaviorConfig = new ApiBehaviorConfiguration();
 apiBehaviorConfig.ConfigureApiBehavior(builder.Services);
 
 var exceptionHandlerConfig = new ExceptionHandlerConfiguration();
+
 var corsConfig = new CorsConfiguration();
 corsConfig.ConfigureCors(builder.Services);
 
