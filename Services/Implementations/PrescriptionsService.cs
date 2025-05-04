@@ -81,6 +81,16 @@ public class PrescriptionsService : IPrescriptions
     // ADD NEW PRESCRIPTION
     public ApiResponse<AddPrescriptionsResponseDTO> AddPrescription(AddPrescriptionsDTO dto)
     {
+        // VALIDATE
+        if (dto == null || dto.MedicalRecordId <= 0)
+        {
+            return new ApiResponse<AddPrescriptionsResponseDTO>
+            {
+                Status = 400,
+                Message = "Invalid input!",
+                Data = null!
+            };
+        }
         // VALIDATE DTO WITH VALIDATOR
         var validationResult = _addPrescriptionValidator.Validate(dto);
         if (!validationResult.IsValid)
@@ -130,6 +140,16 @@ public class PrescriptionsService : IPrescriptions
     // UPDATE PRESCRIPTION
     public ApiResponse<UpdatePrescriptionResponseDTO> UpdatePrescription(int id, UpdatePrescriptionDTO dto)
     {
+        // VALIDATE
+        if (dto.MedicalRecordId <= 0)
+        {
+            return new ApiResponse<UpdatePrescriptionResponseDTO>
+            {
+                Status = 400,
+                Message = "Invalid input!",
+                Data = null!
+            };
+        }
         // VALIDATE DTO WITH VALIDATOR
         var validationResult = _updatePrescriptionValidator.Validate(dto);
         if (!validationResult.IsValid)

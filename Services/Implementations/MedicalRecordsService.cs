@@ -79,6 +79,16 @@ public class MedicalRecordsService : IMedicalRecords
     public ApiResponse<MedicalRecordResponseDTO> CreateMedicalRecord(CreateMedicalRecordDTO dto)
     {
         // VALIDATE
+        if (dto == null || dto.PatientId <= 0 || dto.DoctorId <= 0)
+        {
+            return new ApiResponse<MedicalRecordResponseDTO>
+            {
+                Status = 400,
+                Message = "Invalid input!",
+                Data = null
+            };
+        }
+        // VALIDATE
         var validationResult = _validator.Validate(dto);
         if (!validationResult.IsValid)
         {
@@ -130,6 +140,17 @@ public class MedicalRecordsService : IMedicalRecords
     // UPDATE MEDICAL RECORD
     public ApiResponse<MedicalRecordResponseDTO> UpdateMedicalRecord(int id, UpdateMedicalRecordDTO dto)
     {
+        // VALIDATE
+        if (dto == null || dto.DoctorId <= 0)
+        {
+            return new ApiResponse<MedicalRecordResponseDTO>
+            {
+                Status = 400,
+                Message = "Invalid input!",
+                Data = null
+            };
+        }
+        // VALIDATE
         var validationResult = _updateValidator.Validate(dto);
         if (!validationResult.IsValid)
         {
@@ -155,7 +176,6 @@ public class MedicalRecordsService : IMedicalRecords
 
         // MAP TO DTO
         var responseDto = _mapper.Map<MedicalRecordResponseDTO>(record);
-
         return new ApiResponse<MedicalRecordResponseDTO>
         {
             Status = 200,

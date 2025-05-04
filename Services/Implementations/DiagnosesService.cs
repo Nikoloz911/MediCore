@@ -81,6 +81,16 @@ public class DiagnosesService : IDiagnoses
     public ApiResponse<AddDiagnosesResponseDTO> AddDiagnosis(AddDiagnosesDTO newDiagnosis)
     {
         // VALIDATE
+        if (newDiagnosis == null || newDiagnosis.MedicalRecordId == 0)
+        {
+            return new ApiResponse<AddDiagnosesResponseDTO>
+            {
+                Status = 400,
+                Message = "Invalid input!.",
+                Data = null
+            };
+        }
+        // VALIDATE
         var validationResult = _validator.Validate(newDiagnosis);
         if (!validationResult.IsValid)
         {

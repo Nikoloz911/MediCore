@@ -1,6 +1,4 @@
-﻿using MediCore.Models;
-
-namespace MediCore.DTOs.DiagnosesDTOs;
+﻿namespace MediCore.DTOs.DiagnosesDTOs;
 public class AddDiagnosesDTO
 {
     public int MedicalRecordId { get; set; } 

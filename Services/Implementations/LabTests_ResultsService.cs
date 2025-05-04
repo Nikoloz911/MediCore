@@ -76,9 +76,19 @@ public class LabTests_ResultsService : ILabTests_Results
             Data = responseDTO
         };
     }
-    // GET ALL LAB RESULTS
+    // ADD LAB RESULT
     public ApiResponse<AddLabResultsResponseDTO> AddLabResult(AddLabResultDTO dto)
     {
+        // VALIDATE
+        if (dto == null || dto.PatientId <= 0 || dto.LabTestId <= 0)
+        {
+            return new ApiResponse<AddLabResultsResponseDTO>
+            {
+                Status = 400,
+                Message = "Invalid Input!",
+                Data = null
+            };
+        }
         // VALIDATE
         var validationResult = _LabResultsValidator.Validate(dto);
         if (!validationResult.IsValid)

@@ -54,7 +54,7 @@ public class LabTest_ResultsController : ControllerBase
     }
     // ADD LAB RESULT
     [HttpPost("/api/lab-results")]
-    [Authorize(Policy = "AdminOrLab")]
+    [Authorize(Policy = "AdminOrNurse")]
     public IActionResult AddLabResult([FromBody] AddLabResultDTO dto)
     {    
         var response = _labTests_ResultsService.AddLabResult(dto);
