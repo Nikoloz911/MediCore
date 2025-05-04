@@ -3,9 +3,9 @@ using System.Net.Mail;
 
 namespace MediCore.SMTP
 {
-    public class SMTP_Visit_Reminder
+    public class SMTP_Prescription
     {
-        public void SendReminderEmail(string toAddress, string subject, string body)
+        public void SendPrescriptionEmail(string toAddress, string subject, string body)
         {
             string senderEmail = "nikalobjanidze014@gmail.com";
             string appPassword = ""; // APP PASSWORD
@@ -17,7 +17,6 @@ namespace MediCore.SMTP
                 <p>{body}</p>
             </body>
             </html>";
-
 
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(senderEmail);
