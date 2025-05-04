@@ -80,7 +80,7 @@ public class PrescriptionsController : ControllerBase
         }
     }
     // UPDATE PRESCRIPTION
-    [HttpPut("api/prescriptions/{id}")]
+    [HttpPut("prescriptions/{id}")]
     [Authorize(Policy = "DoctorOnly")]
     public ActionResult<ApiResponse<UpdatePrescriptionResponseDTO>> UpdatePrescription(int id, [FromBody] UpdatePrescriptionDTO dto)
     {
@@ -122,4 +122,28 @@ public class PrescriptionsController : ControllerBase
             return null;
         }
     }
+    /// PRESCRIPTION ITEMS  /// PRESCRIPTION ITEMS  /// PRESCRIPTION ITEMS  /// PRESCRIPTION ITEMS
+    [HttpPost("prescriptions/item")]
+    public ActionResult<ApiResponse<AddPrescriptionItemResponseDTO>> AddPrescriptionItem([FromBody] AddPrescriptionItemDTO dto)
+    {
+        var response = _prescriptionsService.AddPrescriptionItem(dto);
+
+        if (response.Status == 200)         // OK
+        {
+            return Ok(response);
+        }
+        else if (response.Status == 400)        // BAD REQUEST
+        {
+            return BadRequest(response);
+        }
+        else if (response.Status == 404)        // NOT FOUND
+        {
+            return NotFound(response);
+        }
+        else
+        {
+            return null;
+        }
+    }
+    /// PRESCRIPTION ITEMS  /// PRESCRIPTION ITEMS  /// PRESCRIPTION ITEMS  /// PRESCRIPTION ITEMS
 }

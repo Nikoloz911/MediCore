@@ -9,4 +9,5 @@ public interface IPrescriptions
     ApiResponse<AddPrescriptionsResponseDTO> AddPrescription(AddPrescriptionsDTO dto);
     ApiResponse<UpdatePrescriptionResponseDTO> UpdatePrescription(int id, UpdatePrescriptionDTO dto);
     ApiResponse<List<GetActivePrescriptionsDTO>> GetActivePrescriptionsByPatientId(int patientId);
+    ApiResponse<AddPrescriptionItemResponseDTO> AddPrescriptionItem(AddPrescriptionItemDTO dto);
 }

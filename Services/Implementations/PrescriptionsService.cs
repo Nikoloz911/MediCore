@@ -237,4 +237,72 @@ public class PrescriptionsService : IPrescriptions
             Data = mappedPrescriptions
         };
     }
+    // ADD PRESCRIPTION ITEM
+    public ApiResponse<AddPrescriptionItemResponseDTO> AddPrescriptionItem(AddPrescriptionItemDTO dto)
+    {
+        // Validate DTO input
+        if (dto == null || dto.PrescriptionId <= 0 || dto.MedicationId <= 0 || string.IsNullOrEmpty(dto.DosageInstructions))
+        {
+            return new ApiResponse<AddPrescriptionItemResponseDTO>
+            {
+                Status = 400,
+                Message = "Invalid input!",
+                Data = null
+            };
+        }
+        // Validate DosageInstructions length
+        if (dto.DosageInstructions.Length > 150)
+        {
+            return new ApiResponse<AddPrescriptionItemResponseDTO>
+            {
+                Status = 400,
+                Message = "Dosage Instructions cannot exceed 150 characters.",
+                Data = null
+            };
+        }
+        // Validate DurationDays value
+        if (dto.DurationDays <= 0 || dto.DurationDays > 3065)
+        {
+            return new ApiResponse<AddPrescriptionItemResponseDTO>
+            {
+                Status = 400,
+                Message = "Duration Days must be a positive number and should not exceed 3065 days.",
+                Data = null
+            };
+        }
+        // VALIDATE PRESCRIPTION ID
+        var prescription = _context.Prescriptions.FirstOrDefault(p => p.Id == dto.PrescriptionId);
+        if (prescription == null)
+        {
+            return new ApiResponse<AddPrescriptionItemResponseDTO>
+            {
+                Status = 404,
+                Message = "Prescription not found.",
+                Data = null
+            };
+        }
+        // VALIDATE MEDICATION ID
+        var medication = _context.Medications.FirstOrDefault(m => m.Id == dto.MedicationId);
+        if (medication == null)
+        {
+            return new ApiResponse<AddPrescriptionItemResponseDTO>
+            {
+                Status = 404,
+                Message = "Medication not found.",
+                Data = null
+            };
+        }
+        // MAP TO PRESCRIPTION ITEM
+        var prescriptionItem = _mapper.Map<PrescriptionItem>(dto);
+        _context.PrescriptionItems.Add(prescriptionItem);
+        _context.SaveChanges();
+        // MAP FOR RESPONSE
+        var responseDto = _mapper.Map<AddPrescriptionItemResponseDTO>(prescriptionItem);
+        return new ApiResponse<AddPrescriptionItemResponseDTO>
+        {
+            Status = 200,
+            Message = "Prescription item added successfully.",
+            Data = responseDto
+        };
+    }
 }

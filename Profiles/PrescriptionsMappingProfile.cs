@@ -39,5 +39,7 @@ public class PrescriptionsMappingProfile : Profile
 
         CreateMap<Prescription, UpdatePrescriptionResponseDTO>();
         CreateMap<Prescription, GetActivePrescriptionsDTO>();
+        CreateMap<AddPrescriptionItemDTO, PrescriptionItem>();
+        CreateMap<PrescriptionItem, AddPrescriptionItemResponseDTO>();
     }
 }
