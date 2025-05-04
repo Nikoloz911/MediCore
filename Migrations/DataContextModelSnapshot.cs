@@ -73,11 +73,8 @@ namespace MediCore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("DepartmentName")
+                    b.Property<string>("DepartmentType")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DepartmentType")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

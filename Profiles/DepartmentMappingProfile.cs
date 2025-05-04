@@ -9,8 +9,11 @@ namespace MediCore.Profiles
         public DepartmentMappingProfile()
         {
             CreateMap<Department, DepartmentAllDTO>()
-                .ForMember(dest => dest.DepartmentType, opt => opt.MapFrom(src =>
-                 src.DepartmentType.HasValue ? src.DepartmentType.ToString() : null));
+                .ForMember(dest => dest.DepartmentType, opt =>
+                    opt.MapFrom(src => src.DepartmentType)); 
+
+            CreateMap<DepartmentAddDTO, Department>();
+            CreateMap<DepartmentUpdateDTO, Department>();
         }
     }
 }

@@ -32,6 +32,5 @@ public class PatientBasicDTO
 public class DepartmentBasicDTO
 {
     public int Id { get; set; }
-    public DEPARTMENT_TYPE? DepartmentType { get; set; } 
-    public string? DepartmentName { get; set; } 
+    public string? DepartmentType { get; set; } 
 }
