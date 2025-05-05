@@ -427,7 +427,7 @@ namespace MediCore.Migrations
                     b.HasOne("MediCore.Models.Department", "Department")
                         .WithMany("Appointments")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MediCore.Models.Doctor", "Doctor")

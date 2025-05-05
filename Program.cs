@@ -42,7 +42,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHangfireServer();
 app.UseCors();            
 app.UseAuthentication();  
 app.UseAuthorization();   
