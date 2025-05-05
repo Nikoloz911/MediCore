@@ -7,6 +7,9 @@ using MediCore.Models;
 using FluentValidation;
 using MediCore.Validators;
 using Microsoft.EntityFrameworkCore;
+using PdfSharpCore.Pdf;
+using MediCore.SMTP;
+using PdfSharpCore.Drawing;
 namespace MediCore.Services.Implementations;
 public class LabTests_ResultsService : ILabTests_Results
 {
@@ -102,8 +105,10 @@ public class LabTests_ResultsService : ILabTests_Results
             };
         }
         // VALIDATE IF PATIENT EXISTS
-        var patientExists = _context.Patients.Any(p => p.Id == dto.PatientId);
-        if (!patientExists)
+        var patient = _context.Patients
+        .Include(p => p.User)
+        .FirstOrDefault(p => p.Id == dto.PatientId);
+        if (patient == null)
         {
             return new ApiResponse<AddLabResultsResponseDTO>
             {
@@ -113,8 +118,8 @@ public class LabTests_ResultsService : ILabTests_Results
             };
         }
         // VALIDATE IF LAB TEST EXISTS
-        var labTestExists = _context.LabTests.Any(l => l.Id == dto.LabTestId);
-        if (!labTestExists)
+        var labTest = _context.LabTests.FirstOrDefault(l => l.Id == dto.LabTestId);
+        if (labTest == null)
         {
             return new ApiResponse<AddLabResultsResponseDTO>
             {
@@ -127,6 +132,15 @@ public class LabTests_ResultsService : ILabTests_Results
         var entity = _mapper.Map<LabResult>(dto);
         _context.LabResults.Add(entity);
         _context.SaveChanges();
+        // SAVE PDF AND SEND EMAIL
+        var pdfPath = GenerateLabResultPDF(entity, patient, labTest);
+        SMTP_LabResult.SendLabResultEmailWithAttachment(
+            patient.User.Email,
+            "Your Lab Result - MediCore",
+            $"Dear {patient.User.FirstName}, please find attached your lab result.",
+            pdfPath
+        );
+
         // MAP TO DTO
         var responseDTO = _mapper.Map<AddLabResultsResponseDTO>(entity);
         return new ApiResponse<AddLabResultsResponseDTO>
@@ -136,6 +150,38 @@ public class LabTests_ResultsService : ILabTests_Results
             Data = responseDTO
         };
     }
+
+    // GENERATE PDF FILE FOR LAB RESULT
+    public string GenerateLabResultPDF(LabResult result, Patient patient, LabTest labTest)
+    {
+        string fileName = $"LabResult_{result.Id}.pdf"; 
+        string filePath = Path.Combine(AppContext.BaseDirectory, fileName); 
+
+        var document = new PdfDocument();
+        var page = document.AddPage();
+        var gfx = XGraphics.FromPdfPage(page);
+
+        var titleFont = new XFont("Arial", 16, XFontStyle.Bold);
+        var textFont = new XFont("Arial", 12, XFontStyle.Regular);
+
+        int y = 40;
+
+        gfx.DrawString("MediCore Medical System - Lab Result", titleFont, XBrushes.Navy, new XRect(0, y, page.Width, page.Height), XStringFormats.TopCenter);
+        y += 40;
+
+        gfx.DrawString($"Patient: {patient.User.FirstName} {patient.User.LastName}", textFont, XBrushes.Black, 40, y); y += 25;
+        gfx.DrawString($"Test Type: {labTest.TestType}", textFont, XBrushes.Black, 40, y); y += 25;  // Corrected to use TestType
+        gfx.DrawString($"Result: {result.Result}", textFont, XBrushes.Black, 40, y); y += 25;
+        gfx.DrawString($"Test Date: {result.TestDate:yyyy-MM-dd}", textFont, XBrushes.Black, 40, y); y += 25;
+        gfx.DrawString($"Performed by: {result.PerformingLab}", textFont, XBrushes.Black, 40, y);
+
+        document.Save(filePath);
+
+        return filePath;
+    }
+
+
+
     // GET PATIENT LAB RESULTS
     public ApiResponse<List<GetPatientLabResults>> GetPatientLabResults(int patientId)
     {
