@@ -41,8 +41,14 @@ public class DataContext : DbContext
             .HasOne(a => a.Department)
             .WithMany(d => d.Appointments)
             .HasForeignKey(a => a.DepartmentId)
-            .OnDelete(DeleteBehavior.Restrict)
+            .OnDelete(DeleteBehavior.Cascade) 
             .IsRequired();
+
+        modelBuilder.Entity<Doctor>()
+            .HasOne(d => d.Department)
+            .WithMany(dep => dep.Doctors)
+            .HasForeignKey(d => d.DepartmentId)
+            .OnDelete(DeleteBehavior.Cascade); 
 
         modelBuilder.Entity<Patient>()
             .HasOne(p => p.User)
