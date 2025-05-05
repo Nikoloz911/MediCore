@@ -1,3 +1,4 @@
+using Hangfire;
 using MediCore.Configurations;
 using MediCore.Data;
 
@@ -22,9 +23,13 @@ serviceConfig.ConfigureApplicationServices(builder.Services);
 var authConfig = new AuthenticationConfiguration(builder.Configuration);
 authConfig.ConfigureJwtAuthentication(builder.Services);
 
+var hangfireConfig = new HangFireConfiguration(builder.Configuration);
+hangfireConfig.ConfigureHangfireServices(builder.Services);
+
 var app = builder.Build();
 
-exceptionHandlerConfig.CustomExceptionHandler(app);    // EXCEPTION HANDLER
+exceptionHandlerConfig.CustomExceptionHandler(app);   
+hangfireConfig.ConfigureHangfirePipeline(app); 
 
 /// UNCOMMENT CODE BELOW TO INITIALIZE DATA
 // AddDepartmentsDATA.InitializeData(app);
@@ -37,6 +42,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHangfireServer();
 app.UseCors();            
 app.UseAuthentication();  
 app.UseAuthorization();   

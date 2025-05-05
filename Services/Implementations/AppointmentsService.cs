@@ -351,8 +351,6 @@ public class AppointmentsService : IAppointments
 
         // MAP APPOINTMENT TO DTO
         var updatedDto = _mapper.Map<UpdateAppointmentDTO>(appointment);
-
-        // Return successful response
         return new ApiResponse<UpdateAppointmentDTO>
         {
             Status = 200,

@@ -137,6 +137,22 @@ public class PrescriptionsService : IPrescriptions
             Data = responseDto
         };
     }
+    // BACKGROUND JOB TO UPDATE EXPIRED PRESCRIPTIONS
+    public void UpdateExpiredPrescriptions()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Now);
+
+        var expiredPrescriptions = _context.Prescriptions
+            .Where(p => p.ExpiryDate < today && p.Status == PRESCRIPTION_STATUS.ACTIVE)
+            .ToList();
+
+        foreach (var prescription in expiredPrescriptions)
+        {
+            prescription.Status = PRESCRIPTION_STATUS.INACTIVE;
+        }
+        _context.SaveChanges();
+    }
+
     // UPDATE PRESCRIPTION
     public ApiResponse<UpdatePrescriptionResponseDTO> UpdatePrescription(int id, UpdatePrescriptionDTO dto)
     {
