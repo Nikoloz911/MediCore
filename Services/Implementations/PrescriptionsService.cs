@@ -3,12 +3,16 @@ using FluentValidation;
 using MediCore.Core;
 using MediCore.Data;
 using MediCore.Models;
+using PdfSharpCore;
+using PdfSharpCore.Drawing;
 using MediCore.DTOs.DiagnosesDTOs;
 using MediCore.DTOs.PrescriptionsDTOs;
 using MediCore.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using MediCore.Enums;
 using MediCore.Validators;
+using MediCore.SMTP;
+using PdfSharpCore.Pdf;
 
 namespace MediCore.Services.Implementations;
 public class PrescriptionsService : IPrescriptions
@@ -103,7 +107,11 @@ public class PrescriptionsService : IPrescriptions
             };
         }
         // VALIDATE MEDICAL RECORD ID
-        var medicalRecord = _context.MedicalRecords.FirstOrDefault(m => m.Id == dto.MedicalRecordId);
+        var medicalRecord = _context.MedicalRecords
+                         .Include(m => m.Patient)
+                         .ThenInclude(p => p.User)
+                         .FirstOrDefault(m => m.Id == dto.MedicalRecordId);
+
         if (medicalRecord == null)
         {
             return new ApiResponse<AddPrescriptionsResponseDTO>
@@ -128,6 +136,18 @@ public class PrescriptionsService : IPrescriptions
         prescription.IssueDate = DateOnly.FromDateTime(DateTime.Now);
         _context.Prescriptions.Add(prescription);
         _context.SaveChanges();
+        // SEND EMAIL WITH PDF FILE
+        var patientName = medicalRecord.Patient.User.FirstName;
+        var patientEmail = medicalRecord.Patient.User.Email;
+        var pdfPath = GeneratePrescriptionPdf(prescription, patientName);
+
+        SMTP_Prescription.SendPrescriptionEmailWithAttachment(
+            patientEmail,
+            "New Prescription Issued",
+            $"Dear {patientName},<br/>A new prescription has been issued to you. Please find the attached PDF.",
+            pdfPath
+        );
+
         // MAP FOR RESPONSE
         var responseDto = _mapper.Map<AddPrescriptionsResponseDTO>(prescription);
         return new ApiResponse<AddPrescriptionsResponseDTO>
@@ -137,6 +157,33 @@ public class PrescriptionsService : IPrescriptions
             Data = responseDto
         };
     }
+
+    // GENERATE PDF FILE FOR PRESCRIPTION
+    private string GeneratePrescriptionPdf(Prescription prescription, string patientName)
+    {
+        string fileName = $"prescription_{prescription.Id}.pdf";
+        string filePath = Path.Combine(AppContext.BaseDirectory, fileName);
+
+        var document = new PdfDocument();
+        var page = document.AddPage();
+        var gfx = XGraphics.FromPdfPage(page);
+        var font = new XFont("Arial", 12, XFontStyle.Regular);
+        var boldFont = new XFont("Arial", 14, XFontStyle.Bold);
+
+        int yPoint = 40;
+        gfx.DrawString("Prescription Details", boldFont, XBrushes.Black, new XRect(0, yPoint, page.Width, page.Height), XStringFormats.TopCenter);
+        yPoint += 40;
+
+        gfx.DrawString($"Prescription ID: {prescription.Id}", font, XBrushes.Black, 20, yPoint); yPoint += 25;
+        gfx.DrawString($"Patient Name: {patientName}", font, XBrushes.Black, 20, yPoint); yPoint += 25;
+        gfx.DrawString($"Issue Date: {prescription.IssueDate}", font, XBrushes.Black, 20, yPoint); yPoint += 25;
+        gfx.DrawString($"Expiry Date: {prescription.ExpiryDate}", font, XBrushes.Black, 20, yPoint); yPoint += 25;
+        gfx.DrawString($"Status: {prescription.Status}", font, XBrushes.Black, 20, yPoint); yPoint += 25;
+
+        document.Save(filePath);
+        return filePath;
+    }
+
     // BACKGROUND JOB TO UPDATE EXPIRED PRESCRIPTIONS
     public void UpdateExpiredPrescriptions()
     {

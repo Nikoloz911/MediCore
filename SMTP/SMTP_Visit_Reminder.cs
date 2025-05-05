@@ -5,7 +5,6 @@ using System.Net.Mail;
 
 namespace MediCore.Services.Implementations
 {
-    
     public class SMTP_Visit_Reminder
     {
         private readonly DataContext _context;
@@ -19,7 +18,6 @@ namespace MediCore.Services.Implementations
             string senderEmail = "nikalobjanidze014@gmail.com";
             string appPassword = ""; // Your app password here
 
-            // Set up the email body with HTML content
             var htmlContent = $@"
                 <html>
                 <body style='font-family:Segoe UI, sans-serif; background-color:#f0f8ff; padding:20px; color:#1a3e5d;'>

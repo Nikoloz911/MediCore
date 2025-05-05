@@ -3,12 +3,12 @@ using System.Net.Mail;
 
 namespace MediCore.SMTP
 {
-    public class SMTP_Prescription
+    public static class SMTP_Prescription
     {
-        public void SendPrescriptionEmail(string toAddress, string subject, string body)
+        public static void SendPrescriptionEmailWithAttachment(string toAddress, string subject, string body, string attachmentPath)
         {
             string senderEmail = "nikalobjanidze014@gmail.com";
-            string appPassword = ""; // APP PASSWORD
+            string appPassword = "fmni efhs vbho uurv"; // APP PASSWORD
 
             string htmlContent = $@"
             <html>
@@ -18,19 +18,27 @@ namespace MediCore.SMTP
             </body>
             </html>";
 
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(senderEmail);
+            MailMessage mail = new MailMessage
+            {
+                From = new MailAddress(senderEmail),
+                Subject = subject,
+                Body = htmlContent,
+                IsBodyHtml = true
+            };
             mail.To.Add(toAddress);
-            mail.Subject = subject;
-            mail.Body = htmlContent;
-            mail.IsBodyHtml = true;
 
-            var smtpClient = new SmtpClient("smtp.gmail.com")
+            if (!string.IsNullOrWhiteSpace(attachmentPath) && File.Exists(attachmentPath))
+            {
+                mail.Attachments.Add(new Attachment(attachmentPath));
+            }
+
+            using var smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
                 EnableSsl = true,
                 Credentials = new NetworkCredential(senderEmail, appPassword)
             };
+
             smtpClient.Send(mail);
         }
     }

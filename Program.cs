@@ -1,4 +1,3 @@
-using Hangfire;
 using MediCore.Configurations;
 using MediCore.Data;
 
