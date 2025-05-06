@@ -107,7 +107,6 @@ namespace MediCore.Services.Implementations
                 Data = updatedDto
             };
         }
-
         // DELETE DEPARTMENT
         public ApiResponse<bool> DeleteDepartment(int id)
         {
@@ -124,15 +123,24 @@ namespace MediCore.Services.Implementations
                 };
             }
 
-            _context.Departments.Remove(department);
-            _context.SaveChanges();
+            var doctorsInDepartment = _context.Doctors
+                .Where(d => d.DepartmentId == id)
+                .ToList();
 
+            foreach (var doctor in doctorsInDepartment)
+            {
+                _context.Doctors.Remove(doctor);
+            }
+
+            _context.Departments.Remove(department);
+            _context.SaveChanges(); 
             return new ApiResponse<bool>
             {
                 Status = 200,
-                Message = "Department deleted successfully.",
+                Message = "Department and its associated doctors deleted successfully.",
                 Data = true
             };
         }
+
     }
 }

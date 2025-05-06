@@ -1,4 +1,5 @@
-﻿using FluentValidation.AspNetCore;
+﻿using System.Text.Json.Serialization;
+using FluentValidation.AspNetCore;
 using MediCore.Data;
 using MediCore.Services.Implementations;
 using MediCore.Services.Interfaces;
@@ -23,7 +24,9 @@ namespace MediCore.Configurations
             services.AddScoped<ILabTests_Results, LabTests_ResultsService>();
             services.AddScoped<IReports, ReportsService>();
             services.AddAutoMapper(typeof(Program));
-            services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
+            services.AddFluentValidation(fv =>
+                fv.RegisterValidatorsFromAssemblyContaining<Program>()
+            );
         }
     }
 }

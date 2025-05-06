@@ -5,9 +5,9 @@ using MediCore.Services.Interfaces;
 using MediCore.Core;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using System.Linq;
 using System.Text.RegularExpressions;
 using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace MediCore.Services.Implementations
 {
@@ -229,10 +229,13 @@ namespace MediCore.Services.Implementations
             }
             return errors;
         }
-        // DELTE USER BY ID
+        // DELETE USER BY ID
         public ApiResponse<User> DeleteUserById(int id)
         {
-            var userToDelete = _context.Users.FirstOrDefault(u => u.Id == id);
+            var userToDelete = _context.Users
+                .Include(u => u.Patient) 
+                .Include(u => u.Doctor)  
+                .FirstOrDefault(u => u.Id == id);
 
             if (userToDelete == null)
             {
@@ -243,6 +246,14 @@ namespace MediCore.Services.Implementations
                     Data = null
                 };
             }
+            if (userToDelete.Patient != null)
+            {
+                _context.Patients.Remove(userToDelete.Patient);
+            }
+            if (userToDelete.Doctor != null)
+            {
+                _context.Doctors.Remove(userToDelete.Doctor);
+            }
             _context.Users.Remove(userToDelete);
             _context.SaveChanges();
             return new ApiResponse<User>
@@ -251,6 +262,6 @@ namespace MediCore.Services.Implementations
                 Message = "User deleted successfully",
                 Data = userToDelete
             };
-        }   
+        }
     }
 }

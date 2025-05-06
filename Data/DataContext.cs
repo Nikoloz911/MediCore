@@ -17,7 +17,7 @@ public class DataContext : DbContext
     public DbSet<User> Users { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Data Source=LENOVO\SQLEXPRESS02;Initial Catalog=Database;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
+        optionsBuilder.UseSqlServer(@"Data Source=LENOVO\SQLEXPRESS02;Initial Catalog=RDS;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,14 +41,15 @@ public class DataContext : DbContext
             .HasOne(a => a.Department)
             .WithMany(d => d.Appointments)
             .HasForeignKey(a => a.DepartmentId)
-            .OnDelete(DeleteBehavior.Cascade) 
+            .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
         modelBuilder.Entity<Doctor>()
             .HasOne(d => d.Department)
             .WithMany(dep => dep.Doctors)
             .HasForeignKey(d => d.DepartmentId)
-            .OnDelete(DeleteBehavior.Cascade); 
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
 
         modelBuilder.Entity<Patient>()
             .HasOne(p => p.User)

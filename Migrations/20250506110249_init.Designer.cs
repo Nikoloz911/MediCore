@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250505124814_init")]
+    [Migration("20250506110249_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -430,7 +430,7 @@ namespace MediCore.Migrations
                     b.HasOne("MediCore.Models.Department", "Department")
                         .WithMany("Appointments")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MediCore.Models.Doctor", "Doctor")
@@ -468,7 +468,7 @@ namespace MediCore.Migrations
                     b.HasOne("MediCore.Models.Department", "Department")
                         .WithMany("Doctors")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("MediCore.Models.User", "User")
