@@ -1,12 +1,12 @@
 ﻿namespace MediCore.Models;
 public class LabResult
 {
-    public int Id { get; set; } // Primary Key
-    public int PatientId { get; set; } // Foreign Key to Patient
-    public int LabTestId { get; set; } // Foreign Key to LabTest
-    public string Result { get; set; } // Result of the lab test (e.g., "Positive", "120 mg/dL")
-    public DateOnly TestDate { get; set; } // Date the test was performed
-    public string PerformingLab { get; set; } // Lab that performed the test
-    public Patient Patient { get; set; } // Navigation property to Patient
-    public LabTest LabTest { get; set; } // Navigation property to LabTest
+    public int Id { get; set; } 
+    public int PatientId { get; set; } 
+    public int LabTestId { get; set; }
+    public string Result { get; set; } 
+    public DateOnly TestDate { get; set; } 
+    public string PerformingLab { get; set; }
+    public Patient Patient { get; set; }
+    public LabTest LabTest { get; set; } 
 }

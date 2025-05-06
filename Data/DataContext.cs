@@ -20,6 +20,7 @@ public class DataContext : DbContext
     public DbSet<Prescription> Prescriptions { get; set; }
     public DbSet<PrescriptionItem> PrescriptionItems { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connectionString = _configuration.GetConnectionString("DefaultConnection");
