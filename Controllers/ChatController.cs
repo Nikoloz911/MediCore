@@ -14,7 +14,7 @@ using AutoMapper;
 
 namespace MediCore.Controllers
 {
-    [Route("api/")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ChatController : ControllerBase
     {

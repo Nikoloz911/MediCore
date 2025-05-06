@@ -1,5 +1,6 @@
-using MediCore.Configurations;
+﻿using MediCore.Configurations;
 using MediCore.Data;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseWebSockets();
 app.UseCors();            
 app.UseAuthentication();  
