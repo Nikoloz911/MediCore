@@ -15,5 +15,15 @@ public class PatientHistoryDTO
     public string InsuranceDetails { get; set; }
     public string Allergies { get; set; }
     public string BloodType { get; set; }
-    public List<MedicalRecord> MedicalRecords { get; set; }
+    public List<MedicalRecordDTO> MedicalRecords { get; set; }
 }
+
+public class MedicalRecordDTO
+{
+    public int Id { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public string Complaints { get; set; }
+    public string Symptoms { get; set; }
+    public string Measurements { get; set; }
+}
+

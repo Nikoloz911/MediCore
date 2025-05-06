@@ -37,7 +37,8 @@ public class PatientMappingProfile : Profile
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
                 .ForMember(dest => dest.InsuranceDetails, opt => opt.MapFrom(src => src.InsuranceDetails))
                 .ForMember(dest => dest.Allergies, opt => opt.MapFrom(src => src.Allergies))
-                .ForMember(dest => dest.BloodType, opt => opt.MapFrom(src => src.BloodType.ToString()))
-                .ForMember(dest => dest.MedicalRecords, opt => opt.MapFrom(src => src.MedicalRecords));
+                .ForMember(dest => dest.BloodType, opt => opt.MapFrom(src => src.BloodType.ToString()));
+
+        CreateMap<MedicalRecord, MedicalRecordDTO>();
     }
 }
