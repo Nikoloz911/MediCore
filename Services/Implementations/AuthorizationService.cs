@@ -13,6 +13,7 @@ using MediCore.SMTP;
 using MediCore.JWT;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using OfficeOpenXml;
 namespace MediCore.Services.Implementations;
 public class AuthorizationService : IAuthorization
 {
@@ -81,12 +82,59 @@ public class AuthorizationService : IAuthorization
         // Save the new user in the database
         _context.Users.Add(newUser);
         _context.SaveChanges();
+        WriteUserToExcel(newUser);
         // Map User to PublicUserDTO for response
         var userDto = _mapper.Map<PublicUserDTO>(newUser);
         response.Status = 200;
         response.Data = userDto;
+        response.Message = "User registered successfully. Please check your email for verification code.";
         return response;
     }
+
+    // SAVE USERS IN EXCEL
+    public void WriteUserToExcel(User user)
+    {
+        var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        var filePath = Path.Combine(baseDirectory, "Users.xlsx");
+        var fileExists = File.Exists(filePath);
+
+        using (var package = new ExcelPackage(new FileInfo(filePath)))
+        {
+            ExcelWorksheet worksheet;
+
+            if (!fileExists)
+            {
+                worksheet = package.Workbook.Worksheets.Add("RegisteredUsers");
+                worksheet.Cells[1, 1].Value = "Id";
+                worksheet.Cells[1, 2].Value = "FirstName";
+                worksheet.Cells[1, 3].Value = "LastName";
+                worksheet.Cells[1, 4].Value = "Email";
+                worksheet.Cells[1, 5].Value = "Role";
+            }
+            else
+            {
+                worksheet = package.Workbook.Worksheets["RegisteredUsers"] ??
+                            package.Workbook.Worksheets.Add("RegisteredUsers");
+                if (worksheet.Dimension == null)
+                {
+                    worksheet.Cells[1, 1].Value = "Id";
+                    worksheet.Cells[1, 2].Value = "FirstName";
+                    worksheet.Cells[1, 3].Value = "LastName";
+                    worksheet.Cells[1, 4].Value = "Email";
+                    worksheet.Cells[1, 5].Value = "Role";
+                }
+            }
+
+            int newRow = (worksheet.Dimension?.End.Row ?? 1) + 1;
+            worksheet.Cells[newRow, 1].Value = user.Id;
+            worksheet.Cells[newRow, 2].Value = user.FirstName;
+            worksheet.Cells[newRow, 3].Value = user.LastName;
+            worksheet.Cells[newRow, 4].Value = user.Email;
+            worksheet.Cells[newRow, 5].Value = user.Role.ToString();
+            package.Save();
+        }
+    }
+
     // VERIFY EMAIL
     public ApiResponse<PublicUserDTO> VerifyEmail(string verificationCode)
     {

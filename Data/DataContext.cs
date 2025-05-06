@@ -3,6 +3,11 @@ using MediCore.Models;
 namespace MediCore.Data;
 public class DataContext : DbContext
 {
+    private readonly IConfiguration _configuration;
+    public DataContext(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<Department> Departments { get; set; }
     public DbSet<Diagnoses> Diagnoses { get; set; }
@@ -17,7 +22,8 @@ public class DataContext : DbContext
     public DbSet<User> Users { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(@"Data Source=LENOVO\SQLEXPRESS02;Initial Catalog=RDS;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
+        var connectionString = _configuration.GetConnectionString("DefaultConnection");
+        optionsBuilder.UseSqlServer(connectionString);
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
