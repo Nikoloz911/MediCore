@@ -40,5 +40,21 @@ public class PatientMappingProfile : Profile
                 .ForMember(dest => dest.BloodType, opt => opt.MapFrom(src => src.BloodType.ToString()));
 
         CreateMap<MedicalRecord, MedicalRecordDTO>();
+        CreateMap<AddPatientUserDTO, Patient>();
+
+        CreateMap<(User user, Patient patient), AddPatientUserResponseDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.user.Id))
+            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.user.FirstName))
+            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.user.LastName))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.user.Email))
+            .ForMember(dest => dest.PersonalNumber, opt => opt.MapFrom(src => src.patient.PersonalNumber))
+            .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.patient.DateOfBirth))
+            .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.patient.GENDER.ToString()))
+            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.patient.PhoneNumber))
+            .ForMember(dest => dest.InsuranceDetails, opt => opt.MapFrom(src => src.patient.InsuranceDetails))
+            .ForMember(dest => dest.Allergies, opt => opt.MapFrom(src => src.patient.Allergies))
+            .ForMember(dest => dest.BloodType, opt => opt.MapFrom(src => src.patient.BloodType.ToString()))
+            .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.user.Role))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.user.Status));
     }
 }

@@ -155,6 +155,95 @@ public class PatientService : IPatient
             Data = createdDto
         };
     }
+    // ADD PATIENT WITH USER ID
+    public ApiResponse<AddPatientUserResponseDTO> AddPatientByUserId(AddPatientUserDTO dto)
+    {
+        if (dto == null)
+        {
+            return new ApiResponse<AddPatientUserResponseDTO>
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Message = "Request data cannot be null.",
+                Data = null
+            };
+        }
+        if (dto.UserId <= 0)
+        {
+            return new ApiResponse<AddPatientUserResponseDTO>
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Message = "Invalid UserId. UserId must be a positive integer.",
+                Data = null
+            };
+        }
+        var user = _context.Users.FirstOrDefault(u => u.Id == dto.UserId);
+        if (user == null)
+        {
+            return new ApiResponse<AddPatientUserResponseDTO>
+            {
+                Status = StatusCodes.Status404NotFound,
+                Message = "User not found.",
+                Data = null
+            };
+        }
+        if (user.Role != USER_ROLE.PATIENT)
+        {
+            return new ApiResponse<AddPatientUserResponseDTO>
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Message = "User is not a patient.",
+                Data = null
+            };
+        }
+        var existingPatientForUser = _context.Patients.FirstOrDefault(p => p.UserId == dto.UserId);
+        if (existingPatientForUser != null)
+        {
+            return new ApiResponse<AddPatientUserResponseDTO>
+            {
+                Status = StatusCodes.Status409Conflict,
+                Message = "A patient is already associated with this user.",
+                Data = null
+            };
+        }
+        var existingPatientByPersonalNumber = _context.Patients.FirstOrDefault(p => p.PersonalNumber == dto.PersonalNumber);
+        if (existingPatientByPersonalNumber != null)
+        {
+            return new ApiResponse<AddPatientUserResponseDTO>
+            {
+                Status = StatusCodes.Status409Conflict,
+                Message = "Patient with this Personal Number already exists.",
+                Data = null
+            };
+        }
+        if (!Enum.TryParse(dto.Gender, true, out GENDER gender) ||
+            !Enum.TryParse(dto.BloodType, true, out BLOOD_TYPE bloodType))
+        {
+            return new ApiResponse<AddPatientUserResponseDTO>
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Message = "Invalid gender or blood type value.",
+                Data = null
+            };
+        }
+
+        // MAP DTO TO ENTITY
+        var patient = _mapper.Map<Patient>(dto);
+        patient.UserId = dto.UserId;
+        patient.GENDER = gender;
+        patient.BloodType = bloodType;
+
+        _context.Patients.Add(patient);
+        _context.SaveChanges();
+
+        // MAP TO RESPONSE
+        var responseDto = _mapper.Map<AddPatientUserResponseDTO>((user, patient));
+        return new ApiResponse<AddPatientUserResponseDTO>
+        {
+            Status = StatusCodes.Status200OK,
+            Message = "Patient added successfully.",
+            Data = responseDto
+        };
+    }
 
     // GET PATIENT HISTORY BY ID
     public ApiResponse<PatientHistoryDTO> GetPatientHistory(int patientId)
