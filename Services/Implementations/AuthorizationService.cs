@@ -173,15 +173,17 @@ public class AuthorizationService : IAuthorization
                 Data = null
             };
         }
+
         if (foundUser.Status == USER_STATUS.UNVERIFIED)
         {
             return new ApiResponse<LogInUserDTO>
             {
-                Status = 403, 
+                Status = 403,
                 Message = "User is not Verified",
                 Data = null
             };
         }
+
         if (!BCrypt.Net.BCrypt.Verify(user.Password, foundUser.Password))
         {
             return new ApiResponse<LogInUserDTO>
@@ -191,10 +193,13 @@ public class AuthorizationService : IAuthorization
                 Data = null
             };
         }
+
         var jwtToken = _jwtService.GetUserToken(foundUser);
         foundUser.Status = USER_STATUS.ACTIVE;
         _context.Users.Update(foundUser);
         _context.SaveChanges();
+        LogLoginActivity(foundUser);
+
         var loginUser = new LogInUserDTO
         {
             Email = foundUser.Email,
@@ -203,6 +208,7 @@ public class AuthorizationService : IAuthorization
             Status = foundUser.Status.ToString(),
             Password = foundUser.Password
         };
+
         return new ApiResponse<LogInUserDTO>
         {
             Status = 200,
@@ -210,6 +216,25 @@ public class AuthorizationService : IAuthorization
             Data = loginUser
         };
     }
+    // LOG THE LOG IN
+    private void LogLoginActivity(User user)
+    {
+        string logFilePath = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            "Security.txt"
+        );
+
+        if (!File.Exists(logFilePath))
+        {
+            File.Create(logFilePath).Close();
+        }
+
+        string logEntry =
+            $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] Login - User ID {user.Id}, Email: {user.Email}, Role: {user.Role}\n";
+
+        File.AppendAllText(logFilePath, logEntry);
+    }
+
     // LOGOUT
     public ApiResponse<string> Logout(TokenRefreshRequestDTO request)
     {
