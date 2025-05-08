@@ -1,6 +1,5 @@
 ﻿using MediCore.Configurations;
 using MediCore.Data;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +33,7 @@ hangfireConfig.ConfigureHangfirePipeline(app);
 /// UNCOMMENT CODE BELOW TO INITIALIZE DATA
 // AddDepartmentsDATA.InitializeData(app);
 // AddDoctorsDATA.InitializeData(app);
-//AddMedicationsDATA.InitializeData(app);
+// AddMedicationsDATA.InitializeData(app);
 
 if (app.Environment.IsDevelopment())
 {

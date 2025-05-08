@@ -88,9 +88,11 @@ namespace MediCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorId");
+                    b.HasIndex("DoctorId")
+                        .IsUnique();
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("PatientId")
+                        .IsUnique();
 
                     b.ToTable("ChatMessages");
                 });
@@ -482,14 +484,14 @@ namespace MediCore.Migrations
             modelBuilder.Entity("MediCore.Models.ChatMessage", b =>
                 {
                     b.HasOne("MediCore.Models.Doctor", "Doctor")
-                        .WithMany()
-                        .HasForeignKey("DoctorId")
+                        .WithOne("ChatMessage")
+                        .HasForeignKey("MediCore.Models.ChatMessage", "DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MediCore.Models.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId")
+                        .WithOne("ChatMessage")
+                        .HasForeignKey("MediCore.Models.ChatMessage", "PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -618,6 +620,9 @@ namespace MediCore.Migrations
                 {
                     b.Navigation("Appointments");
 
+                    b.Navigation("ChatMessage")
+                        .IsRequired();
+
                     b.Navigation("MedicalRecords");
                 });
 
@@ -636,6 +641,9 @@ namespace MediCore.Migrations
             modelBuilder.Entity("MediCore.Models.Patient", b =>
                 {
                     b.Navigation("Appointments");
+
+                    b.Navigation("ChatMessage")
+                        .IsRequired();
 
                     b.Navigation("MedicalRecords");
                 });

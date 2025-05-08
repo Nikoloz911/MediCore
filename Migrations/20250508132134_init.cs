@@ -171,6 +171,34 @@ namespace MediCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatMessages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DoctorId = table.Column<int>(type: "int", nullable: false),
+                    PatientId = table.Column<int>(type: "int", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatMessages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChatMessages_Doctors_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Doctors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChatMessages_Patients_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "Patients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LabResults",
                 columns: table => new
                 {
@@ -317,6 +345,18 @@ namespace MediCore.Migrations
                 column: "PatientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChatMessages_DoctorId",
+                table: "ChatMessages",
+                column: "DoctorId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatMessages_PatientId",
+                table: "ChatMessages",
+                column: "PatientId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Diagnoses_MedicalRecordId",
                 table: "Diagnoses",
                 column: "MedicalRecordId");
@@ -379,6 +419,9 @@ namespace MediCore.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Appointments");
+
+            migrationBuilder.DropTable(
+                name: "ChatMessages");
 
             migrationBuilder.DropTable(
                 name: "Diagnoses");
