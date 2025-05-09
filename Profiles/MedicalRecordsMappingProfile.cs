@@ -8,7 +8,6 @@ public class MedicalRecordsMappingProfile : Profile
     public MedicalRecordsMappingProfile()
     {
         CreateMap<MedicalRecord, GetPatientsMedicalRecordsDTO>();
-        CreateMap<Patient, PatientBasicInfo>();
         CreateMap<MedicalRecord, GetMedicalRecordsDTO>();
 
         CreateMap<UpdateMedicalRecordDTO, MedicalRecord>()

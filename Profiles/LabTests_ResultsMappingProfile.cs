@@ -11,8 +11,6 @@ public class LabTests_ResultsMappingProfile : Profile
         CreateMap<LabTest, AddLabTestsResponseDTO>();     
         CreateMap<AddLabResultDTO, LabResult>(); 
         CreateMap<LabResult, AddLabResultsResponseDTO>();
-        CreateMap<LabResult, GetPatientLabResults>()
-          .ForMember(dest => dest.Patient, opt => opt.MapFrom(src => src.Patient)); 
-        CreateMap<Patient, PatientLabResultsBasicInfo>();
+        CreateMap<LabResult, GetPatientLabResults>();
     }
 }

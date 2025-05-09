@@ -35,24 +35,11 @@ namespace MediCore.Profiles
 
             CreateMap<Appointment, GetDoctorsAppointmentsDTO>()
                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-               .ForMember(dest => dest.VisitType, opt => opt.MapFrom(src => src.VisitType))
-               .ForMember(dest => dest.Doctor, opt => opt.MapFrom(src => new DoctorInfoDTO
-               {
-                   Id = src.Doctor.Id,
-                   Specialty = src.Doctor.Specialty,
-                   WorkingHours = src.Doctor.WorkingHours,
-                   ExperienceYears = src.Doctor.ExperienceYears
-               }));
+               .ForMember(dest => dest.VisitType, opt => opt.MapFrom(src => src.VisitType));
 
             CreateMap<Appointment, GetPatientsAppointmentsDTO>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
-                .ForMember(dest => dest.VisitType, opt => opt.MapFrom(src => src.VisitType))
-                .ForMember(dest => dest.Patient, opt => opt.MapFrom(src => new PatientInfoDTO
-                {
-                    Id = src.Patient.Id,
-                    PersonalNumber = src.Patient.PersonalNumber,
-                    PhoneNumber = src.Patient.PhoneNumber
-                }));
+                .ForMember(dest => dest.VisitType, opt => opt.MapFrom(src => src.VisitType));
         }
     }
 }
