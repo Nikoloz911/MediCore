@@ -7,4 +7,5 @@ public class GetAllMedications
     public string Category { get; set; } 
     public string Dosage { get; set; } 
     public string Form { get; set; } 
+    public string ImageURL { get; set; }
 }

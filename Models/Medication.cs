@@ -7,5 +7,6 @@ public class Medication
     public string Category { get; set; }
     public string Dosage { get; set; }
     public string Form { get; set; }
+    public string ImageURL { get; set; }
     public List<PrescriptionItem> PrescriptionItems { get; set; }
 }

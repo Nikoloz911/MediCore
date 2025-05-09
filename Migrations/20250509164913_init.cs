@@ -49,7 +49,8 @@ namespace MediCore.Migrations
                     ActiveSubstance = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dosage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Form = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Form = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

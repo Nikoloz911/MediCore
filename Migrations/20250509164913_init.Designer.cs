@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MediCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250509150824_init")]
+    [Migration("20250509164913_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -307,6 +307,10 @@ namespace MediCore.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Form")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
