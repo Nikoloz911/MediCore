@@ -239,7 +239,7 @@ public class AppointmentsService : IAppointments
         {
             formattedPhoneNumber = $"+995{formattedPhoneNumber.TrimStart('0').TrimStart('+')}";
         }
-        // SMS_Service.SendAppointmentDetails(responseDto, formattedPhoneNumber, _context);
+         SMS_Service.SendAppointmentDetails(responseDto, formattedPhoneNumber, _context);
 
         return new ApiResponse<AddAppointmentResponseDTO>
         {
