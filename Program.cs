@@ -31,9 +31,9 @@ exceptionHandlerConfig.CustomExceptionHandler(app);
 hangfireConfig.ConfigureHangfirePipeline(app); 
 
 /// UNCOMMENT CODE BELOW TO INITIALIZE DATA
-// AddDepartmentsDATA.InitializeData(app);
-// AddDoctorsDATA.InitializeData(app);
-// AddMedicationsDATA.InitializeData(app);
+ AddDepartmentsDATA.InitializeData(app);
+ AddDoctorsDATA.InitializeData(app);
+ AddMedicationsDATA.InitializeData(app);
 
 if (app.Environment.IsDevelopment())
 {

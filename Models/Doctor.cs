@@ -8,6 +8,7 @@ public class Doctor
     public string LicenseNumber { get; set; }
     public string WorkingHours { get; set; }
     public int ExperienceYears { get; set; }
+    public string ImageURL { get; set; }
     public User User { get; set; }
     public ChatMessage ChatMessage { get; set; }
     public Department Department { get; set; } 

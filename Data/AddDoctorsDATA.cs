@@ -31,6 +31,7 @@ namespace MediCore.Data
                     Specialty = "Cardiology",
                     LicenseNumber = "LN001",
                     WorkingHours = "9AM - 5PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/7ulpUX2Tm4MYgQHRjfzHpB5pyhJiy3SsmYgBcdrR.webp",
                     ExperienceYears = 6,
                 },
                 new Doctor
@@ -48,6 +49,7 @@ namespace MediCore.Data
                     Specialty = "Neurology",
                     LicenseNumber = "LN002",
                     WorkingHours = "9AM - 4PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/iECPsw0oTISowqkcZxpWSWiAzJQKsgirKUb86HRp.webp",
                     ExperienceYears = 8,
                 },
                 new Doctor
@@ -65,6 +67,7 @@ namespace MediCore.Data
                     Specialty = "Orthopedics",
                     LicenseNumber = "LN003",
                     WorkingHours = "8AM - 5PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/4OLsth5lrbnW5RVzEos94hhCpahvu1Rjj3clrSxo.webp",
                     ExperienceYears = 10,
                 },
                 new Doctor
@@ -82,6 +85,7 @@ namespace MediCore.Data
                     Specialty = "Pediatrics",
                     LicenseNumber = "LN004",
                     WorkingHours = "10AM - 6PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/jJBicceDLAVgLvpozBm85HRu06fMfYfLbtEibwNT.webp",
                     ExperienceYears = 5,
                 },
                 new Doctor
@@ -99,6 +103,7 @@ namespace MediCore.Data
                     Specialty = "Dermatology",
                     LicenseNumber = "LN005",
                     WorkingHours = "9AM - 3PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/7CxKoikCmM4ICFM4cdveZ3v54t3rCTaeX9gfi6e5.webp",
                     ExperienceYears = 7,
                 },
                 new Doctor
@@ -116,6 +121,7 @@ namespace MediCore.Data
                     Specialty = "Gastroenterology",
                     LicenseNumber = "LN006",
                     WorkingHours = "8AM - 4PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/aJEEXJp5GrhwF3mlrv17W5Gf7FP2TYVaMFxjN75a.webp",
                     ExperienceYears = 9,
                 },
                 new Doctor
@@ -133,6 +139,7 @@ namespace MediCore.Data
                     Specialty = "Psychiatry",
                     LicenseNumber = "LN007",
                     WorkingHours = "9AM - 5PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/f1a7x8BAwNyPaOQwCo9iN64J27JR3rYdCAkLkFze.webp",
                     ExperienceYears = 11,
                 },
                 new Doctor
@@ -150,6 +157,7 @@ namespace MediCore.Data
                     Specialty = "Radiology",
                     LicenseNumber = "LN008",
                     WorkingHours = "7AM - 3PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/bV9jm5UOHlB1hAKMC1D6qNLPTPrPKUN934XsTOJ8.webp",
                     ExperienceYears = 4,
                 },
                 new Doctor
@@ -167,6 +175,7 @@ namespace MediCore.Data
                     Specialty = "Cardiology",
                     LicenseNumber = "LN009",
                     WorkingHours = "8AM - 6PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/LrANPnmCKOGyxzPiT06tjfXgo4AkpBtpo6iY85YB.webp",
                     ExperienceYears = 12,
                 },
                 new Doctor
@@ -184,6 +193,7 @@ namespace MediCore.Data
                     Specialty = "Pediatrics",
                     LicenseNumber = "LN010",
                     WorkingHours = "9AM - 4PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/bV9jm5UOHlB1hAKMC1D6qNLPTPrPKUN934XsTOJ8.webp",
                     ExperienceYears = 7,
                 },
                 new Doctor
@@ -201,6 +211,7 @@ namespace MediCore.Data
                     Specialty = "Psychiatry",
                     LicenseNumber = "LN011",
                     WorkingHours = "8AM - 5PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/o6JzOOBeRbGwFhgWdEK2U9nJ5ifadEatCBpGpMtv.webp",
                     ExperienceYears = 5,
                 },
                 new Doctor
@@ -218,6 +229,7 @@ namespace MediCore.Data
                     Specialty = "Radiology",
                     LicenseNumber = "LN012",
                     WorkingHours = "9AM - 3PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/f1a7x8BAwNyPaOQwCo9iN64J27JR3rYdCAkLkFze.webp",
                     ExperienceYears = 6,
                 },
                 new Doctor
@@ -235,6 +247,7 @@ namespace MediCore.Data
                     Specialty = "Orthopedics",
                     LicenseNumber = "LN013",
                     WorkingHours = "8AM - 4PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/OPodK2ZEa9b1iUWjQTN5DtwwnxSTyyUuF7R4EzMq.webp",
                     ExperienceYears = 9,
                 },
                 new Doctor
@@ -252,6 +265,7 @@ namespace MediCore.Data
                     Specialty = "Cardiology",
                     LicenseNumber = "LN014",
                     WorkingHours = "9AM - 5PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/lNQzKixRl0SGWMwA3Owdxh2fhiAwYoOLLCWAdcyp.jpg",
                     ExperienceYears = 7,
                 },
                 new Doctor
@@ -269,6 +283,7 @@ namespace MediCore.Data
                     Specialty = "Pediatrics",
                     LicenseNumber = "LN015",
                     WorkingHours = "8AM - 5PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/0L7UbvkVSSGyuJLaxN6ChoJSR7taiwbyyJHjeJKv.webp",
                     ExperienceYears = 10,
                 },
                 new Doctor
@@ -286,6 +301,7 @@ namespace MediCore.Data
                     Specialty = "Neurology",
                     LicenseNumber = "LN016",
                     WorkingHours = "9AM - 4PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/EB1Okwwjp3rj5DRXlTj6B5bYrtlUXD84mM7LYw6q.webp",
                     ExperienceYears = 6,
                 },
                 new Doctor
@@ -303,6 +319,7 @@ namespace MediCore.Data
                     Specialty = "Psychiatry",
                     LicenseNumber = "LN017",
                     WorkingHours = "8AM - 6PM",
+                    ImageURL = "https://dashboard.aversiclinic.ge/storage/doctors/VdBeH0vNG0FVGV0NpHNmBEIVQlHrjg928JSkJY5H.jpg",
                     ExperienceYears = 8,
                 },
                 new Doctor
@@ -320,6 +337,7 @@ namespace MediCore.Data
                     Specialty = "Dermatology",
                     LicenseNumber = "LN018",
                     WorkingHours = "10AM - 6PM",
+                    ImageURL    = "https://dashboard.aversiclinic.ge/storage/doctors/xMQYj7sN33SePT1IEt55aO3YtYrSvK1unskXVyy7.jpg",
                     ExperienceYears = 4,
                 },
                 new Doctor
@@ -337,6 +355,7 @@ namespace MediCore.Data
                     Specialty = "Gastroenterology",
                     LicenseNumber = "LN019",
                     WorkingHours = "8AM - 5PM",
+                    ImageURL   = "https://dashboard.aversiclinic.ge/storage/doctors/4F2NENHDc4EP2KZCKLtYVjmzFBJWwMWpqJVM2asP.jpg",
                     ExperienceYears = 7,
                 },
                 new Doctor
@@ -354,6 +373,7 @@ namespace MediCore.Data
                     Specialty = "Orthopedics",
                     LicenseNumber = "LN020",
                     WorkingHours = "9AM - 5PM",
+                    ImageURL  = "https://dashboard.aversiclinic.ge/storage/doctors/m8AOkLPxYYmrbIJRUOysXEwV3IKqN7EFkjx0Va0n.jpg",
                     ExperienceYears = 5,
                 },
             };

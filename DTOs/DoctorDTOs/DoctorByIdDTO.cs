@@ -11,4 +11,5 @@ public class DoctorByIdDTO
     public string WorkingHours { get; set; }
     public int ExperienceYears { get; set; }
     public string DepartmentType { get; set; }
+    public string imageURL { get; set; }
 }

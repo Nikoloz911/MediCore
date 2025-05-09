@@ -23,7 +23,8 @@ namespace MediCore.Profiles
             CreateMap<Doctor, DoctorAllDTO>()
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName))
-                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty));
+                .ForMember(dest => dest.Specialty, opt => opt.MapFrom(src => src.Specialty))
+                .ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.ImageURL));
 
             CreateMap<Doctor, DoctorByIdDTO>()
                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
@@ -33,6 +34,7 @@ namespace MediCore.Profiles
                .ForMember(dest => dest.LicenseNumber, opt => opt.MapFrom(src => src.LicenseNumber))
                .ForMember(dest => dest.WorkingHours, opt => opt.MapFrom(src => src.WorkingHours))
                .ForMember(dest => dest.ExperienceYears, opt => opt.MapFrom(src => src.ExperienceYears))
+               .ForMember(dest => dest.imageURL, opt => opt.MapFrom(src => src.ImageURL))
                .ForMember(dest => dest.DepartmentType, opt => opt.MapFrom(src => src.Department.DepartmentType.ToString()));
 
             CreateMap<Doctor, DoctorsByDepartmentDTO>()

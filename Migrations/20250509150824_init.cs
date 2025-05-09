@@ -87,7 +87,8 @@ namespace MediCore.Migrations
                     Specialty = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LicenseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WorkingHours = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ExperienceYears = table.Column<int>(type: "int", nullable: false)
+                    ExperienceYears = table.Column<int>(type: "int", nullable: false),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
