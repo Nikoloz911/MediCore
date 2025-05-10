@@ -8,7 +8,7 @@ namespace MediCore.SMTP
         public static void SendLabResultEmailWithAttachment(string toAddress, string subject, string body, string attachmentPath)
         {
             string senderEmail = "nikalobjanidze014@gmail.com";
-            string appPassword = "fmni efhs vbho uurv";
+            string appPassword = "";   // APP PASSWORD
 
             var mail = new MailMessage
             {

@@ -16,7 +16,7 @@ namespace MediCore.Services.Implementations
         public static void SendReminderEmail(string toAddress, string subject, string body)
         {
             string senderEmail = "nikalobjanidze014@gmail.com";
-            string appPassword = "fmni efhs vbho uurv"; // APP PASSWORD 
+            string appPassword = ""; // APP PASSWORD 
 
             var htmlContent = $@"
                 <html>

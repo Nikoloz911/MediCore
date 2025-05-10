@@ -14,7 +14,7 @@ namespace MediCore.SMTP
         public static void EmailSender(string ToAddress, string firstName, string lastName, string verificationCode)
         {
             string senderEmail = "nikalobjanidze014@gmail.com";
-            string appPassword = "fmni efhs vbho uurv"; // APP PASSWORD
+            string appPassword = ""; // APP PASSWORD
 
             string htmlContent = $@"
 <!DOCTYPE html>

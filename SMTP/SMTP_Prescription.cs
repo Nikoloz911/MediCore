@@ -8,7 +8,7 @@ namespace MediCore.SMTP
         public static void SendPrescriptionEmailWithAttachment(string toAddress, string subject, string body, string attachmentPath)
         {
             string senderEmail = "nikalobjanidze014@gmail.com";
-            string appPassword = "fmni efhs vbho uurv"; // APP PASSWORD
+            string appPassword = ""; // APP PASSWORD
 
             string htmlContent = $@"
             <html>

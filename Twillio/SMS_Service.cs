@@ -9,7 +9,7 @@ namespace MediCore.Twillio
     public static class SMS_Service
     {
         private static readonly string _accountSid = "AC6050d2b967b8562ed0db05e3c377433f";
-        private static readonly string _authToken = "defcdd55f679f44e56ec86f8b898a034"; // TWILIO_AUTH_TOKEN
+        private static readonly string _authToken = ""; // TWILIO_AUTH_TOKEN
         private static readonly string _fromPhoneNumber = "+19783076324";
 
         public static string SendAppointmentDetails(
