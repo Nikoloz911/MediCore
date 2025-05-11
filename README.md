@@ -121,6 +121,7 @@ Each user has role-based permissions and secure authentication using JWT tokens.
 
 - FluentValidation for DTO and request validation
 - Postman documentation (with folders per controller and testable requests)
+- Postman URL:  https://documenter.getpostman.com/view/44023225/2sB2jAa7mp
 - JWT authorization and examples included in Postman
 
 ---
@@ -135,3 +136,28 @@ Each user has role-based permissions and secure authentication using JWT tokens.
   - .pdf formatted
   - .xlsx for analysis
 
+---
+
+
+## 📖 How To Use This Project
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/Nikoloz911/MediCore.git
+
+## 2. Open the Project
+
+Open the solution in your preferred IDE (e.g., **Visual Studio** or **Rider**).
+
+---
+
+## 3. Update the Connection String & Database
+
+Open the `appsettings.json` file and update the `DefaultConnection` string under `ConnectionStrings`:
+
+Check Program.cs
+Open the Program.cs file to review how the application is configured to seed Data.
+
+### 🔐 Contact for Private Services
+The app uses private services for **SMTP** and **Twilio** integration, which are available only to the app owner.  
+👉 *Please contact me directly if you need access to these services.*
