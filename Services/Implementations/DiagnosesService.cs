@@ -21,7 +21,7 @@ public class DiagnosesService : IDiagnoses
         _updateValidator = updateValidator;
     }
 
-    // GET DIAGNOSIS BY PATIENT ID
+    // GET DIAGNOSIS BY PATIENT ID     // GET DIAGNOSIS BY PATIENT ID
     public ApiResponse<List<GetPatientDiagnosesDTO>> GetDiagnosesByPatientId(int patientId)
     {
         var diagnoses = _context.Diagnoses
@@ -49,7 +49,7 @@ public class DiagnosesService : IDiagnoses
             Data = mapped
         };
     }
-    // GET DIAGNOSES BY MEDICAL RECORD ID
+    // GET DIAGNOSES BY MEDICAL RECORD ID    // GET DIAGNOSES BY MEDICAL RECORD ID
     public ApiResponse<List<GetMedicalRecordsDiagnosesDTO>> GetDiagnosesByMedicalRecordId(int recordId)
     {
         var diagnoses = _context.Diagnoses
@@ -77,7 +77,7 @@ public class DiagnosesService : IDiagnoses
             Data = mapped
         };
     }
-    // ADD DIAGNOSES
+    // ADD DIAGNOSES    // ADD DIAGNOSES    // ADD DIAGNOSES    // ADD DIAGNOSES
     public ApiResponse<AddDiagnosesResponseDTO> AddDiagnosis(AddDiagnosesDTO newDiagnosis)
     {
         // VALIDATE
@@ -128,7 +128,7 @@ public class DiagnosesService : IDiagnoses
             Data = responseDTO
         };
     }
-    // UPDATE DIAGNOSES
+    // UPDATE DIAGNOSES   // UPDATE DIAGNOSES   // UPDATE DIAGNOSES
     public ApiResponse<UpdateDiagnosesResponseDTO> UpdateDiagnosis(int id, UpdateDiagnosesDTO dto)
     {
         // VALIDATE

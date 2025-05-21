@@ -25,7 +25,7 @@ public class LabTests_ResultsService : ILabTests_Results
         _LabResultsValidator = labResultsValidator;
     }
 
-    // GET LAB TESTS
+    // GET LAB TESTS    // GET LAB TESTS    // GET LAB TESTS
     public ApiResponse<List<GetLabTestsDTO>> GetAllLabTests()
     {
         var labTests = _context.LabTests.ToList();
@@ -48,7 +48,7 @@ public class LabTests_ResultsService : ILabTests_Results
             Data = labTestDTOs
         };
     }
-    // ADD LAB TEST
+    // ADD LAB TEST     // ADD LAB TEST     // ADD LAB TEST
     public ApiResponse<AddLabTestsResponseDTO> AddLabTest(AddLabTestsDTO dto)
     {
         // VALIDATE
@@ -79,7 +79,7 @@ public class LabTests_ResultsService : ILabTests_Results
             Data = responseDTO
         };
     }
-    // ADD LAB RESULT
+    // ADD LAB RESULT    // ADD LAB RESULT    // ADD LAB RESULT
     public ApiResponse<AddLabResultsResponseDTO> AddLabResult(AddLabResultDTO dto)
     {
         // VALIDATE
@@ -151,7 +151,7 @@ public class LabTests_ResultsService : ILabTests_Results
         };
     }
 
-    // GENERATE PDF FILE FOR LAB RESULT
+    // GENERATE PDF FILE FOR LAB RESULT    // GENERATE PDF FILE FOR LAB RESULT
     public string GenerateLabResultPDF(LabResult result, Patient patient, LabTest labTest)
     {
         string fileName = $"LabResult_{result.Id}.pdf"; 
@@ -182,7 +182,7 @@ public class LabTests_ResultsService : ILabTests_Results
 
 
 
-    // GET PATIENT LAB RESULTS
+    // GET PATIENT LAB RESULTS    // GET PATIENT LAB RESULTS    // GET PATIENT LAB RESULTS
     public ApiResponse<List<GetPatientLabResults>> GetPatientLabResults(int patientId)
     {
         var labResults = _context.LabResults

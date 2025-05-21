@@ -19,7 +19,7 @@ public class AppointmentsService : IAppointments
         _mapper = mapper;
     }
 
-    // GET APPOINTMENTS BY FILTERS
+    // GET APPOINTMENTS BY FILTERS   // GET APPOINTMENTS BY FILTERS
     public ApiResponse<List<GetAppointmentsDTO>> GetAppointments(
         int? doctorId = null,
         int? patientId = null,
@@ -35,32 +35,26 @@ public class AppointmentsService : IAppointments
         {
             query = query.Where(a => a.DoctorId == doctorId.Value);
         }
-
         if (patientId.HasValue)
         {
             query = query.Where(a => a.PatientId == patientId.Value);
         }
-
         if (departmentId.HasValue)
         {
             query = query.Where(a => a.DepartmentId == departmentId.Value);
         }
-
         if (status.HasValue)
         {
             query = query.Where(a => a.Status == status.Value);
         }
-
         if (visitType.HasValue)
         {
             query = query.Where(a => a.VisitType == visitType.Value);
         }
-
         if (date.HasValue)
         {
             query = query.Where(a => a.Date == date.Value);
         }
-
         var appointments = query.ToList();
 
         if (!appointments.Any())
@@ -72,9 +66,8 @@ public class AppointmentsService : IAppointments
                 Data = new List<GetAppointmentsDTO>()
             };
         }
-        // MAP APPOINTMENTS TO DTO
+        // MAP TO DTO
         var mapped = _mapper.Map<List<GetAppointmentsDTO>>(appointments);
-
         return new ApiResponse<List<GetAppointmentsDTO>>
         {
             Status = 200,
@@ -83,7 +76,7 @@ public class AppointmentsService : IAppointments
         };
     }
 
-    // GET APPOINTMENT BY ID
+    // GET APPOINTMENT BY ID   // GET APPOINTMENT BY ID
     public ApiResponse<GetAppointmentsByIdDTO> GetAppointmentById(int id)
     {
         var appointment = _context.Appointments
@@ -101,9 +94,8 @@ public class AppointmentsService : IAppointments
                 Data = null
             };
         }
-        // MAP APPOINTMENT TO DTO
+        // MAP TO DTO
         var mapped = _mapper.Map<GetAppointmentsByIdDTO>(appointment);
-
         return new ApiResponse<GetAppointmentsByIdDTO>
         {
             Status = 200,
@@ -111,7 +103,7 @@ public class AppointmentsService : IAppointments
             Data = mapped
         };
     }
-    // ADD NEW APPOINTMENT
+    // ADD NEW APPOINTMENT  // ADD NEW APPOINTMENT
     public ApiResponse<AddAppointmentResponseDTO> AddAppointment(AddAppointmentDTO dto)
     {
         // Validation for null DTO
@@ -168,7 +160,7 @@ public class AppointmentsService : IAppointments
             };
         }
 
-        // Validate Status enum
+        // VALIDATE STATUS ENUM
         if (!Enum.TryParse(dto.Status, true, out APPOINTMENT_STATUS statusEnum))
         {
             return new ApiResponse<AddAppointmentResponseDTO>
@@ -179,7 +171,7 @@ public class AppointmentsService : IAppointments
             };
         }
 
-        // Validate VisitType enum
+        // VALIDATE VISIT TYPE ENUM
         if (!Enum.TryParse(dto.VisitType, true, out APPOINTMENT_TYPE visitTypeEnum))
         {
             return new ApiResponse<AddAppointmentResponseDTO>
@@ -190,7 +182,7 @@ public class AppointmentsService : IAppointments
             };
         }
 
-        // VALIDATE DOCTORS FREE TIME
+        // VALIDATE IF DOCTORS HAS FREE TIME
         var conflictingAppointments = _context.Appointments
                              .Where(a => a.DoctorId == dto.DoctorId && a.Date == dto.Date)
                              .ToList();
@@ -202,7 +194,6 @@ public class AppointmentsService : IAppointments
             TimeSpan existingAppointmentStart = existingAppointment.Time;
             TimeSpan existingAppointmentEnd = existingAppointmentStart.Add(existingAppointment.Duration);
 
-            // Check for overlapping time slots
             if (newAppointmentStart < existingAppointmentEnd && existingAppointmentStart < newAppointmentEnd)
             {
                 return new ApiResponse<AddAppointmentResponseDTO>
@@ -249,7 +240,7 @@ public class AppointmentsService : IAppointments
         };
     }
 
-    // UPDATE APPOINTMENT BY ID
+    // UPDATE APPOINTMENT BY ID   // UPDATE APPOINTMENT BY ID
     public ApiResponse<UpdateAppointmentDTO> UpdateAppointment(int id, UpdateAppointmentDTO updateDto)
     {
         // VALIDATE IF APPOINTMENT EXISTS
@@ -349,7 +340,7 @@ public class AppointmentsService : IAppointments
         appointment.VisitType = visitTypeEnum;
         _context.SaveChanges();
 
-        // MAP APPOINTMENT TO DTO
+        // MAP TO DTO
         var updatedDto = _mapper.Map<UpdateAppointmentDTO>(appointment);
         return new ApiResponse<UpdateAppointmentDTO>
         {
@@ -358,7 +349,7 @@ public class AppointmentsService : IAppointments
             Data = updatedDto
         };
     }
-    // DELETE APPOINTMENT BY ID
+    // DELETE APPOINTMENT BY ID    // DELETE APPOINTMENT BY ID
     public ApiResponse<string> DeleteAppointment(int id)
     {
         var appointment = _context.Appointments.FirstOrDefault(a => a.Id == id);
@@ -381,7 +372,7 @@ public class AppointmentsService : IAppointments
             Data = null
         };
     }
-    // GET DOCTOR APPOINTMENTS BY DOCTOR ID
+    // GET DOCTOR APPOINTMENTS BY DOCTOR ID     // GET DOCTOR APPOINTMENTS BY DOCTOR ID
     public ApiResponse<List<GetDoctorsAppointmentsDTO>> GetAppointmentsByDoctorId(int doctorId)
     {
         var appointments = _context.Appointments
@@ -407,7 +398,7 @@ public class AppointmentsService : IAppointments
             Data = appointmentDtos
         };
     }
-    // GET PATIENT APPOINTMENTS BY PATIENT ID
+    // GET PATIENT APPOINTMENTS BY PATIENT ID    // GET PATIENT APPOINTMENTS BY PATIENT ID
     public ApiResponse<List<GetPatientsAppointmentsDTO>> GetAppointmentsByPatientId(int patientId)
     {
         var appointments = _context.Appointments
