@@ -30,7 +30,7 @@ public class AuthorizationService : IAuthorization
         _jwtService = jwtService;
     }
 
-    // REGISTER A NEW USER
+    // REGISTER A NEW USER   // REGISTER A NEW USER
     public ApiResponse<PublicUserDTO> Register(AddUserDTO requestDto)
     {
         var response = new ApiResponse<PublicUserDTO>();
@@ -91,7 +91,7 @@ public class AuthorizationService : IAuthorization
         return response;
     }
 
-    // SAVE USERS IN EXCEL
+    // SAVE USERS IN EXCEL   // SAVE USERS IN EXCEL
     public void WriteUserToExcel(User user)
     {
         var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -135,7 +135,7 @@ public class AuthorizationService : IAuthorization
         }
     }
 
-    // VERIFY EMAIL
+    // VERIFY EMAIL     // VERIFY EMAIL     // VERIFY EMAIL
     public ApiResponse<PublicUserDTO> VerifyEmail(string verificationCode)
     {
         var response = new ApiResponse<PublicUserDTO>();
@@ -160,7 +160,7 @@ public class AuthorizationService : IAuthorization
         response.Data = publicUser;
         return response;
     }
-    // LOGIN
+    // LOGIN    // LOGIN    // LOGIN    // LOGIN    // LOGIN
     public ApiResponse<LogInUserDTO> LogIn(User user)
     {
         var foundUser = _context.Users.FirstOrDefault(u => u.Email == user.Email);
@@ -216,7 +216,7 @@ public class AuthorizationService : IAuthorization
             Data = loginUser
         };
     }
-    // LOG THE LOG IN
+    // LOG THE LOG IN     // LOG THE LOG IN     // LOG THE LOG IN
     private void LogLoginActivity(User user)
     {
         string logFilePath = Path.Combine(
@@ -235,7 +235,7 @@ public class AuthorizationService : IAuthorization
         File.AppendAllText(logFilePath, logEntry);
     }
 
-    // LOGOUT
+    // LOGOUT   // LOGOUT   // LOGOUT
     public ApiResponse<string> Logout(TokenRefreshRequestDTO request)
     {
         if (string.IsNullOrEmpty(request.Token))
@@ -294,7 +294,7 @@ public class AuthorizationService : IAuthorization
             Data = "Logout successful"
         };
     }
-    // REFRESH TOKEN
+    // REFRESH TOKEN    // REFRESH TOKEN    // REFRESH TOKEN
     public ApiResponse<LogInUserDTO> RefreshToken(TokenRefreshRequestDTO request)
     {
         if (string.IsNullOrEmpty(request.Token))

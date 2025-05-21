@@ -13,7 +13,7 @@ namespace MediCore.Services.Implementations
         {
             _context = context;
         }
-        // GET APPOINTMENT STATS
+        // GET APPOINTMENT STATS    // GET APPOINTMENT STATS    // GET APPOINTMENT STATS
         public ApiResponse<object> GetAppointmentStats()
         {
             var grouped = _context.Appointments
@@ -43,7 +43,7 @@ namespace MediCore.Services.Implementations
                 Data = grouped
             };
         }
-        // GET DIAGNOSIS STATS
+        // GET DIAGNOSIS STATS     // GET DIAGNOSIS STATS    // GET DIAGNOSIS STATS
         public ApiResponse<object> GetDiagnosisStats()
         {
             var grouped = _context.Diagnoses
@@ -73,7 +73,7 @@ namespace MediCore.Services.Implementations
                 Data = grouped
             };
         }
-        // GET DEPARTMENT LOAD REPORT
+        // GET DEPARTMENT LOAD REPORT   // GET DEPARTMENT LOAD REPORT
         public ApiResponse<object> GetDepartmentLoadReport()
         {
             var grouped = _context.Appointments
@@ -105,7 +105,7 @@ namespace MediCore.Services.Implementations
                 Data = grouped
             };
         }
-        // GET DOCTOR ACTIVITY REPORT
+        // GET DOCTOR ACTIVITY REPORT    // GET DOCTOR ACTIVITY REPORT
         public ApiResponse<object> GetDoctorActivityReport()
         {
             var activity = _context.Doctors

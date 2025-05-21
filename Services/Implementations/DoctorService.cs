@@ -22,7 +22,7 @@ namespace MediCore.Services.Implementations
             _doctorValidator = doctorValidator;
         }
 
-        // GET ALL DOCTORS
+        // GET ALL DOCTORS    // GET ALL DOCTORS    // GET ALL DOCTORS
         public ApiResponse<List<DoctorAllDTO>> GetAllDoctors()
         {
             var doctors = _context.Doctors.Include(d => d.User).ToList(); 
@@ -43,7 +43,7 @@ namespace MediCore.Services.Implementations
                 Data = doctorDtos
             };
         }
-        // GET DOCTOR BY ID
+        // GET DOCTOR BY ID     // GET DOCTOR BY ID     // GET DOCTOR BY ID
         public ApiResponse<DoctorByIdDTO> GetDoctorById(int id)
         {
             var doctor = _context.Doctors
@@ -67,7 +67,7 @@ namespace MediCore.Services.Implementations
                 Data = doctorDto
             };
         }
-        // GET DOCTOR BY DEPARTMENTS ID
+        // GET DOCTOR BY DEPARTMENTS ID     // GET DOCTOR BY DEPARTMENTS ID
         public ApiResponse<List<DoctorsByDepartmentDTO>> GetDoctorsByDepartment(int departmentId)
         {
             var department = _context.Departments.FirstOrDefault(d => d.Id == departmentId);
@@ -104,7 +104,7 @@ namespace MediCore.Services.Implementations
             };
         }
 
-        // GET DOCTOR SCHEDULE BY DOCTOR ID
+        // GET DOCTOR SCHEDULE BY DOCTOR ID   // GET DOCTOR SCHEDULE BY DOCTOR ID
         public ApiResponse<DoctorScheduleDTO> GetDoctorSchedule(int doctorId)
         {
             var doctor = _context.Doctors
@@ -128,8 +128,8 @@ namespace MediCore.Services.Implementations
                 Data = scheduleDto
             };
         }
-        // UPDATE DOCTOR BY ID
-            public ApiResponse<DoctorByIdDTO> UpdateDoctor(int id, DoctorUpdateDTO doctorUpdateDTO)
+        // UPDATE DOCTOR BY ID    // UPDATE DOCTOR BY ID    // UPDATE DOCTOR BY ID
+        public ApiResponse<DoctorByIdDTO> UpdateDoctor(int id, DoctorUpdateDTO doctorUpdateDTO)
             {
             // VALIDATE WITH FLUENT VALIDATOR
             var validationResult = _doctorValidator.Validate(doctorUpdateDTO);

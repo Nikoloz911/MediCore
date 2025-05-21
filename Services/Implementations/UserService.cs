@@ -22,7 +22,7 @@ namespace MediCore.Services.Implementations
             _mapper = mapper;
         }
 
-        // GET ALL USERS
+        // GET ALL USERS    // GET ALL USERS    // GET ALL USERS    // GET ALL USERS
         public ApiResponse<List<UserGetDTO>> GetAllUsers()
         {
             var users = _context.Users.ToList();
@@ -44,7 +44,7 @@ namespace MediCore.Services.Implementations
             };
         }
 
-        // GET USER BY ID
+        // GET USER BY ID     // GET USER BY ID     // GET USER BY ID     // GET USER BY ID  
         public ApiResponse<UserGetByIdDTO> GetUserById(int id)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == id);
@@ -66,7 +66,7 @@ namespace MediCore.Services.Implementations
             };
         }
 
-        // UPDATE USER BY ID
+        // UPDATE USER BY ID   // UPDATE USER BY ID   // UPDATE USER BY ID
         public ApiResponse<UserGetByIdDTO> UpdateUserById(int id, UserUpdateDTO userUpdateDto)
         {
             var existingUser = _context.Users.FirstOrDefault(u => u.Id == id);
@@ -185,7 +185,7 @@ namespace MediCore.Services.Implementations
             }
         }
 
-        // LOG CHANGES
+        // LOG CHANGES    // LOG CHANGES    // LOG CHANGES
         private void LogChanges(int userId, List<string> changes)
         {
             string logFilePath = Path.Combine(
@@ -203,7 +203,7 @@ namespace MediCore.Services.Implementations
             File.AppendAllText(logFilePath, logEntry);
         }
 
-        // Validate user update
+        // Validate user update    // Validate user update    // Validate user update
         private List<string> ValidateUserUpdate(UserUpdateDTO userDto, User existingUser)
         {
             var errors = new List<string>();
@@ -283,7 +283,7 @@ namespace MediCore.Services.Implementations
             return errors;
         }
 
-        // DELETE USER BY ID
+        // DELETE USER BY ID   // DELETE USER BY ID   // DELETE USER BY ID
         public ApiResponse<User> DeleteUserById(int id)
         {
             var userToDelete = _context
@@ -320,6 +320,7 @@ namespace MediCore.Services.Implementations
                 Data = userToDelete,
             };
         }
+        // LOG DELETION    // LOG DELETION    // LOG DELETION
         private void LogDeletion(User user)
         {
             string logFilePath = Path.Combine(

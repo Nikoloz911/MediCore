@@ -24,7 +24,7 @@ public class MedicalRecordsService : IMedicalRecords
     }
 
 
-    // GET MEDICAL RECORDS BY PATIENT ID
+    // GET MEDICAL RECORDS BY PATIENT ID    // GET MEDICAL RECORDS BY PATIENT ID
     public ApiResponse<List<GetPatientsMedicalRecordsDTO>> GetMedicalRecordsByPatientId(int patientId)
     {
         var records = _context.MedicalRecords
@@ -51,7 +51,7 @@ public class MedicalRecordsService : IMedicalRecords
             Data = dtoList
         };
     }
-    // GET MEDICAL RECORD BY ID
+    // GET MEDICAL RECORD BY ID    // GET MEDICAL RECORD BY ID
     public ApiResponse<GetMedicalRecordsDTO> GetMedicalRecordById(int id)
     {
         var record = _context.MedicalRecords.FirstOrDefault(m => m.Id == id);
@@ -75,7 +75,7 @@ public class MedicalRecordsService : IMedicalRecords
             Data = dto
         };
     }
-    // ADD NEW MEDICAL RECORD
+    // ADD NEW MEDICAL RECORD    // ADD NEW MEDICAL RECORD
     public ApiResponse<MedicalRecordResponseDTO> CreateMedicalRecord(CreateMedicalRecordDTO dto)
     {
         // VALIDATE
@@ -137,7 +137,7 @@ public class MedicalRecordsService : IMedicalRecords
         };
     }
 
-    // UPDATE MEDICAL RECORD
+    // UPDATE MEDICAL RECORD     // UPDATE MEDICAL RECORD     // UPDATE MEDICAL RECORD
     public ApiResponse<MedicalRecordResponseDTO> UpdateMedicalRecord(int id, UpdateMedicalRecordDTO dto)
     {
         // VALIDATE

@@ -29,7 +29,7 @@ public class PrescriptionsService : IPrescriptions
         _updatePrescriptionValidator = updatePrescriptionValidator;
     }
 
-    // GET PRESCTIPTIONS BY PATIENT ID
+    // GET PRESCTIPTIONS BY PATIENT ID   // GET PRESCTIPTIONS BY PATIENT ID  
     public ApiResponse<List<GetPatientPrescriptionsDTO>> GetPrescriptionsByPatientId(int patientId)
     {
         var prescriptions = _context.Prescriptions
@@ -57,7 +57,7 @@ public class PrescriptionsService : IPrescriptions
             Data = result
         };
     }
-    // GET PRESCTIPTIONS BY ID
+    // GET PRESCTIPTIONS BY ID    // GET PRESCTIPTIONS BY ID    // GET PRESCTIPTIONS BY ID
     public ApiResponse<GetPrescriptionsByIdDTO> GetPrescriptionById(int id)
     {
         var prescription = _context.Prescriptions
@@ -82,7 +82,7 @@ public class PrescriptionsService : IPrescriptions
             Data = dto
         };
     }
-    // ADD NEW PRESCRIPTION
+    // ADD NEW PRESCRIPTION    // ADD NEW PRESCRIPTION    // ADD NEW PRESCRIPTION
     public ApiResponse<AddPrescriptionsResponseDTO> AddPrescription(AddPrescriptionsDTO dto)
     {
         // VALIDATE
@@ -158,7 +158,7 @@ public class PrescriptionsService : IPrescriptions
         };
     }
 
-    // GENERATE PDF FILE FOR PRESCRIPTION
+    // GENERATE PDF FILE FOR PRESCRIPTION    // GENERATE PDF FILE FOR PRESCRIPTION
     private string GeneratePrescriptionPdf(Prescription prescription, string patientName)
     {
         string fileName = $"prescription_{prescription.Id}.pdf";
@@ -184,7 +184,7 @@ public class PrescriptionsService : IPrescriptions
         return filePath;
     }
 
-    // BACKGROUND JOB TO UPDATE EXPIRED PRESCRIPTIONS
+    // BACKGROUND JOB TO UPDATE EXPIRED PRESCRIPTIONS   // BACKGROUND JOB TO UPDATE EXPIRED PRESCRIPTIONS
     public void UpdateExpiredPrescriptions()
     {
         var today = DateOnly.FromDateTime(DateTime.Now);
@@ -200,7 +200,7 @@ public class PrescriptionsService : IPrescriptions
         _context.SaveChanges();
     }
 
-    // UPDATE PRESCRIPTION
+    // UPDATE PRESCRIPTION    // UPDATE PRESCRIPTION    // UPDATE PRESCRIPTION
     public ApiResponse<UpdatePrescriptionResponseDTO> UpdatePrescription(int id, UpdatePrescriptionDTO dto)
     {
         // VALIDATE
@@ -269,7 +269,7 @@ public class PrescriptionsService : IPrescriptions
             Data = response
         };
     }
-    // GET ACTIVE PRESCRIPTIONS BY PATIENT ID
+    // GET ACTIVE PRESCRIPTIONS BY PATIENT ID   // GET ACTIVE PRESCRIPTIONS BY PATIENT ID
     public ApiResponse<List<GetActivePrescriptionsDTO>> GetActivePrescriptionsByPatientId(int patientId)
     {
         var today = DateOnly.FromDateTime(DateTime.Now);
@@ -300,7 +300,7 @@ public class PrescriptionsService : IPrescriptions
             Data = mappedPrescriptions
         };
     }
-    // ADD PRESCRIPTION ITEM
+    // ADD PRESCRIPTION ITEM   // ADD PRESCRIPTION ITEM   // ADD PRESCRIPTION ITEM
     public ApiResponse<AddPrescriptionItemResponseDTO> AddPrescriptionItem(AddPrescriptionItemDTO dto)
     {
         // Validate DTO input

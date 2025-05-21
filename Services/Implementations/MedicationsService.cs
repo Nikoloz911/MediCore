@@ -20,7 +20,7 @@ public class MedicationsService : IMedications
         _mapper = mapper;
         _validator = validator;
     }
-    // GET ALL MEDICATIONS WITH FILTERS
+    // GET ALL MEDICATIONS WITH FILTERS   // GET ALL MEDICATIONS WITH FILTERS
     public ApiResponse<List<GetAllMedications>> GetMedications(
     string? name = null,
     string? activeSubstance = null,
@@ -62,7 +62,7 @@ public class MedicationsService : IMedications
             Data = result
         };
     }
-    // GET MEDICATION BY ID
+    // GET MEDICATION BY ID    // GET MEDICATION BY ID    // GET MEDICATION BY ID
     public ApiResponse<GetMedication> GetMedicationById(int id)
     {
         var medication = _context.Medications.FirstOrDefault(m => m.Id == id);
@@ -86,7 +86,7 @@ public class MedicationsService : IMedications
             Data = dto
         };
     }
-    // ADD MEDICATION
+    // ADD MEDICATION    // ADD MEDICATION    // ADD MEDICATION    // ADD MEDICATION
     public ApiResponse<AddMedicationResponseDTO> AddMedication(AddMedicationDTO dto)
     {
         // VALIDATE DTO
@@ -114,7 +114,7 @@ public class MedicationsService : IMedications
             Data = responseDto
         };
     }
-    // UPDATE MEDICATION
+    // UPDATE MEDICATION    // UPDATE MEDICATION    // UPDATE MEDICATION
     public ApiResponse<AddMedicationResponseDTO> UpdateMedication(int id, UpdateMedicationDTO dto)
     {
         // FIND MEDICATION

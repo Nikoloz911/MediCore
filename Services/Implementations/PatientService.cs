@@ -24,7 +24,7 @@ public class PatientService : IPatient
         _validator = validator;
     }
 
-    // GET ALL PATIENTS
+    // GET ALL PATIENTS     // GET ALL PATIENTS     // GET ALL PATIENTS     // GET ALL PATIENTS
     public ApiResponse<List<PatientGetDTO>> GetAllPatients()
     {
         var patients = _context.Patients.ToList();
@@ -47,7 +47,7 @@ public class PatientService : IPatient
         };
     }
 
-    // GET PATIENT BY ID
+    // GET PATIENT BY ID    // GET PATIENT BY ID    // GET PATIENT BY ID    // GET PATIENT BY ID
     public ApiResponse<PatientGetByIdDTO> GetPatientById(int id)
     {
         var patient = _context.Patients.FirstOrDefault(p => p.Id == id);
@@ -71,7 +71,7 @@ public class PatientService : IPatient
     }
 
 
-    // ADD NEW PATIENT
+    // ADD NEW PATIENT    // ADD NEW PATIENT    // ADD NEW PATIENT    // ADD NEW PATIENT
     public ApiResponse<PatientCreatedDTO> AddPatient(PatientAddDTO dto)
     {
         // VALIDATE DTO
@@ -155,7 +155,7 @@ public class PatientService : IPatient
             Data = createdDto
         };
     }
-    // ADD PATIENT WITH USER ID
+    // ADD PATIENT WITH USER ID    // ADD PATIENT WITH USER ID    // ADD PATIENT WITH USER ID
     public ApiResponse<AddPatientUserResponseDTO> AddPatientByUserId(AddPatientUserDTO dto)
     {
         if (dto == null)
@@ -245,7 +245,7 @@ public class PatientService : IPatient
         };
     }
 
-    // GET PATIENT HISTORY BY ID
+    // GET PATIENT HISTORY BY ID    // GET PATIENT HISTORY BY ID    // GET PATIENT HISTORY BY ID
     public ApiResponse<PatientHistoryDTO> GetPatientHistory(int patientId)
     {
         var patient = _context.Patients

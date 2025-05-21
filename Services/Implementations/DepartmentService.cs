@@ -20,7 +20,7 @@ namespace MediCore.Services.Implementations
             _mapper = mapper;
         }
 
-        // GET ALL DEPARTMENTS
+        // GET ALL DEPARTMENTS    // GET ALL DEPARTMENTS
         public ApiResponse<List<DepartmentAllDTO>> GetAllDepartments()
         {
             var departments = _context.Departments.ToList();
@@ -42,7 +42,7 @@ namespace MediCore.Services.Implementations
                 Data = departmentDtos
             };
         }
-        // ADD DEPARTMNET
+        // ADD DEPARTMNET    // ADD DEPARTMNET
         public ApiResponse<DepartmentAllDTO> CreateDepartment(DepartmentAddDTO departmentDto)
         {
             if (string.IsNullOrWhiteSpace(departmentDto.DepartmentType) || departmentDto.DepartmentType.Length > 20)
@@ -73,7 +73,7 @@ namespace MediCore.Services.Implementations
                 Data = createdDto
             };
         }
-        // UPDATE DEPARTMENT
+        // UPDATE DEPARTMENT     // UPDATE DEPARTMENT    // UPDATE DEPARTMENT
         public ApiResponse<DepartmentAllDTO> UpdateDepartment(int id, DepartmentUpdateDTO departmentDto)
         {
             if (string.IsNullOrEmpty(departmentDto.DepartmentType) || departmentDto.DepartmentType.Length > 50)
@@ -107,7 +107,7 @@ namespace MediCore.Services.Implementations
                 Data = updatedDto
             };
         }
-        // DELETE DEPARTMENT
+        // DELETE DEPARTMENT    // DELETE DEPARTMENT    // DELETE DEPARTMENT
         public ApiResponse<bool> DeleteDepartment(int id)
         {
             var department = _context.Departments
@@ -141,6 +141,5 @@ namespace MediCore.Services.Implementations
                 Data = true
             };
         }
-
     }
 }

@@ -7,7 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// REGISTER CONFIGURATION CLASdotneSES
+// REGISTER CONFIGURATION
 var apiBehaviorConfig = new ApiBehaviorConfiguration();
 apiBehaviorConfig.ConfigureApiBehavior(builder.Services);
 
